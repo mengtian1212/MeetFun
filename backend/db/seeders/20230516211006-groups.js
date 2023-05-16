@@ -52,25 +52,25 @@ module.exports = {
     */
     options.tableName = 'Groups';
     await queryInterface.bulkInsert(options, groups, {});
-    // try {
-    //   for (let group of groups) {
-    //     const foundOrganizer = await User.findOne({
-    //       where: { username: group.organizer }
-    //     });
-    //     await Group.create({
-    //       name: group.name,
-    //       about: group.about,
-    //       type: group.type,
-    //       private: group.private,
-    //       city: group.city,
-    //       state: group.state,
-    //       organizerId: foundOrganizer.id
-    //     }, options);
-    //   };
-    // } catch (err) {
-    //   console.error(err);
-    //   throw err;
-    // };
+    try {
+      for (let group of groups) {
+        const foundOrganizer = await User.findOne({
+          where: { username: group.organizer }
+        });
+        await Group.create({
+          name: group.name,
+          about: group.about,
+          type: group.type,
+          private: group.private,
+          city: group.city,
+          state: group.state,
+          organizerId: foundOrganizer.id
+        }, options);
+      };
+    } catch (err) {
+      console.error(err);
+      throw err;
+    };
   },
 
   async down(queryInterface, Sequelize) {
