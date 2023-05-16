@@ -17,7 +17,7 @@ const groups = [
     private: false,
     city: "New York City",
     state: "NY",
-    organizer: "Demo-lition"
+    organizerId: 1
   },
   {
     name: "FakeGroup2",
@@ -26,7 +26,7 @@ const groups = [
     private: true,
     city: "Chicago",
     state: "IL",
-    organizer: "FakeUser3"
+    organizerId: 4
   },
   {
     name: "FakeGroup3",
@@ -35,7 +35,7 @@ const groups = [
     private: false,
     city: "San Jose",
     state: "CA",
-    organizer: "FakeUser1"
+    organizerId: 2
   }
 ];
 
@@ -51,25 +51,26 @@ module.exports = {
      * }], {});
     */
     options.tableName = 'Groups';
-    try {
-      for (let group of groups) {
-        const foundOrganizer = await User.findOne({
-          where: { username: group.organizer }
-        });
-        await Group.create({
-          name: group.name,
-          about: group.about,
-          type: group.type,
-          private: group.private,
-          city: group.city,
-          state: group.state,
-          organizerId: foundOrganizer.id
-        });
-      };
-    } catch (err) {
-      console.error(err);
-      throw err;
-    };
+    await queryInterface.bulkInsert(options, groups, {});
+    // try {
+    //   for (let group of groups) {
+    //     const foundOrganizer = await User.findOne({
+    //       where: { username: group.organizer }
+    //     });
+    //     await Group.create({
+    //       name: group.name,
+    //       about: group.about,
+    //       type: group.type,
+    //       private: group.private,
+    //       city: group.city,
+    //       state: group.state,
+    //       organizerId: foundOrganizer.id
+    //     }, options);
+    //   };
+    // } catch (err) {
+    //   console.error(err);
+    //   throw err;
+    // };
   },
 
   async down(queryInterface, Sequelize) {

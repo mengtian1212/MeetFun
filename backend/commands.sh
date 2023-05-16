@@ -11,6 +11,13 @@ npx dotenv sequelize db:seed:all
 npx dotenv sequelize db:migrate
 npx dotenv sequelize db:seed:all
 
+// access Render Postgres db
+# PGPASSWORD=w5GV4y0wwlQH3MDPPQreaKldCinnYJ61 psql -h dpg-chhapp64dad31tk9c3kg-a.oregon-postgres.render.com -U app_academy_projects_0syt_user app_academy_projects_0syt
+# \dn        list all schemas in the db
+# \dt meetup_schema.*   list all tables in meetup_schema
+# SELECT * FROM "meetup_schema"."Users";
+# SELECT * FROM "meetup_schema"."Groups";
+
 //////////////////
 Create a model file & a blank migration file:
 npx sequelize model:generate --name <NameOfModel> --attributes <column1Name:type,column2Name:type>
