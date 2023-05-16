@@ -17,7 +17,7 @@ const groups = [
     private: false,
     city: "New York City",
     state: "NY",
-    organizerId: 1
+    organizer: "Demo-lition"
   },
   {
     name: "FakeGroup2",
@@ -26,7 +26,7 @@ const groups = [
     private: true,
     city: "Chicago",
     state: "IL",
-    organizerId: 4
+    organizer: "FakeUser3"
   },
   {
     name: "FakeGroup3",
@@ -35,7 +35,7 @@ const groups = [
     private: false,
     city: "San Jose",
     state: "CA",
-    organizerId: 2
+    organizer: "FakeUser1"
   }
 ];
 
@@ -65,7 +65,7 @@ module.exports = {
           city: group.city,
           state: group.state,
           organizerId: foundOrganizer.id
-        }, options);
+        });
       };
     } catch (err) {
       console.error(err);
