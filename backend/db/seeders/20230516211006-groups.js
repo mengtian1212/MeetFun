@@ -51,7 +51,7 @@ module.exports = {
      * }], {});
     */
     options.tableName = 'Groups';
-    await queryInterface.bulkInsert(options, groups, {});
+    // await queryInterface.bulkInsert(options, groups, {});
     try {
       for (let group of groups) {
         const foundOrganizer = await User.findOne({
