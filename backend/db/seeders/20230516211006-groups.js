@@ -57,14 +57,15 @@ module.exports = {
         const foundOrganizer = await User.findOne({
           where: { username: group.organizer }
         });
+        console.log(typeof foundOrganizer.id);
         await Group.create({
+          organizerId: foundOrganizer.id,
           name: group.name,
           about: group.about,
           type: group.type,
           private: group.private,
           city: group.city,
           state: group.state,
-          organizerId: foundOrganizer.id
         });
       };
     } catch (err) {
