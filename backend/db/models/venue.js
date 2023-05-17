@@ -12,6 +12,12 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Venue.belongsTo(models.Group, { foreignKey: 'groupId' });
+
+      Venue.belongsToMany(models.Group, {
+        through: models.Event,
+        foreignKey: 'venueId',
+        otherKey: 'groupId'
+      });
     }
   }
   Venue.init({
@@ -46,6 +52,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: { msg: "Latitude is not valid" },
         isDecimal: { msg: "Latitude is not valid" },
+        isLatLong: { msg: "Latitude is not valid" },
         min: {
           args: [-90],
           msg: "Latitude is not valid"
@@ -62,13 +69,14 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: { msg: "Longitude is not valid" },
         isDecimal: { msg: "Longitude is not valid" },
+        isLatLong: { msg: "Longitude is not valid" },
         min: {
           args: [-180],
-          msg: "Latitude is not valid"
+          msg: "Longitude is not valid"
         },
         max: {
           args: [180],
-          msg: "Latitude is not valid"
+          msg: "Longitude is not valid"
         }
       }
     }
