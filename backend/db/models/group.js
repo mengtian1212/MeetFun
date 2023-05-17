@@ -12,6 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Group.belongsTo(models.User, { foreignKey: 'organizerId' });
+
+      Group.hasMany(models.GroupImage, { foreignKey: 'groupId' });
     }
   }
   Group.init({
