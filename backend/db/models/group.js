@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       Group.belongsToMany(models.Venue, {
         through: models.Event,
         foreignKey: 'groupId',
-        otherKey: 'venueId'
+        otherKey: 'venueId', as: 'events'
       });
 
       Group.belongsToMany(models.User, {
@@ -28,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'groupId',
         otherKey: 'userId'
       });
+
     }
   }
   Group.init({
@@ -56,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       validate: {
         notNull: { msg: "Type must be 'Online' or 'In person'" },
-        isIn: { args: [['Online', 'In person']], msg: "Type must be 'Online' or 'In person'" }
+        isIn: { args: [['Online', 'In person']], msg: "Type must be 'Online' or 'In person'." }
       }
     },
     private: {

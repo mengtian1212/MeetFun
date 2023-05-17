@@ -12,13 +12,23 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Event.hasMany(models.EventImage, { foreignKey: 'eventId' });
+
+      Event.belongsTo(models.Group, { foreignKey: 'groupId' });
+      Event.belongsTo(models.Venue, { foreignKey: 'venueId' });
+
+      Event.belongsToMany(models.User, {
+        through: models.Attendance,
+        foreignKey: 'eventId',
+        otherKey: 'userId'
+      });
+
     }
   }
   Event.init({
     venueId: {
       allowNull: false,
       type: DataTypes.INTEGER,
-      references: { model: 'Venues', key: 'id' },
+      // references: { model: 'Venues', key: 'id' },
       validate: {
         notNull: { msg: "Venue does not exist" }
       }
@@ -26,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
     groupId: {
       allowNull: false,
       type: DataTypes.INTEGER,
-      references: { model: 'Groups', key: 'id' }
+      // references: { model: 'Groups', key: 'id' }
     },
     name: {
       allowNull: false,
