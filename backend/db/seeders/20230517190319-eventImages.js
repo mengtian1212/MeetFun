@@ -17,32 +17,47 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    options.tableName = 'GroupImages';
+    options.tableName = 'EventImages';
     await queryInterface.bulkInsert(options, [
       {
-        groupId: 3,
-        url: "https://www.url1.com/",
+        eventId: 3,
+        url: "https://www.example.com/images/fake-image-1.jpg",
         preview: true
       },
       {
-        groupId: 2,
-        url: "https://www.url2.com/",
+        eventId: 5,
+        url: "https://www.example.com/images/fake-image-2.jpg",
         preview: false
       },
       {
-        groupId: 2,
-        url: "https://www.url3.com/",
+        eventId: 1,
+        url: "https://www.example.com/images/fake-image-3.jpg",
         preview: true
       },
       {
-        groupId: 1,
-        url: "https://www.url4.com/",
+        eventId: 4,
+        url: "https://www.example.com/images/fake-image-4.jpg",
         preview: false
       },
       {
-        groupId: 1,
-        url: "https://www.url5.com/",
+        eventId: 4,
+        url: "https://www.example.com/images/fake-image-5.jpg",
         preview: true
+      },
+      {
+        eventId: 4,
+        url: "https://www.example.com/images/fake-image-6.jpg",
+        preview: false
+      },
+      {
+        eventId: 2,
+        url: "https://www.example.com/images/fake-image-7.jpg",
+        preview: true
+      },
+      {
+        eventId: 3,
+        url: "https://www.example.com/images/fake-image-8.jpg",
+        preview: false
       }
     ], {});
   },
@@ -54,7 +69,7 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    options.tableName = 'GroupImages';
+    options.tableName = 'EventImages';
     await queryInterface.bulkDelete(options);
   }
 };
