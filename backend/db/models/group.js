@@ -16,6 +16,12 @@ module.exports = (sequelize, DataTypes) => {
       Group.hasMany(models.GroupImage, { foreignKey: 'groupId' });
 
       Group.hasMany(models.Venue, { foreignKey: 'groupId' });
+
+      Group.belongsToMany(models.Venue, {
+        through: models.Event,
+        foreignKey: 'groupId',
+        otherKey: 'venueId'
+      });
     }
   }
   Group.init({
@@ -35,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.TEXT,
       validate: {
-        notNull: { msg: "Name must be 60 characters or less" },
+        notNull: { msg: "About must be 50 characters or more" },
         len: { args: [50, 100000], msg: "About must be 50 characters or more" }
       }
     },
