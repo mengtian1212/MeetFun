@@ -20,9 +20,14 @@ module.exports = {
     options.tableName = 'GroupImages';
     await queryInterface.bulkInsert(options, [
       {
-        groupId: 3,
-        url: "https://www.url1.com/",
+        groupId: 1,
+        url: "https://www.url5.com/",
         preview: true
+      },
+      {
+        groupId: 1,
+        url: "https://www.url4.com/",
+        preview: false
       },
       {
         groupId: 2,
@@ -35,15 +40,10 @@ module.exports = {
         preview: true
       },
       {
-        groupId: 1,
-        url: "https://www.url4.com/",
+        groupId: 3,
+        url: "https://www.url1.com/",
         preview: false
       },
-      {
-        groupId: 1,
-        url: "https://www.url5.com/",
-        preview: true
-      }
     ], {});
   },
 

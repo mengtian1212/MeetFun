@@ -20,45 +20,45 @@ module.exports = {
     options.tableName = 'EventImages';
     await queryInterface.bulkInsert(options, [
       {
-        eventId: 3,
+        eventId: 1,
         url: "https://www.example.com/images/fake-image-1.jpg",
         preview: true
       },
       {
-        eventId: 5,
+        eventId: 2,
         url: "https://www.example.com/images/fake-image-2.jpg",
-        preview: false
+        preview: true
       },
       {
-        eventId: 1,
+        eventId: 3,
         url: "https://www.example.com/images/fake-image-3.jpg",
         preview: true
       },
       {
-        eventId: 4,
+        eventId: 3,
         url: "https://www.example.com/images/fake-image-4.jpg",
         preview: false
       },
       {
         eventId: 4,
         url: "https://www.example.com/images/fake-image-5.jpg",
-        preview: true
+        preview: false
       },
       {
         eventId: 4,
         url: "https://www.example.com/images/fake-image-6.jpg",
-        preview: false
-      },
-      {
-        eventId: 2,
-        url: "https://www.example.com/images/fake-image-7.jpg",
         preview: true
       },
       {
-        eventId: 3,
+        eventId: 4,
+        url: "https://www.example.com/images/fake-image-7.jpg",
+        preview: false
+      },
+      {
+        eventId: 5,
         url: "https://www.example.com/images/fake-image-8.jpg",
         preview: false
-      }
+      },
     ], {});
   },
 

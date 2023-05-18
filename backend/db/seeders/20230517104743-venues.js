@@ -8,14 +8,6 @@ if (process.env.NODE_ENV === 'production') {
 
 const venues = [
   {
-    groupId: 2,
-    address: "111 Fox Drive",
-    city: "Pittsburgh",
-    state: "PA",
-    lat: 40.440624,
-    lng: -79.995888
-  },
-  {
     groupId: 1,
     address: "321 Main Avenue",
     city: "Brooklyn",
@@ -24,12 +16,12 @@ const venues = [
     lng: -73.949997
   },
   {
-    groupId: 3,
-    address: "1001 NE Snow Way",
-    city: "Anchorage",
-    state: "AK",
-    lat: 61.217381,
-    lng: -149.863129
+    groupId: 2,
+    address: "111 Fox Drive",
+    city: "Pittsburgh",
+    state: "PA",
+    lat: 40.440624,
+    lng: -79.995888
   },
   {
     groupId: 2,
@@ -38,6 +30,14 @@ const venues = [
     state: "CA",
     lat: 37.773972,
     lng: -122.431297
+  },
+  {
+    groupId: 3,
+    address: "1001 NE Snow Way",
+    city: "Anchorage",
+    state: "AK",
+    lat: 61.217381,
+    lng: -149.863129
   }
 ];
 
