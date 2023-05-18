@@ -17,14 +17,16 @@ module.exports = (sequelize, DataTypes) => {
 
       Group.hasMany(models.Venue, { foreignKey: 'groupId' });
 
+      Group.hasMany(models.Event, { foreignKey: 'groupId' }); //
+
       Group.belongsToMany(models.Venue, {
-        through: models.Event,
+        through: 'Event',
         foreignKey: 'groupId',
         otherKey: 'venueId', as: 'events'
       });
 
       Group.belongsToMany(models.User, {
-        through: models.Membership,
+        through: 'Membership',
         foreignKey: 'groupId',
         otherKey: 'userId'
       });
@@ -35,6 +37,7 @@ module.exports = (sequelize, DataTypes) => {
     organizerId: {
       allowNull: false,
       type: DataTypes.INTEGER,
+      // references: { model: 'Users', key: 'id' }
     },
     name: {
       allowNull: false,

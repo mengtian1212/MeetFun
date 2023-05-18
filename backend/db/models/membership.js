@@ -14,13 +14,21 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Membership.init({
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
     userId: {
       allowNull: false,
       type: DataTypes.INTEGER,
+      // references: { model: 'Users', key: 'id' }
     },
     groupId: {
       allowNull: false,
       type: DataTypes.INTEGER,
+      // references: { model: 'Groups', key: 'id' }
     },
     status: {
       allowNull: false,
