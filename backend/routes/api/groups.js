@@ -154,6 +154,16 @@ router.get('/:groupId', async (req, res, next) => {
         ]
     });
 
+    // get aggregate: numMembers
+    const numMembers = await Membership.count({
+        where: {
+            groupId: req.params.groupId,
+            status: {
+                [Op.in]: ['member', 'co-host']
+            }
+        }
+    });
+
     if (!group) {
         const err = new Error("Group couldn't be found");
         return res.status(404).json({
@@ -163,6 +173,7 @@ router.get('/:groupId', async (req, res, next) => {
         const result = group.toJSON();
         result.createdAt = group.createdAt.toISOString().slice(0, 10) + ' ' + group.createdAt.toISOString().slice(11, 19);
         result.updatedAt = group.updatedAt.toISOString().slice(0, 10) + ' ' + group.updatedAt.toISOString().slice(11, 19);
+        result.numMembers = numMembers;
         return res.json(result);
     }
 });
