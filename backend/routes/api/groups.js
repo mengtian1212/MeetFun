@@ -2,7 +2,7 @@ const express = require('express');
 const { Op } = require('sequelize');
 
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
-const { User, Group, GroupImage, Membership, sequelize } = require('../../db/models');
+const { User, Group, GroupImage, Event, EventImage, Membership, Venue, Attendance, sequelize } = require('../../db/models');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -13,7 +13,7 @@ const router = express.Router();
 // Middlewares:
 
 // Route handlers:
-// Get all groups:
+// 1. Get all groups:
 router.get('/', async (req, res, next) => {
     const groups = await Group.findAll();
 
@@ -58,7 +58,7 @@ router.get('/', async (req, res, next) => {
     return res.json({ Groups: result });
 });
 
-// Get all Groups joined or organized by the Current User
+// 2. Get all Groups joined or organized by the Current User
 router.get('/current', requireAuth, async (req, res, next) => {
     const groupsOrganized = await Group.findAll({
         where: {
@@ -132,6 +132,50 @@ router.get('/current', requireAuth, async (req, res, next) => {
         delete groupData.GroupImages;
     }
     return res.json({ Groups: result });
+});
+
+// 3. Get details of a Group from an id
+router.get('/:groupId', async (req, res, next) => {
+    const group = await Group.findByPk(req.params.groupId, {
+        include: [
+            {
+                model: GroupImage,
+                attributes: ['id', 'url', 'preview'],
+            },
+            {
+                model: User,
+                as: 'Organizer',
+                attributes: ['id', 'firstName', 'lastName']
+            },
+            {
+                model: Venue,
+                attributes: ['id', 'groupId', 'address', 'city', 'state', 'lat', 'lng']
+            }
+        ]
+    });
+
+    // get aggregate: numMembers
+    const numMembers = await Membership.count({
+        where: {
+            groupId: req.params.groupId,
+            status: {
+                [Op.in]: ['member', 'co-host']
+            }
+        }
+    });
+
+    if (!group) {
+        const err = new Error("Group couldn't be found");
+        return res.status(404).json({
+            message: err.message
+        });
+    } else {
+        const result = group.toJSON();
+        result.createdAt = group.createdAt.toISOString().slice(0, 10) + ' ' + group.createdAt.toISOString().slice(11, 19);
+        result.updatedAt = group.updatedAt.toISOString().slice(0, 10) + ' ' + group.updatedAt.toISOString().slice(11, 19);
+        result.numMembers = numMembers;
+        return res.json(result);
+    }
 });
 
 module.exports = router;
