@@ -49,7 +49,7 @@ router.get('/', async (req, res, next) => {
             groupData.previewImage = previewImage.url;
         }
         else {
-            groupData.previewImage = `No preview Image for this group`;
+            groupData.previewImage = `No preview image for this group`;
         }
 
         result.push(groupData);
@@ -63,13 +63,6 @@ router.get('/current', requireAuth, async (req, res, next) => {
     const groupsOrganized = await Group.findAll({
         where: {
             organizerId: req.user.id
-        },
-        include: {
-            model: GroupImage,
-            where: {
-                preview: true
-            },
-            attributes: ["url"]
         }
     });
 
@@ -84,13 +77,6 @@ router.get('/current', requireAuth, async (req, res, next) => {
                     },
                 },
                 attributes: []
-            },
-            {
-                model: GroupImage,
-                where: {
-                    preview: true
-                },
-                attributes: ["url"]
             }
         ],
     });
@@ -123,13 +109,20 @@ router.get('/current', requireAuth, async (req, res, next) => {
             }
         });
 
-        if (groupData.GroupImages[0].url) {
-            groupData.previewImage = groupData.GroupImages[0].url;
+        // get previewImage
+        const previewImage = await GroupImage.findOne({
+            where: {
+                groupId: groupData.id,
+                preview: true
+            }
+        });
+
+        if (previewImage) {
+            groupData.previewImage = previewImage.url;
         }
         else {
-            groupData.previewImage = `No preview Image for this group`;
-        }
-        delete groupData.GroupImages;
+            groupData.previewImage = `No preview image for this group`;
+        };
     }
     return res.json({ Groups: result });
 });
@@ -166,9 +159,7 @@ router.get('/:groupId', async (req, res, next) => {
 
     if (!group) {
         const err = new Error("Group couldn't be found");
-        return res.status(404).json({
-            message: err.message
-        });
+        next(err);
     } else {
         const result = group.toJSON();
         result.createdAt = group.createdAt.toISOString().slice(0, 10) + ' ' + group.createdAt.toISOString().slice(11, 19);
@@ -176,6 +167,42 @@ router.get('/:groupId', async (req, res, next) => {
         result.numMembers = numMembers;
         return res.json(result);
     }
+});
+
+// 4. Create a Group
+const validateGroup = [
+    check('name')
+        .exists({ checkFalsy: true })
+        .isLength({ min: 1, max: 60 })
+        .withMessage("Name must be 60 characters or less"),
+    check('about')
+        .exists({ checkFalsy: true })
+        .isLength({ min: 50 })
+        .withMessage("About must be 50 characters or more"),
+    check('type')
+        .exists({ checkFalsy: true })
+        .isIn(['Online', 'In person'])
+        .withMessage("Type must be 'Online' or 'In person'"),
+    check('private')
+        .exists({ checkFalsy: true })
+        .isBoolean()
+        .withMessage("Private must be a boolean"),
+    check('city')
+        .exists({ checkFalsy: true })
+        .withMessage("City is required"),
+    check('state')
+        .exists({ checkFalsy: true })
+        .withMessage("State is required"),
+    handleValidationErrors
+];
+
+router.post('/', requireAuth, validateGroup, async (req, res, next) => {
+    const { name, about, type, private, city, state } = req.body;
+    const group = await Group.create({
+        organizerId: req.user.id,
+        name, about, type, private, city, state,
+    });
+    return res.status(201).json(group);
 });
 
 module.exports = router;
