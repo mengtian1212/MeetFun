@@ -50,6 +50,21 @@ module.exports = {
           userId: 1,
           groupId: 3,
           status: 'co-host'
+        },
+        {
+          userId: 4,
+          groupId: 1,
+          status: 'co-host'
+        },
+        {
+          userId: 4,
+          groupId: 3,
+          status: 'member'
+        },
+        {
+          userId: 3,
+          groupId: 3,
+          status: 'member'
         }
       ], {});
     } catch (err) {
