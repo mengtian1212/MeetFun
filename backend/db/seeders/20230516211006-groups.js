@@ -24,7 +24,7 @@ module.exports = {
     const groups = [
       {
         name: "FakeGroup1",
-        about: "Perfect opporunity to connect with music lovers online.",
+        about: "Perfect opportunity to connect with music lovers online.",
         type: "Online",
         private: false,
         city: "New York City",
