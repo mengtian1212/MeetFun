@@ -49,7 +49,7 @@ router.get('/', async (req, res, next) => {
             groupData.previewImage = previewImage.url;
         }
         else {
-            groupData.previewImage = `No preview Image for this group`;
+            groupData.previewImage = `No preview image for this group`;
         }
 
         result.push(groupData);
@@ -63,13 +63,6 @@ router.get('/current', requireAuth, async (req, res, next) => {
     const groupsOrganized = await Group.findAll({
         where: {
             organizerId: req.user.id
-        },
-        include: {
-            model: GroupImage,
-            where: {
-                preview: true
-            },
-            attributes: ["url"]
         }
     });
 
@@ -84,13 +77,6 @@ router.get('/current', requireAuth, async (req, res, next) => {
                     },
                 },
                 attributes: []
-            },
-            {
-                model: GroupImage,
-                where: {
-                    preview: true
-                },
-                attributes: ["url"]
             }
         ],
     });
@@ -123,13 +109,20 @@ router.get('/current', requireAuth, async (req, res, next) => {
             }
         });
 
-        if (groupData.GroupImages[0].url) {
-            groupData.previewImage = groupData.GroupImages[0].url;
+        // get previewImage
+        const previewImage = await GroupImage.findOne({
+            where: {
+                groupId: groupData.id,
+                preview: true
+            }
+        });
+
+        if (previewImage) {
+            groupData.previewImage = previewImage.url;
         }
         else {
-            groupData.previewImage = `No preview Image for this group`;
-        }
-        delete groupData.GroupImages;
+            groupData.previewImage = `No preview image for this group`;
+        };
     }
     return res.json({ Groups: result });
 });
