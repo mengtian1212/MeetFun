@@ -21,39 +21,6 @@ module.exports = {
      * }], {});
     */
     // method 1: using bulkInsert
-    // const groups = [
-    //   {
-    //     name: "FakeGroup1",
-    //     about: "Perfect opporunity to connect with music lovers online.",
-    //     type: "Online",
-    //     private: false,
-    //     city: "New York City",
-    //     state: "NY",
-    //     organizerId: 1
-    //   },
-    //   {
-    //     name: "FakeGroup2",
-    //     about: "Join our investors group to learn all areas of investment opportunities.",
-    //     type: "In person",
-    //     private: true,
-    //     city: "Chicago",
-    //     state: "IL",
-    //     organizerId: 4
-    //   },
-    //   {
-    //     name: "FakeGroup3",
-    //     about: "Let's get together and enjoy the fun to tackle Kaggle challenges.",
-    //     type: "Online",
-    //     private: false,
-    //     city: "San Jose",
-    //     state: "CA",
-    //     organizerId: 2
-    //   }
-    // ];
-    //  options.tableName = 'Groups';
-    //   await queryInterface.bulkInsert(options, groups, {});
-
-    // method2: dynamic seeding
     const groups = [
       {
         name: "FakeGroup1",
@@ -62,7 +29,7 @@ module.exports = {
         private: false,
         city: "New York City",
         state: "NY",
-        organizer: "Demo-lition"
+        organizerId: 1
       },
       {
         name: "FakeGroup2",
@@ -71,7 +38,7 @@ module.exports = {
         private: true,
         city: "Chicago",
         state: "IL",
-        organizer: "FakeUser3"
+        organizerId: 4
       },
       {
         name: "FakeGroup3",
@@ -80,29 +47,62 @@ module.exports = {
         private: false,
         city: "San Jose",
         state: "CA",
-        organizer: "FakeUser1"
+        organizerId: 2
       }
     ];
+    options.tableName = 'Groups';
+    await queryInterface.bulkInsert(options, groups, {});
 
-    try {
-      for (let group of groups) {
-        const foundOrganizer = await User.findOne({
-          where: { username: group.organizer }
-        });
-        await Group.create({
-          organizerId: foundOrganizer.id,
-          name: group.name,
-          about: group.about,
-          type: group.type,
-          private: group.private,
-          city: group.city,
-          state: group.state,
-        });
-      };
-    } catch (err) {
-      console.error(err);
-      throw err;
-    };
+    // method2: dynamic seeding
+    // const groups = [
+    //   {
+    //     name: "FakeGroup1",
+    //     about: "Perfect opporunity to connect with music lovers online.",
+    //     type: "Online",
+    //     private: false,
+    //     city: "New York City",
+    //     state: "NY",
+    //     organizer: "Demo-lition"
+    //   },
+    //   {
+    //     name: "FakeGroup2",
+    //     about: "Join our investors group to learn all areas of investment opportunities.",
+    //     type: "In person",
+    //     private: true,
+    //     city: "Chicago",
+    //     state: "IL",
+    //     organizer: "FakeUser3"
+    //   },
+    //   {
+    //     name: "FakeGroup3",
+    //     about: "Let's get together and enjoy the fun to tackle Kaggle challenges.",
+    //     type: "Online",
+    //     private: false,
+    //     city: "San Jose",
+    //     state: "CA",
+    //     organizer: "FakeUser1"
+    //   }
+    // ];
+
+    // try {
+    //   for (let group of groups) {
+    //     const foundOrganizer = await User.findOne({
+    //       where: { username: group.organizer }
+    //     });
+    //     await Group.create({
+    //       organizerId: foundOrganizer.id,
+    //       name: group.name,
+    //       about: group.about,
+    //       type: group.type,
+    //       private: group.private,
+    //       city: group.city,
+    //       state: group.state,
+    //     });
+    //   };
+    // } catch (err) {
+    //   console.error(err);
+    //   throw err;
+    // };
   },
 
   async down(queryInterface, Sequelize) {
