@@ -113,9 +113,10 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
     options.tableName = 'Groups';
-    const Op = Sequelize.Op;
-    await queryInterface.bulkDelete(options, {
-      name: { [Op.in]: ['FakeGroup1', 'FakeGroup2', 'FakeGroup3'] }
-    }, {});
+    // const Op = Sequelize.Op;
+    // await queryInterface.bulkDelete(options, {
+    //   name: { [Op.in]: ['FakeGroup1', 'FakeGroup2', 'FakeGroup3'] }
+    // }, {});
+    await queryInterface.bulkDelete(options);
   }
 };
