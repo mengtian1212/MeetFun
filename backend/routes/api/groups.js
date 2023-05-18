@@ -224,4 +224,10 @@ router.post('/:groupId/images', requireAuth, isOrganizer, async (req, res, next)
     });
 });
 
+// 6. Edit a Group
+router.put('/:groupId', requireAuth, isOrganizer, async (req, res, next) => {
+    const { name, about, type, private, city, state } = req.body;
+
+
+});
 module.exports = router;
