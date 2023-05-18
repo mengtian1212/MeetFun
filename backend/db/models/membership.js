@@ -14,19 +14,27 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Membership.init({
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
     userId: {
       allowNull: false,
       type: DataTypes.INTEGER,
+      // references: { model: 'Users', key: 'id' }
     },
     groupId: {
       allowNull: false,
       type: DataTypes.INTEGER,
+      // references: { model: 'Groups', key: 'id' }
     },
     status: {
       allowNull: false,
       type: DataTypes.STRING,
       validate: {
-        isIn: { args: [['pending', 'member', 'co-host']], msg: "Status must be 'pending', 'member', or 'co-host'." }
+        isIn: { args: [['pending', 'member', 'co-host']], msg: "Membership status must be 'pending', 'member', or 'co-host'." }
       }
     }
   }, {

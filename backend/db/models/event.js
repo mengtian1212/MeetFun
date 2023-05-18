@@ -1,6 +1,6 @@
 'use strict';
 const {
-  Model
+  Model, Validator
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Event extends Model {
@@ -18,13 +18,23 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'eventId',
         otherKey: 'userId'
       });
+
+      Event.belongsTo(models.Group, { foreignKey: 'groupId' });
+      Event.belongsTo(models.Venue, { foreignKey: 'venueId' });
+
     }
   }
   Event.init({
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
     venueId: {
       allowNull: false,
       type: DataTypes.INTEGER,
-      references: { model: 'Venues', key: 'id' },
+      // references: { model: 'Venues', key: 'id' },
       validate: {
         notNull: { msg: "Venue does not exist" }
       }
@@ -32,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
     groupId: {
       allowNull: false,
       type: DataTypes.INTEGER,
-      references: { model: 'Groups', key: 'id' }
+      // references: { model: 'Groups', key: 'id' }
     },
     name: {
       allowNull: false,
