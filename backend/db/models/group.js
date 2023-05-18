@@ -69,8 +69,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.BOOLEAN,
       validate: {
-        notNull: { msg: "Private must be a boolean" },
-        notEmpty: { msg: "Private must be a boolean" },
+        // notNull: { msg: "Private must be a boolean" },
+        // notEmpty: { msg: "Private must be a boolean" },
         isBoolean(value) {
           if (typeof (value) !== 'boolean') {
             throw new Error("Private must be a boolean");
@@ -88,7 +88,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     state: {
       allowNull: false,
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(2),
       validate: {
         notNull: { msg: "State is required" },
         notEmpty: { msg: "State is required" }

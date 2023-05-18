@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { jwtConfig } = require('../config');
-const { User } = require('../db/models');
+const { User, Group, GroupImage, Event, EventImage, Membership, Venue, Attendance } = require('../db/models');
 
 const { secret, expiresIn } = jwtConfig;
 
@@ -59,7 +59,7 @@ const restoreUser = (req, res, next) => {
     });
 };
 
-// If there is no current user, return an error
+// authentication: If there is no current user, return an error
 const requireAuth = function (req, _res, next) {
     if (req.user) return next();
 
@@ -68,6 +68,15 @@ const requireAuth = function (req, _res, next) {
     err.errors = { message: 'Authentication required' };
     err.status = 401;
     return next(err);
-}
+};
 
-module.exports = { setTokenCookie, restoreUser, requireAuth };
+// authorization: check if the current user is the organizer of the group, return an error
+const isOrganizer = async (req, res, next) => {
+    const group = await Group.findByPk(req.params.groupId);
+
+    if (!group) return res.status(404).json({ message: "Group couldn't be found" });
+    if (req.user.id !== group.organizerId) return res.status(403).json({ message: "Forbidden" });
+    next();
+};
+
+module.exports = { setTokenCookie, restoreUser, requireAuth, isOrganizer };

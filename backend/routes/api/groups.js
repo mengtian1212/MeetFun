@@ -6,7 +6,7 @@ const { User, Group, GroupImage, Event, EventImage, Membership, Venue, Attendanc
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { requireAuth } = require('../../utils/auth');
+const { requireAuth, isOrganizer } = require('../../utils/auth');
 
 const router = express.Router();
 
@@ -203,6 +203,25 @@ router.post('/', requireAuth, validateGroup, async (req, res, next) => {
         name, about, type, private, city, state,
     });
     return res.status(201).json(group);
+});
+
+// 5. Add an Image to a Group based on the Group's id
+router.post('/:groupId/images', requireAuth, isOrganizer, async (req, res, next) => {
+    const group = await Group.findByPk(req.params.groupId);
+    const { url, preview } = req.body;
+
+    const image = await GroupImage.create({
+        groupId: req.params.groupId,
+        url,
+        preview
+    });
+
+    console.log(image);
+    return res.json({
+        id: image.id,
+        url: image.url,
+        preview: image.preview
+    });
 });
 
 module.exports = router;
