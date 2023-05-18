@@ -14,18 +14,8 @@ const router = express.Router();
 // Route handlers:
 
 // Get all groups:
-// createdAt and updatedAt format, fn doesn't overwrite column, has to rename.
-// count members?
 router.get('/', async (req, res, next) => {
-    const groups = await Group.findAll({
-        attributes: {
-            // exclude: ['createdAt', 'updatedAt'],
-            // include: [
-            //     [sequelize.fn("strftime", '%Y-%m-%d %H:%M:%S', sequelize.col("createdAt")), 'createdAt1'],
-            //     [sequelize.fn("strftime", '%Y-%m-%d %H:%M:%S', sequelize.col("updatedAt")), "updatedAt1"]
-            // ],
-        }
-    });
+    const groups = await Group.findAll();
 
     const result = [];
 
@@ -49,11 +39,8 @@ router.get('/', async (req, res, next) => {
         });
 
         // add correct date format, numMembers, previewImage
-        // groupData.createdAt = groupData.createdAt1;
-        // groupData.updatedAt = groupData.updatedAt1;
-        // delete groupData.createdAt1;
-        // delete groupData.updatedAt1;
-
+        groupData.createdAt = groupData.createdAt.toISOString().slice(0, 10) + ' ' + groupData.createdAt.toISOString().slice(11, 19);
+        groupData.updatedAt = groupData.updatedAt.toISOString().slice(0, 10) + ' ' + groupData.updatedAt.toISOString().slice(11, 19);
         groupData.numMembers = numMembers;
 
         if (previewImage) {
