@@ -88,9 +88,11 @@ const validateEvent = async (req, res, next) => {
     } else if (venueId !== null && Number.isInteger(venueId) && venueId <= 0) {
         errors.venueId = "Venue does not exist";
     } else if (venueId !== null && Number.isInteger(venueId) && venueId > 0) {
-        const venue = await Venue.findByPk(venueId);
+        const venue = await Venue.findByPk(gitvenueId);
         if (!venue) errors.venueId = "Venue does not exist";
     }
+
+    if (venueId === undefined) errors.venueId = "Venue does not exist";
 
     //name
     if (!name || typeof (name) !== 'string' || name.length < 5) errors.name = "Name must be at least 5 characters";
