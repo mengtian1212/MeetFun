@@ -6,13 +6,18 @@ const { User, Group, GroupImage, Event, EventImage, Membership, Venue, Attendanc
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { requireAuth } = require('../../utils/auth');
+const { requireAuth, isOrganizer, isOrganizerCoHost } = require('../../utils/auth');
 
 const router = express.Router();
 
 // Middlewares:
 
 // Route handlers:
-
+// Feature 1: group endpoints
+// Feature 2: venue endpoints
+// Feature 3: event endpoints
+// Feature 4: membership endpoints
+// Feature 5: attendance endpoints
+// Feature 6: image endpoints
 
 module.exports = router;

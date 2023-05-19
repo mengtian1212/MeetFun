@@ -6,19 +6,21 @@ const { User, Group, GroupImage, Event, EventImage, Membership, Venue, Attendanc
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { requireAuth, isOrganizer } = require('../../utils/auth');
+const { requireAuth, isOrganizer, isOrganizerCoHost } = require('../../utils/auth');
 
 const router = express.Router();
 
 // Middlewares:
 
 // Route handlers:
+// Feature 1: group endpoints
 // 1. Get all groups:
 router.get('/', async (req, res, next) => {
-    const groups = await Group.findAll();
+    const groups = await Group.findAll({
+        order: [['id', 'ASC']]
+    });
 
     const result = [];
-
     for (let group of groups) {
         groupData = group.toJSON();
 
@@ -60,13 +62,7 @@ router.get('/', async (req, res, next) => {
 
 // 2. Get all Groups joined or organized by the Current User
 router.get('/current', requireAuth, async (req, res, next) => {
-    const groupsOrganized = await Group.findAll({
-        where: {
-            organizerId: req.user.id
-        }
-    });
-
-    const groupsJoined = await Group.findAll({
+    const groups = await Group.findAll({
         include: [
             {
                 model: Membership,
@@ -79,27 +75,16 @@ router.get('/current', requireAuth, async (req, res, next) => {
                 attributes: []
             }
         ],
+        order: [['id', 'ASC']]
     });
 
     const result = [];
-    const resultGroupId = [];
-    for (let group of groupsOrganized) {
+    for (let group of groups) {
         const groupData = group.toJSON();
-        result.push(groupData);
-        resultGroupId.push(groupData.id);
-    }
-
-    for (let group of groupsJoined) {
-        if (!resultGroupId.includes(group.id)) {
-            const groupData = group.toJSON();
-            result.push(groupData);
-        }
-    }
-
-    for (let groupData of result) {
         groupData.createdAt = groupData.createdAt.toISOString().slice(0, 10) + ' ' + groupData.createdAt.toISOString().slice(11, 19);
         groupData.updatedAt = groupData.updatedAt.toISOString().slice(0, 10) + ' ' + groupData.updatedAt.toISOString().slice(11, 19);
 
+        // get aggregate: numMembers
         groupData.numMembers = await Membership.count({
             where: {
                 groupId: groupData.id,
@@ -123,6 +108,8 @@ router.get('/current', requireAuth, async (req, res, next) => {
         else {
             groupData.previewImage = `No preview image for this group`;
         };
+
+        result.push(groupData);
     }
     return res.json({ Groups: result });
 });
@@ -133,7 +120,7 @@ router.get('/:groupId', async (req, res, next) => {
         include: [
             {
                 model: GroupImage,
-                attributes: ['id', 'url', 'preview'],
+                attributes: ['id', 'url', 'preview']
             },
             {
                 model: User,
@@ -255,7 +242,7 @@ router.delete('/:groupId', requireAuth, isOrganizer, async (req, res, next) => {
     const group = await Group.findByPk(req.params.groupId);
     try {
         await group.destroy();
-    } catch(err) {
+    } catch (err) {
         console.log(err);
     }
     return res.json({
@@ -263,5 +250,25 @@ router.delete('/:groupId', requireAuth, isOrganizer, async (req, res, next) => {
     });
 });
 
+// Feature 2: venue endpoints
+// 8. Get All Venues for a Group specified by its id
+router.get('/:groupId/venues', requireAuth, isOrganizerCoHost, async (req, res, next) => {
+    const venues = await Venue.findAll({
+        where: {
+            groupId: req.params.groupId
+        },
+        attributes: {
+            exclude: ['createdAt', 'updatedAt']
+        },
+        order: [['id', 'asc']]
+    });
+
+    return res.json({ Venues: venues });
+});
+
+// Feature 3: event endpoints
+// Feature 4: membership endpoints
+// Feature 5: attendance endpoints
+// Feature 6: image endpoints
 
 module.exports = router;

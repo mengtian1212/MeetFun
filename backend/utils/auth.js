@@ -4,6 +4,8 @@ const { User, Group, GroupImage, Event, EventImage, Membership, Venue, Attendanc
 
 const { secret, expiresIn } = jwtConfig;
 
+const { Op } = require('sequelize');
+
 // Sends a JWT Cookie (used in the login and signup routes)
 const setTokenCookie = (res, user) => {
     // Create the token.
@@ -70,7 +72,7 @@ const requireAuth = function (req, _res, next) {
     return next(err);
 };
 
-// authorization: check if the current user is the organizer of the group, return an error
+// authorization1: check if the current user is the organizer of the group, return an error
 const isOrganizer = async (req, res, next) => {
     const group = await Group.findByPk(req.params.groupId);
 
@@ -79,4 +81,24 @@ const isOrganizer = async (req, res, next) => {
     next();
 };
 
-module.exports = { setTokenCookie, restoreUser, requireAuth, isOrganizer };
+// authorization2: check if the current user is the organizer or co-host of the group, return an error
+const isOrganizerCoHost = async (req, res, next) => {
+    const group = await Group.findByPk(req.params.groupId);
+
+    if (!group) return res.status(404).json({ message: "Group couldn't be found" });
+
+    const membership = await Membership.findAll({
+        where: {
+            userId: req.user.id,
+            groupId: req.params.groupId,
+            status: {
+                [Op.in]: ['co-host', 'organizer']
+            }
+        }
+    });
+
+    if (membership.length === 0) return res.status(403).json({ message: "Forbidden" });
+    next();
+};
+
+module.exports = { setTokenCookie, restoreUser, requireAuth, isOrganizer, isOrganizerCoHost };
