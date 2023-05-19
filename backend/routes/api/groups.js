@@ -241,8 +241,6 @@ router.get('/:groupId/venues', requireAuth, isOrganizerCoHost, async (req, res, 
 });
 
 // 9. Create a new Venue for a Group specified by its id
-
-
 router.post('/:groupId/venues', requireAuth, isOrganizerCoHost, validateVenue, async (req, res, next) => {
     const { address, city, state, lat, lng } = req.body;
     const venue = await Venue.create({
@@ -258,6 +256,65 @@ router.post('/:groupId/venues', requireAuth, isOrganizerCoHost, validateVenue, a
 });
 
 // Feature 3: event endpoints
+// 12. Get all Events of a Group specified by its id
+router.get('/:groupId/events', async (req, res, next) => {
+    const group = await Group.findByPk(req.params.groupId);
+    console.log(group);
+    if (!group) {
+        const err = new Error("Group couldn't be found");
+        err.status = 404;
+        err.title = "Group couldn't be found";
+        next(err);
+    } else {
+        const events = await Event.findAll({
+            where: {
+                groupId: req.params.groupId
+            },
+            attributes: ['id', 'groupId', 'venueId', 'name', 'type', 'startDate', 'endDate'],
+            include: [
+                {
+                    model: Group,
+                    attributes: ['id', 'name', 'city', 'state']
+                },
+                {
+                    model: Venue,
+                    attributes: ['id', 'city', 'state']
+                }
+            ],
+            order: [['id', 'asc']]
+        });
+
+        const payload = [];
+        for (let event of events) {
+            const eventData = event.toJSON();
+            // get aggregate: numAttending
+            eventData.numAttending = await Attendance.count({
+                where: {
+                    eventId: event.id,
+                    status: 'attending'
+                }
+            });
+
+            // get previewImage
+            const previewImage = await EventImage.findOne({
+                where: {
+                    eventId: event.id,
+                    preview: true
+                }
+            });
+
+            if (previewImage) {
+                eventData.previewImage = previewImage.url;
+            } else {
+                eventData.previewImage = `No preview image for this event`;
+            };
+
+            payload.push(eventData);
+        };
+        return res.json({ Events: payload });
+    };
+});
+
 // Feature 4: membership endpoints
 // Feature 5: attendance endpoints
 // Feature 6: image endpoints

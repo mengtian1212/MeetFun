@@ -63,8 +63,9 @@ router.get('/', async (req, res, next) => {
 
         payload.push(eventData);
     }
-    return res.json(payload);
+    return res.json({ Events: payload });
 });
+
 // Feature 4: membership endpoints
 // Feature 5: attendance endpoints
 // Feature 6: image endpoints
