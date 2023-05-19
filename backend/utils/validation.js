@@ -36,7 +36,7 @@ const validateGroup = [
         .isIn(['Online', 'In person'])
         .withMessage("Type must be 'Online' or 'In person'"),
     check('private')
-        .exists({ checkFalsy: true })
+        // .exists({ checkFalsy: true })
         .isBoolean()
         .withMessage("Private must be a boolean"),
     check('city')
@@ -114,6 +114,17 @@ const validateEvent = async (req, res, next) => {
     }
 };
 
+const validateImage = [
+    check('url')
+        .exists({ checkFalsy: true })
+        .withMessage("Please input an image url"),
+    check('preview')
+        // .exists({ checkFalsy: true })
+        .isBoolean()
+        .withMessage("Preview must be a boolean"),
+    handleValidationErrors
+];
+
 // const validateEvent = [
 //     check('venueId')
 //         .exists({ checkFalsy: true })
@@ -149,5 +160,5 @@ const validateEvent = async (req, res, next) => {
 // ];
 
 module.exports = {
-    handleValidationErrors, validateGroup, validateVenue, validateEvent
+    handleValidationErrors, validateGroup, validateVenue, validateEvent, validateImage
 };

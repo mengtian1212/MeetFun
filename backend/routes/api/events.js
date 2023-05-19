@@ -5,7 +5,7 @@ const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { User, Group, GroupImage, Event, EventImage, Membership, Venue, Attendance, sequelize } = require('../../db/models');
 
 const { check } = require('express-validator');
-const { handleValidationErrors, validateGroup, validateVenue } = require('../../utils/validation');
+const { handleValidationErrors, validateGroup, validateVenue, validateEvent, validateImage } = require('../../utils/validation');
 const { requireAuth, isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue, isAttendeeByEventId } = require('../../utils/auth');
 
 const router = express.Router();
@@ -104,7 +104,7 @@ router.get('/:eventId', async (req, res, next) => {
 });
 
 // 15. Add an Image to a Event based on the Event's id
-router.post('/:eventId/images', requireAuth, isAttendeeByEventId, async (req, res, next) => {
+router.post('/:eventId/images', requireAuth, isAttendeeByEventId, validateImage, async (req, res, next) => {
     const event = await Event.findByPk(req.params.eventId);
     const { url, preview } = req.body;
 
@@ -121,6 +121,9 @@ router.post('/:eventId/images', requireAuth, isAttendeeByEventId, async (req, re
     });
 });
 
+
+router.post('/:eventId', requireAuth, isOrganizerCoHost, validateEvent, async (req, res, next) => {
+});
 // Feature 4: membership endpoints
 // Feature 5: attendance endpoints
 // Feature 6: image endpoints
