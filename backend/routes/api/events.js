@@ -149,6 +149,20 @@ router.put('/:eventId', requireAuth, isOrganizerCoHostEvent, isVenueExist, valid
 
     return res.json(updatedEvent);
 });
+
+// 17. Delete an Event specified by its id
+router.delete('/:eventId', requireAuth, isOrganizerCoHostEvent, async (req, res, next) => {
+    try {
+        const event = await Event.findByPk(req.params.eventId);
+        await event.destroy();
+    } catch (err) {
+        console.log(err);
+    }
+    return res.json({
+        message: "Successfully deleted"
+    })
+});
+
 // Feature 4: membership endpoints
 // Feature 5: attendance endpoints
 // Feature 6: image endpoints
