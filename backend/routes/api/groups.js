@@ -5,7 +5,7 @@ const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { User, Group, GroupImage, Event, EventImage, Membership, Venue, Attendance, sequelize } = require('../../db/models');
 
 const { check } = require('express-validator');
-const { handleValidationErrors, validateGroup, validateVenue, validateEvent } = require('../../utils/validation');
+const { handleValidationErrors, validateGroup, validateVenue, validateEvent, validateImage } = require('../../utils/validation');
 const { requireAuth, isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue } = require('../../utils/auth');
 const event = require('../../db/models/event');
 
@@ -177,7 +177,7 @@ router.post('/', requireAuth, validateGroup, async (req, res, next) => {
 });
 
 // 5. Add an Image to a Group based on the Group's id
-router.post('/:groupId/images', requireAuth, isOrganizer, async (req, res, next) => {
+router.post('/:groupId/images', requireAuth, isOrganizer, validateImage, async (req, res, next) => {
     const group = await Group.findByPk(req.params.groupId);
     const { url, preview } = req.body;
 
