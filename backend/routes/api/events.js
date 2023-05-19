@@ -124,23 +124,30 @@ router.post('/:eventId/images', requireAuth, isAttendeeByEventId, validateImage,
 
 // 16. Edit an Event specified by its id
 router.put('/:eventId', requireAuth, isOrganizerCoHostEvent, isVenueExist, validateEvent, async (req, res, next) => {
-    const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+    try {
+        const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
 
-    const event = await Event.findByPk(req.params.eventId);
-    if (!isNaN(venueId)) event.venueId = venueId;
-    if (name) event.name = name;
-    if (type) event.type = type;
-    if (capacity) event.capacity = capacity;
-    if (price) event.price = price;
-    if (description) event.description = description;
-    if (startDate) event.startDate = startDate;
-    if (endDate) event.endDate = endDate;
-    await event.save();
+        const event = await Event.findByPk(req.params.eventId);
+        if (!isNaN(venueId)) event.venueId = venueId;
+        if (name) event.name = name;
+        if (type) event.type = type;
+        if (capacity) event.capacity = capacity;
+        if (price) event.price = price;
+        if (description) event.description = description;
+        if (startDate) event.startDate = startDate;
+        if (endDate) event.endDate = endDate;
+        await event.save();
+    } catch (err) {
+        console.log(err);
+    }
 
-    const updatedEvent = await Event.findByPk(req.params.eventId);
-    console.log(updatedEvent);
+    const updatedEvent = await Event.findByPk(req.params.eventId, {
+        attributes: {
+            exclude: ['createdAt', 'updatedAt']
+        }
+    });
 
-    return res.json(event);
+    return res.json(updatedEvent);
 });
 // Feature 4: membership endpoints
 // Feature 5: attendance endpoints

@@ -80,9 +80,10 @@ const validateVenue = [
 const validateEvent = async (req, res, next) => {
     const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
     const errors = {};
+    console.log(errors);
 
     // venueId
-    if (venueId !== null && !Number.isInteger(venueId)) {
+    if (venueId && !Number.isInteger(venueId)) {
         errors.venueId = "Venue does not exist";
     } else if (venueId !== null && Number.isInteger(venueId) && venueId <= 0) {
         errors.venueId = "Venue does not exist";
@@ -149,14 +150,19 @@ const validateImage = [
 const isVenueExist = async (req, res, next) => {
     const { venueId } = req.body;
     // venueId
-    if (venueId !== null && !Number.isInteger(venueId)) {
-        return res.status(404).json({ message: "Venue couldn't be found" });
-    } else if (venueId !== null && Number.isInteger(venueId) && venueId <= 0) {
-        return res.status(404).json({ message: "Venue couldn't be found" });
-    } else if (venueId !== null && Number.isInteger(venueId) && venueId > 0) {
+    // if (venueId !== null && !Number.isInteger(venueId)) {
+    //     return res.status(404).json({ message: "Venue couldn't be found" });
+    // } else if (venueId !== null && Number.isInteger(venueId) && venueId <= 0) {
+    //     return res.status(404).json({ message: "Venue couldn't be found" });
+    // } else if (venueId !== null && Number.isInteger(venueId) && venueId > 0) {
+    //     const venue = await Venue.findByPk(venueId);
+    //     if (!venue) return res.status(404).json({ message: "Venue couldn't be found" });
+    // };
+    // next();
+    if (Number.isInteger(venueId) && venueId > 0) {
         const venue = await Venue.findByPk(venueId);
         if (!venue) return res.status(404).json({ message: "Venue couldn't be found" });
-    };
+    }
     next();
 };
 
