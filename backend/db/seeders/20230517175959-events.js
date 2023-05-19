@@ -31,7 +31,7 @@ const events = [
     // startDate: new Date('31 May 2023 14:00:00 EST'),
     // endDate: new Date('31 May 2023 16:00:00 EST')
     startDate: "2023-06-30 14:00:00",
-    endDate: "2023-06-31 16:00:00"
+    endDate: "2023-06-30 16:00:00"
   }, {
     venueId: 3,
     groupId: 2,
@@ -55,8 +55,8 @@ const events = [
     description: "Register to expand your real estate investing career.",
     // startDate: new Date('20 JUL 2023 20:00:00 EST'),
     // endDate: new Date('21 JUL 2023 21:30:00 EST')
-    startDate: "2024-07-20 20:00:00",
-    endDate: "2024-07-20 21:30:00"
+    startDate: "2024-07-14 20:00:00",
+    endDate: "2024-07-14 21:30:00"
   },
   {
     venueId: 4,
