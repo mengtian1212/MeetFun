@@ -395,7 +395,37 @@ router.get('/:groupId/members', async (req, res, next) => {
 });
 
 // 19. Request a Membership for a Group based on the Group's id
+router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
+    const group = await Group.findByPk(req.params.groupId);
+    if (!group) return res.status(404).json({ message: "Group couldn't be found" });
 
+    const membership = await Membership.findOne({
+        where: {
+            userId: req.user.id,
+            groupId: req.params.groupId
+        }
+    });
+    
+    if (membership === null) {
+        const member = await Membership.create({
+            userId: req.user.id,
+            groupId: req.params.groupId,
+            status: 'pending'
+        });
+        return res.json({
+            memberId: member.userId,
+            status: 'pending'
+        })
+    } else if (membership.status === 'pending') {
+        return res.status(400).json({
+            "message": "Membership has already been requested"
+        });
+    } else {
+        return res.status(400).json({
+            "message": "User is already a member of the group"
+        })
+    };
+});
 
 // Feature 5: attendance endpoints
 // Feature 6: image endpoints
