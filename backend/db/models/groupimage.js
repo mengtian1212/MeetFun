@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     groupId: {
       allowNull: false,
       type: DataTypes.INTEGER,
+      onDelete: 'cascade'
       // references: { model: 'Users', key: 'id' }
     },
     url: {
