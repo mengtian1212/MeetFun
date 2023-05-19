@@ -322,7 +322,11 @@ router.post('/:groupId/events', requireAuth, isOrganizerCoHost, validateEvent, a
         groupId: req.params.groupId,
         venueId, name, type, capacity, price, description, startDate, endDate
     });
-    return res.json(event);
+    return res.json({
+        id: event.id,
+        groupId: req.params.groupId,
+        venueId, name, type, capacity, price, description, startDate, endDate
+    });
 });
 
 // Feature 4: membership endpoints
