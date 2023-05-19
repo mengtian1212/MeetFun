@@ -7,6 +7,7 @@ const { User, Group, GroupImage, Event, EventImage, Membership, Venue, Attendanc
 const { check } = require('express-validator');
 const { handleValidationErrors, validateGroup, validateVenue, validateEvent } = require('../../utils/validation');
 const { requireAuth, isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue } = require('../../utils/auth');
+const event = require('../../db/models/event');
 
 const router = express.Router();
 
@@ -320,12 +321,15 @@ router.post('/:groupId/events', requireAuth, isOrganizerCoHost, validateEvent, a
     const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
     const event = await Event.create({
         groupId: req.params.groupId,
-        venueId, name, type, capacity, price, description, startDate, endDate
+        venueId: (venueId) ? venueId : null,
+        name, type, capacity, price, description, startDate, endDate
     });
+
     return res.json({
         id: event.id,
         groupId: req.params.groupId,
-        venueId, name, type, capacity, price, description, startDate, endDate
+        venueId: (venueId) ? venueId : null,
+        name, type, capacity, price, description, startDate, endDate
     });
 });
 
