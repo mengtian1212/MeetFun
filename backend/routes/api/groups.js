@@ -266,6 +266,50 @@ router.get('/:groupId/venues', requireAuth, isOrganizerCoHost, async (req, res, 
     return res.json({ Venues: venues });
 });
 
+// 9. Create a new Venue for a Group specified by its id
+const validateVenue = [
+    check('address')
+        .exists({ checkFalsy: true })
+        .withMessage("Street address is required"),
+    check('city')
+        .exists({ checkFalsy: true })
+        .withMessage("City is required"),
+    check('state')
+        .exists({ checkFalsy: true })
+        .withMessage("State is required"),
+    check('lat')
+        .exists({ checkFalsy: true })
+        .isDecimal({ force_decimal: true })
+        .withMessage("Latitude is not valid"),
+    check('lat')
+        .exists({ checkFalsy: true })
+        .isFloat({ min: -90, max: 90 })
+        .withMessage("Latitude is not valid"),
+    check('lng')
+        .exists({ checkFalsy: true })
+        .isDecimal({ force_decimal: true })
+        .withMessage("Longitude is not valid"),
+    check('lng')
+        .exists({ checkFalsy: true })
+        .isFloat({ min: -180, max: 180 })
+        .withMessage("Longitude is not valid"),
+    handleValidationErrors
+];
+
+router.post('/:groupId/venues', requireAuth, isOrganizerCoHost, validateVenue, async (req, res, next) => {
+    const { address, city, state, lat, lng } = req.body;
+    const venue = await Venue.create({
+        groupId: req.params.groupId,
+        address, city, state, lat, lng
+    });
+
+    return res.status(200).json({
+        id: venue.id,
+        groupId: venue.groupId,
+        address, city, state, lat, lng
+    });
+});
+
 // Feature 3: event endpoints
 // Feature 4: membership endpoints
 // Feature 5: attendance endpoints
