@@ -5,8 +5,8 @@ const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { User, Group, GroupImage, Event, EventImage, Membership, Venue, Attendance, sequelize } = require('../../db/models');
 
 const { check } = require('express-validator');
-const { handleValidationErrors } = require('../../utils/validation');
-const { requireAuth, isOrganizer, isOrganizerCoHost } = require('../../utils/auth');
+const { handleValidationErrors, validateGroup, validateVenue } = require('../../utils/validation');
+const { requireAuth, isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue } = require('../../utils/auth');
 
 const router = express.Router();
 
@@ -159,32 +159,6 @@ router.get('/:groupId', async (req, res, next) => {
 });
 
 // 4. Create a Group
-const validateGroup = [
-    check('name')
-        .exists({ checkFalsy: true })
-        .isLength({ min: 1, max: 60 })
-        .withMessage("Name must be 60 characters or less"),
-    check('about')
-        .exists({ checkFalsy: true })
-        .isLength({ min: 50 })
-        .withMessage("About must be 50 characters or more"),
-    check('type')
-        .exists({ checkFalsy: true })
-        .isIn(['Online', 'In person'])
-        .withMessage("Type must be 'Online' or 'In person'"),
-    check('private')
-        .exists({ checkFalsy: true })
-        .isBoolean()
-        .withMessage("Private must be a boolean"),
-    check('city')
-        .exists({ checkFalsy: true })
-        .withMessage("City is required"),
-    check('state')
-        .exists({ checkFalsy: true })
-        .withMessage("State is required"),
-    handleValidationErrors
-];
-
 router.post('/', requireAuth, validateGroup, async (req, res, next) => {
     const { name, about, type, private, city, state } = req.body;
     const group = await Group.create({
@@ -267,34 +241,7 @@ router.get('/:groupId/venues', requireAuth, isOrganizerCoHost, async (req, res, 
 });
 
 // 9. Create a new Venue for a Group specified by its id
-const validateVenue = [
-    check('address')
-        .exists({ checkFalsy: true })
-        .withMessage("Street address is required"),
-    check('city')
-        .exists({ checkFalsy: true })
-        .withMessage("City is required"),
-    check('state')
-        .exists({ checkFalsy: true })
-        .withMessage("State is required"),
-    check('lat')
-        .exists({ checkFalsy: true })
-        .isDecimal({ force_decimal: true })
-        .withMessage("Latitude is not valid"),
-    check('lat')
-        .exists({ checkFalsy: true })
-        .isFloat({ min: -90, max: 90 })
-        .withMessage("Latitude is not valid"),
-    check('lng')
-        .exists({ checkFalsy: true })
-        .isDecimal({ force_decimal: true })
-        .withMessage("Longitude is not valid"),
-    check('lng')
-        .exists({ checkFalsy: true })
-        .isFloat({ min: -180, max: 180 })
-        .withMessage("Longitude is not valid"),
-    handleValidationErrors
-];
+
 
 router.post('/:groupId/venues', requireAuth, isOrganizerCoHost, validateVenue, async (req, res, next) => {
     const { address, city, state, lat, lng } = req.body;
