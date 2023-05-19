@@ -91,8 +91,11 @@ const validateEvent = async (req, res, next) => {
     };
 
     const errors = {};
-    const venue = await Venue.findByPk(venueId);
-    if (!venue) errors.venueId = "Venue does not exist";
+    if (venueId) {
+        const venue = await Venue.findByPk(venueId);
+        if (!venue) errors.venueId = "Venue does not exist";
+    }
+
     if (!name || name.length < 5) errors.name = "Name must be at least 5 characters";
     if (!description) errors.description = "Description is required";
     if (!type || !types.includes(type)) errors.type = "Type must be 'Online' or 'In person'";

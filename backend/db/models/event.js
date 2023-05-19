@@ -32,12 +32,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     venueId: {
-      allowNull: false,
+      // allowNull: false,
       type: DataTypes.INTEGER,
       // references: { model: 'Venues', key: 'id' },
-      validate: {
-        notNull: { msg: "Venue does not exist" }
-      }
+      // validate: {
+      //   notNull: { msg: "Venue does not exist" }
+      // }
     },
     groupId: {
       allowNull: false,
