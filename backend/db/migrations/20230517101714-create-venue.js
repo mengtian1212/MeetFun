@@ -16,9 +16,10 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       groupId: {
-        allowNull: false,
+        // allowNull: false,
         type: Sequelize.INTEGER,
-        references: { model: 'Groups', key: 'id' }
+        references: { model: 'Groups', key: 'id' },
+        onDelete: 'SET NULL'
       },
       address: {
         type: Sequelize.STRING,
