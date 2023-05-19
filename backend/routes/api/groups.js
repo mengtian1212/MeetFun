@@ -318,13 +318,11 @@ router.get('/:groupId/events', async (req, res, next) => {
 // 14. Create an Event for a Group specified by its id
 router.post('/:groupId/events', requireAuth, isOrganizerCoHost, validateEvent, async (req, res, next) => {
     const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
-
     const event = await Event.create({
         groupId: req.params.groupId,
         venueId, name, type, capacity, price, description, startDate, endDate
     });
     return res.json(event);
-
 });
 
 // Feature 4: membership endpoints
