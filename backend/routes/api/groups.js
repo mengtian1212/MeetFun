@@ -5,7 +5,7 @@ const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { User, Group, GroupImage, Event, EventImage, Membership, Venue, Attendance, sequelize } = require('../../db/models');
 
 const { check } = require('express-validator');
-const { handleValidationErrors, validateGroup, validateVenue } = require('../../utils/validation');
+const { handleValidationErrors, validateGroup, validateVenue, validateEvent } = require('../../utils/validation');
 const { requireAuth, isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue } = require('../../utils/auth');
 
 const router = express.Router();
@@ -313,6 +313,18 @@ router.get('/:groupId/events', async (req, res, next) => {
         };
         return res.json({ Events: payload });
     };
+});
+
+// 14. Create an Event for a Group specified by its id
+router.post('/:groupId/events', requireAuth, isOrganizerCoHost, validateEvent, async (req, res, next) => {
+    const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+
+    const event = await Event.create({
+        groupId: req.params.groupId,
+        venueId, name, type, capacity, price, description, startDate, endDate
+    });
+    return res.json(event);
+
 });
 
 // Feature 4: membership endpoints
