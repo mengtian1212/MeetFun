@@ -124,4 +124,25 @@ const isOrganizerCoHostVenue = async (req, res, next) => {
     next();
 };
 
-module.exports = { setTokenCookie, restoreUser, requireAuth, isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue };
+// authorization4: using eventId, check if the current user is the attendee of the event, return an error
+const isAttendeeByEventId = async (req, res, next) => {
+    const event = await Event.findByPk(req.params.eventId);
+
+    if (!event) return res.status(404).json({ message: "Event couldn't be found" });
+
+    // const group = await Event.getGroup();
+    // if (group.organizerId !== req.user.id) return res.status(403).json({ message: "Forbidden" });
+
+    const eventAttendance = await Attendance.findAll({
+        where: {
+            eventId: req.params.eventId,
+            userId: req.user.id,
+            status: 'attending'
+        }
+    });
+
+    if (eventAttendance.length === 0) return res.status(403).json({ message: "Forbidden" });
+    next();
+};
+
+module.exports = { setTokenCookie, restoreUser, requireAuth, isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue, isAttendeeByEventId };

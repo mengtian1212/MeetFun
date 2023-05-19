@@ -6,8 +6,7 @@ const { User, Group, GroupImage, Event, EventImage, Membership, Venue, Attendanc
 
 const { check } = require('express-validator');
 const { handleValidationErrors, validateGroup, validateVenue } = require('../../utils/validation');
-const { requireAuth, isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue } = require('../../utils/auth');
-const attendance = require('../../db/models/attendance');
+const { requireAuth, isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue, isAttendeeByEventId } = require('../../utils/auth');
 
 const router = express.Router();
 
@@ -102,6 +101,24 @@ router.get('/:eventId', async (req, res, next) => {
         });
         return res.json(eventData);
     }
+});
+
+// 15. Add an Image to a Event based on the Event's id
+router.post('/:eventId/images', requireAuth, isAttendeeByEventId, async (req, res, next) => {
+    const event = await Event.findByPk(req.params.eventId);
+    const { url, preview } = req.body;
+
+    const image = await EventImage.create({
+        eventId: req.params.eventId,
+        url,
+        preview
+    });
+
+    return res.json({
+        id: image.id,
+        url: image.url,
+        preview: image.preview
+    });
 });
 
 // Feature 4: membership endpoints
