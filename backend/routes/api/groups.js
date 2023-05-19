@@ -203,7 +203,7 @@ router.put('/:groupId', requireAuth, isOrganizer, validateGroup, async (req, res
     if (name) group.name = name;
     if (about) group.about = about;
     if (type) group.type = type;
-    if (private) group.private = private;
+    if (!isNaN(private)) group.private = private;
     if (city) group.city = city;
     if (state) group.state = state;
     await group.save();

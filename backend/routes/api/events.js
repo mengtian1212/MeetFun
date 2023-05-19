@@ -5,8 +5,9 @@ const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { User, Group, GroupImage, Event, EventImage, Membership, Venue, Attendance, sequelize } = require('../../db/models');
 
 const { check } = require('express-validator');
-const { handleValidationErrors, validateGroup, validateVenue, validateEvent, validateImage } = require('../../utils/validation');
-const { requireAuth, isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue, isAttendeeByEventId } = require('../../utils/auth');
+const { handleValidationErrors, validateGroup, validateVenue, validateEvent, validateImage, isVenueExist } = require('../../utils/validation');
+const { requireAuth, isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue, isOrganizerCoHostEvent, isAttendeeByEventId } = require('../../utils/auth');
+const venue = require('../../db/models/venue');
 
 const router = express.Router();
 
@@ -121,8 +122,25 @@ router.post('/:eventId/images', requireAuth, isAttendeeByEventId, validateImage,
     });
 });
 
+// 16. Edit an Event specified by its id
+router.put('/:eventId', requireAuth, isOrganizerCoHostEvent, isVenueExist, validateEvent, async (req, res, next) => {
+    const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
 
-router.post('/:eventId', requireAuth, isOrganizerCoHost, validateEvent, async (req, res, next) => {
+    const event = await Event.findByPk(req.params.eventId);
+    if (!isNaN(venueId)) event.venueId = venueId;
+    if (name) event.name = name;
+    if (type) event.type = type;
+    if (capacity) event.capacity = capacity;
+    if (price) event.price = price;
+    if (description) event.description = description;
+    if (startDate) event.startDate = startDate;
+    if (endDate) event.endDate = endDate;
+    await event.save();
+
+    const updatedEvent = await Event.findByPk(req.params.eventId);
+    console.log(updatedEvent);
+
+    return res.json(event);
 });
 // Feature 4: membership endpoints
 // Feature 5: attendance endpoints

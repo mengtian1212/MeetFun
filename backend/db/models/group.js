@@ -73,7 +73,7 @@ module.exports = (sequelize, DataTypes) => {
         // notEmpty: { msg: "Private must be a boolean" },
         isBoolean(value) {
           if (typeof (value) !== 'boolean') {
-            throw new Error("Private must be a boolean");
+            throw new Error("Private must be a boolean11");
           }
         }
       }

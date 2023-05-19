@@ -61,7 +61,7 @@ const restoreUser = (req, res, next) => {
     });
 };
 
-// authentication: If there is no current user, return an error
+// authentication0: If there is no current user, return an error
 const requireAuth = async (req, _res, next) => {
     if (req.user) return next();
 
@@ -124,14 +124,35 @@ const isOrganizerCoHostVenue = async (req, res, next) => {
     next();
 };
 
-// authorization4: using eventId, check if the current user is the attendee of the event, return an error
+// authorization4: using eventId, check if the current user is the organizer or co-host of the group, return an error
+const isOrganizerCoHostEvent = async (req, res, next) => {
+    const event = await Event.findByPk(req.params.eventId);
+    if (!event) return res.status(404).json({ message: "Event couldn't be found" });
+
+    const group = await Group.findByPk(event.groupId);
+    if (!group) return res.status(404).json({ message: "Group couldn't be found" });
+
+    const membership = await Membership.findAll({
+        where: {
+            userId: req.user.id,
+            groupId: event.groupId,
+            status: {
+                [Op.in]: ['co-host', 'organizer']
+            }
+        }
+    });
+
+    if (membership.length === 0) return res.status(403).json({ message: "Forbidden" });
+    next();
+};
+
+// authorization5: using eventId, check if the current user is the attendee of the event or organizer of the group, return an error
 const isAttendeeByEventId = async (req, res, next) => {
     const event = await Event.findByPk(req.params.eventId);
 
     if (!event) return res.status(404).json({ message: "Event couldn't be found" });
 
-    // const group = await Event.getGroup();
-    // if (group.organizerId !== req.user.id) return res.status(403).json({ message: "Forbidden" });
+    const group = await event.getGroup();
 
     const eventAttendance = await Attendance.findAll({
         where: {
@@ -141,8 +162,8 @@ const isAttendeeByEventId = async (req, res, next) => {
         }
     });
 
-    if (eventAttendance.length === 0) return res.status(403).json({ message: "Forbidden" });
+    if (group.organizerId !== req.user.id && eventAttendance.length === 0) return res.status(403).json({ message: "Forbidden" });
     next();
 };
 
-module.exports = { setTokenCookie, restoreUser, requireAuth, isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue, isAttendeeByEventId };
+module.exports = { setTokenCookie, restoreUser, requireAuth, isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue, isOrganizerCoHostEvent, isAttendeeByEventId };
