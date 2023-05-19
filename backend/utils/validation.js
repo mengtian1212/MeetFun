@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator');
 const { check } = require('express-validator');
+const { User, Group, GroupImage, Event, EventImage, Membership, Venue, Attendance } = require('../db/models');
 
 // middleware for formatting errors from express-validator middleware
 // (to customize, see express-validator's documentation)
@@ -76,6 +77,74 @@ const validateVenue = [
     handleValidationErrors
 ];
 
+const validateEvent = async (req, res, next) => {
+    const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+    const types = ['Online', 'In person'];
+    const currDateTime = new Date().getTime();
+    let startDateTime;
+    let endDateTime;
+    if (startDate) {
+        startDateTime = new Date(startDate).getTime();
+    };
+    if (endDate) {
+        endDateTime = new Date(endDate).getTime();
+    };
+
+    const errors = {};
+    const venue = await Venue.findByPk(venueId);
+    if (!venue) errors.venueId = "Venue does not exist";
+    if (!name || name.length < 5) errors.name = "Name must be at least 5 characters";
+    if (!description) errors.description = "Description is required";
+    if (!type || !types.includes(type)) errors.type = "Type must be 'Online' or 'In person'";
+    if (!capacity || !Number.isInteger(capacity) || (Number.isInteger(capacity) && capacity < 0)) errors.capacity = "Capacity must be an integer";
+    if (!price || typeof (price) !== 'number' || (typeof (price) === 'number' && price < 0)) errors.price = "Price is invalid";
+    if (!startDate || (startDate && startDateTime <= currDateTime)) errors.startDate = "Start date must be in the future";
+    if (!endDate || (endDateTime && endDateTime < startDateTime)) errors.endDate = "End date is less than start date";
+
+    if (Object.keys(errors).length !== 0) {
+        return res.status(400).json({
+            message: "Bad Request",
+            errors
+        });
+    } else {
+        next();
+    }
+};
+
+// const validateEvent = [
+//     check('venueId')
+//         .exists({ checkFalsy: true })
+//         .withMessage("Venue does not exist"),
+//     check('name')
+//         .exists({ checkFalsy: true })
+//         .isLength({ min: 5 })
+//         .withMessage("Name must be at least 5 characters"),
+//     check('description')
+//         .exists({ checkFalsy: true })
+//         .withMessage("Description is required"),
+//     check('type')
+//         .exists({ checkFalsy: true })
+//         .isIn(['Online', 'In person'])
+//         .withMessage("Type must be 'Online' or 'In person'"),
+//     check('capacity')
+//         .exists({ checkFalsy: true })
+//         .isInt()
+//         .withMessage("Capacity must be an integer"),
+//     check('price')
+//         .exists({ checkFalsy: true })
+//         .isFloat({ min: 0 })
+//         .withMessage("Price is invalid"),
+//     check('startDate')
+//         .exists({ checkFalsy: true })
+//         .isAfter({ comparisonDate: new Date() })
+//         .withMessage("Start date must be in the future"),
+//     check('endDate')
+//         .exists({ checkFalsy: true })
+//         .isAfter({ comparisonDate: 'startDate' })
+//         .withMessage("End date is less than start date"),
+//     handleValidationErrors
+// ];
+
 module.exports = {
-    handleValidationErrors, validateGroup, validateVenue
+    handleValidationErrors, validateGroup, validateVenue, validateEvent
 };

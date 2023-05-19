@@ -5,7 +5,7 @@ const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { User, Group, GroupImage, Event, EventImage, Membership, Venue, Attendance, sequelize } = require('../../db/models');
 
 const { check } = require('express-validator');
-const { handleValidationErrors, validateGroup, validateVenue } = require('../../utils/validation');
+const { handleValidationErrors, validateGroup, validateVenue, validateEvent } = require('../../utils/validation');
 const { requireAuth, isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue } = require('../../utils/auth');
 
 const router = express.Router();

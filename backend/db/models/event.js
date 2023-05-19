@@ -90,9 +90,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       validate: {
         notNull: { msg: "Start date is required" },
-        isAfter: {
-          args: [new Date()],
-          msg: "Start date must be in the future"
+        isAfterCurrentTime(value) {
+          const startDateTime = new Date(value).getTime();
+          const currDateTime = new Date().getTime();
+          if (startDateTime <= currDateTime) {
+            throw new Error("Start date must be in the future");
+          }
         }
       }
     },
@@ -102,9 +105,9 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: { msg: "End date is required" },
         endDateAfterStartDate(value) {
-          const end = value.getTime();
-          const start = this.startDate.getTime();
-          if (end < start) {
+          const startDateTime = new Date(this.startDate).getTime();
+          const endDateTime = new Date(value).getTime();
+          if (endDateTime < startDateTime) {
             throw new Error("End date is less than start date");
           }
         }
