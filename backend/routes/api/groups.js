@@ -27,7 +27,7 @@ router.get('/', async (req, res, next) => {
         // get aggregate: numMembers
         const numMembers = await Membership.count({
             where: {
-                groupId: group.id,
+                groupId: groupData.id,
                 status: {
                     [Op.in]: ['member', 'co-host', 'organizer']
                 }
@@ -97,7 +97,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
         // get previewImage
         const previewImage = await GroupImage.findOne({
             where: {
-                groupId: groupData.id,
+                groupId: group.id,
                 preview: true
             }
         });
