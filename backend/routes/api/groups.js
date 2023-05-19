@@ -8,6 +8,7 @@ const { check } = require('express-validator');
 const { handleValidationErrors, validateGroup, validateVenue, validateEvent, validateImage } = require('../../utils/validation');
 const { requireAuth, isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue } = require('../../utils/auth');
 const event = require('../../db/models/event');
+const e = require('express');
 
 const router = express.Router();
 
@@ -334,6 +335,68 @@ router.post('/:groupId/events', requireAuth, isOrganizerCoHost, validateEvent, a
 });
 
 // Feature 4: membership endpoints
+// 18. Get all Members of a Group specified by its id
+router.get('/:groupId/members', async (req, res, next) => {
+    const group = await Group.findByPk(req.params.groupId);
+    if (!group) return res.status(404).json({ message: "Group couldn't be found" });
+
+    let isOrganizerCoHost = false;
+    if (req.user) {
+        const organizerFound = await Membership.findAll({
+            where: {
+                userId: req.user.id,
+                groupId: req.params.groupId,
+                status: {
+                    [Op.in]: ['co-host', 'organizer']
+                }
+            }
+        });
+
+        if (organizerFound.length !== 0) isOrganizerCoHost = true;
+    }
+
+    let members = [];
+    if (isOrganizerCoHost) {
+        members = await User.findAll({
+            attributes: ['id', 'firstName', 'lastName'],
+            include: {
+                model: Membership,
+                where: {
+                    groupId: group.id
+                },
+                attributes: ['status']
+            }
+        });
+    } else {
+        members = await User.findAll({
+            attributes: ['id', 'firstName', 'lastName'],
+            include: {
+                model: Membership,
+                where: {
+                    groupId: group.id,
+                    status:
+                    {
+                        [Op.ne]: 'pending'
+                    },
+                },
+                attributes: ['status']
+            }
+        });
+    }
+
+    const payload = [];
+    for (let member of members) {
+        const memberData = member.toJSON();
+        memberData.Membership = memberData.Memberships;
+        delete memberData.Memberships;
+        payload.push(memberData);
+    }
+    return res.json({ Members: payload });
+});
+
+// 19. Request a Membership for a Group based on the Group's id
+
+
 // Feature 5: attendance endpoints
 // Feature 6: image endpoints
 
