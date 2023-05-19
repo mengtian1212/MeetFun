@@ -7,6 +7,7 @@ const { User, Group, GroupImage, Event, EventImage, Membership, Venue, Attendanc
 const { check } = require('express-validator');
 const { handleValidationErrors, validateGroup, validateVenue } = require('../../utils/validation');
 const { requireAuth, isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue } = require('../../utils/auth');
+const attendance = require('../../db/models/attendance');
 
 const router = express.Router();
 
@@ -64,6 +65,43 @@ router.get('/', async (req, res, next) => {
         payload.push(eventData);
     }
     return res.json({ Events: payload });
+});
+
+// 13. Get details of an Event specified by its id
+router.get('/:eventId', async (req, res, next) => {
+    const event = await Event.findByPk(req.params.eventId, {
+        attributes: ['id', 'groupId', 'venueId', 'name', 'description', 'type', 'capacity', 'price', 'startDate', 'endDate'],
+        include: [
+            {
+                model: Group,
+                attributes: ['id', 'name', 'private', 'city', 'state']
+            },
+            {
+                model: Venue,
+                attributes: ['id', 'address', 'city', 'state', 'lat', 'lng']
+            },
+            {
+                model: EventImage,
+                attributes: ['id', 'url', 'preview']
+            }
+        ]
+    });
+
+    if (!event) {
+        const err = new Error("Event couldn't be found");
+        err.status = 404;
+        err.title = "Event couldn't be found";
+        next(err);
+    } else {
+        const eventData = event.toJSON();
+        eventData.numAttending = await Attendance.count({
+            where: {
+                eventId: event.id,
+                status: 'attending'
+            }
+        });
+        return res.json(eventData);
+    }
 });
 
 // Feature 4: membership endpoints
