@@ -27,7 +27,7 @@ router.get('/', async (req, res, next) => {
             where: {
                 groupId: group.id,
                 status: {
-                    [Op.in]: ['member', 'co-host']
+                    [Op.in]: ['member', 'co-host', 'organizer']
                 }
             }
         });
@@ -73,7 +73,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
                 where: {
                     userId: req.user.id,
                     status: {
-                        [Op.in]: ['member', 'co-host']
+                        [Op.in]: ['member', 'co-host', 'organizer']
                     },
                 },
                 attributes: []
@@ -104,7 +104,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
             where: {
                 groupId: groupData.id,
                 status: {
-                    [Op.in]: ['member', 'co-host']
+                    [Op.in]: ['member', 'co-host', 'organizer']
                 }
             }
         });
@@ -152,7 +152,7 @@ router.get('/:groupId', async (req, res, next) => {
         where: {
             groupId: req.params.groupId,
             status: {
-                [Op.in]: ['member', 'co-host']
+                [Op.in]: ['member', 'co-host', 'organizer']
             }
         }
     });
@@ -202,6 +202,13 @@ router.post('/', requireAuth, validateGroup, async (req, res, next) => {
         organizerId: req.user.id,
         name, about, type, private, city, state,
     });
+
+    const membership = await Membership.create({
+        userId: req.user.id,
+        groupId: group.id,
+        status: 'organizer'
+    });
+
     return res.status(201).json(group);
 });
 
@@ -216,7 +223,6 @@ router.post('/:groupId/images', requireAuth, isOrganizer, async (req, res, next)
         preview
     });
 
-    console.log(image);
     return res.json({
         id: image.id,
         url: image.url,
@@ -225,9 +231,26 @@ router.post('/:groupId/images', requireAuth, isOrganizer, async (req, res, next)
 });
 
 // 6. Edit a Group
-router.put('/:groupId', requireAuth, isOrganizer, async (req, res, next) => {
+router.put('/:groupId', requireAuth, isOrganizer, validateGroup, async (req, res, next) => {
     const { name, about, type, private, city, state } = req.body;
 
+    const group = await Group.findByPk(req.params.groupId);
+
+    if (!group) {
+        const err = new Error("Group couldn't be found");
+        next(err);
+    } else {
+        if (name) group.name = name;
+        if (about) group.about = about;
+        if (type) group.type = type;
+        if (private) group.private = private;
+        if (city) group.city = city;
+        if (state) group.state = state;
+        await group.save();
+        const updatedGroup = await Group.findByPk(req.params.groupId);
+        return res.json(updatedGroup);
+    };
 
 });
+
 module.exports = router;
