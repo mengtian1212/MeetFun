@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       // allowNull: false,
       // references: { model: 'Groups', key: 'id' }
+      onDelete: 'SET NULL'
     },
     address: {
       type: DataTypes.STRING,

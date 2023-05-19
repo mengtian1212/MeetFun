@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      
+
     }
   }
   Attendance.init({
@@ -25,11 +25,13 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.INTEGER,
       // references: { model: 'Events', key: 'id  ' }
+      onDelete: 'cascade'
     },
     userId: {
       allowNull: false,
       type: DataTypes.INTEGER,
       // references: { model: 'Users', key: 'id  ' }
+      onDelete: 'cascade'
     },
     status: {
       allowNull: false,
