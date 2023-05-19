@@ -26,6 +26,11 @@ module.exports = {
         status: "attending"
       },
       {
+        eventId: 1,
+        userId: 4,
+        status: "attending"
+      },
+      {
         eventId: 2,
         userId: 1,
         status: "attending"
@@ -69,6 +74,11 @@ module.exports = {
         eventId: 5,
         userId: 2,
         status: "waitlist"
+      },
+      {
+        eventId: 5,
+        userId: 3,
+        status: "attending"
       }
     ], {});
 
