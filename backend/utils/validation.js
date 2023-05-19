@@ -79,30 +79,51 @@ const validateVenue = [
 
 const validateEvent = async (req, res, next) => {
     const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
-    const types = ['Online', 'In person'];
-    const currDateTime = new Date().getTime();
-    let startDateTime;
-    let endDateTime;
-    if (startDate) {
-        startDateTime = new Date(startDate).getTime();
-    };
-    if (endDate) {
-        endDateTime = new Date(endDate).getTime();
-    };
-
     const errors = {};
-    if (venueId) {
+
+    // venueId
+    if (venueId !== null && !Number.isInteger(venueId)) {
+        errors.venueId = "Venue does not exist";
+    } else if (venueId !== null && Number.isInteger(venueId) && venueId <= 0) {
+        errors.venueId = "Venue does not exist";
+    } else if (venueId !== null && Number.isInteger(venueId) && venueId > 0) {
         const venue = await Venue.findByPk(venueId);
         if (!venue) errors.venueId = "Venue does not exist";
     }
 
-    if (!name || name.length < 5) errors.name = "Name must be at least 5 characters";
+    //name
+    if (!name || typeof (name) !== 'string' || name.length < 5) errors.name = "Name must be at least 5 characters";
+    //description
     if (!description) errors.description = "Description is required";
+    // type
+    const types = ['Online', 'In person'];
     if (!type || !types.includes(type)) errors.type = "Type must be 'Online' or 'In person'";
+    // capacity
     if (!capacity || !Number.isInteger(capacity) || (Number.isInteger(capacity) && capacity < 0)) errors.capacity = "Capacity must be an integer";
+    //price
     if (!price || typeof (price) !== 'number' || (typeof (price) === 'number' && price < 0)) errors.price = "Price is invalid";
-    if (!startDate || (startDate && startDateTime <= currDateTime)) errors.startDate = "Start date must be in the future";
-    if (!endDate || (endDateTime && endDateTime < startDateTime)) errors.endDate = "End date is less than start date";
+
+    // startDate
+    if (!startDate || typeof (startDate) !== 'string' || isNaN(Date.parse(startDate))) {
+        errors.startDate = "Start date must be in the future";
+    } else {
+        const currDateTime = new Date().getTime();
+        const startDateTime = new Date(startDate).getTime();
+        if (startDateTime <= currDateTime) {
+            errors.startDate = "Start date must be in the future";
+        }
+    };
+
+    // endDate
+    if (!endDate || typeof (endDate) !== 'string' || isNaN(Date.parse(endDate))) {
+        errors.endDate = "End date is less than start date";
+    } else {
+        const startDateTime = new Date(startDate).getTime();
+        const endDateTime = new Date(endDate).getTime();
+        if (endDateTime < startDateTime) {
+            errors.endDate = "End date is less than start date";
+        }
+    };
 
     if (Object.keys(errors).length !== 0) {
         return res.status(400).json({
@@ -124,6 +145,20 @@ const validateImage = [
         .withMessage("Preview must be a boolean"),
     handleValidationErrors
 ];
+
+const isVenueExist = async (req, res, next) => {
+    const { venueId } = req.body;
+    // venueId
+    if (venueId !== null && !Number.isInteger(venueId)) {
+        return res.status(404).json({ message: "Venue couldn't be found" });
+    } else if (venueId !== null && Number.isInteger(venueId) && venueId <= 0) {
+        return res.status(404).json({ message: "Venue couldn't be found" });
+    } else if (venueId !== null && Number.isInteger(venueId) && venueId > 0) {
+        const venue = await Venue.findByPk(venueId);
+        if (!venue) return res.status(404).json({ message: "Venue couldn't be found" });
+    };
+    next();
+};
 
 // const validateEvent = [
 //     check('venueId')
@@ -160,5 +195,5 @@ const validateImage = [
 // ];
 
 module.exports = {
-    handleValidationErrors, validateGroup, validateVenue, validateEvent, validateImage
+    handleValidationErrors, validateGroup, validateVenue, validateEvent, validateImage, isVenueExist
 };
