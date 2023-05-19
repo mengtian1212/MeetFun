@@ -159,6 +159,8 @@ router.get('/:groupId', async (req, res, next) => {
 
     if (!group) {
         const err = new Error("Group couldn't be found");
+        err.status = 404;
+        err.title = "Group couldn't be found";
         next(err);
     } else {
         const result = group.toJSON();
@@ -236,20 +238,15 @@ router.put('/:groupId', requireAuth, isOrganizer, validateGroup, async (req, res
 
     const group = await Group.findByPk(req.params.groupId);
 
-    if (!group) {
-        const err = new Error("Group couldn't be found");
-        next(err);
-    } else {
-        if (name) group.name = name;
-        if (about) group.about = about;
-        if (type) group.type = type;
-        if (private) group.private = private;
-        if (city) group.city = city;
-        if (state) group.state = state;
-        await group.save();
-        const updatedGroup = await Group.findByPk(req.params.groupId);
-        return res.json(updatedGroup);
-    };
+    if (name) group.name = name;
+    if (about) group.about = about;
+    if (type) group.type = type;
+    if (private) group.private = private;
+    if (city) group.city = city;
+    if (state) group.state = state;
+    await group.save();
+    const updatedGroup = await Group.findByPk(req.params.groupId);
+    return res.json(updatedGroup);
 
 });
 
