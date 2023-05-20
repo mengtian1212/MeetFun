@@ -405,7 +405,7 @@ router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
             groupId: req.params.groupId
         }
     });
-    
+
     if (membership === null) {
         const member = await Membership.create({
             userId: req.user.id,
@@ -414,6 +414,7 @@ router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
         });
         return res.json({
             memberId: member.userId,
+            groupId: member.groupId,
             status: 'pending'
         })
     } else if (membership.status === 'pending') {
@@ -426,6 +427,92 @@ router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
         })
     };
 });
+
+const isOrganizerFun = async (groupIdentifier, userIdentifier) => {
+    const group = await Group.findByPk(groupIdentifier);
+    if (group.organizerId !== userIdentifier) return false;
+    return true;
+};
+
+const isOrganizerCohostFun = async (groupIdentifier, userIdentifier) => {
+    const membership = await Membership.findAll({
+        where: {
+            userId: userIdentifier,
+            groupId: groupIdentifier,
+            status: {
+                [Op.in]: ['co-host', 'organizer']
+            }
+        }
+    });
+
+    if (membership.length === 0) return false;
+    return true;
+}
+
+// 20. Change the status of a membership for a group specified by id
+router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
+    const group = await Group.findByPk(req.params.groupId);
+    if (!group) return res.status(404).json({ message: "Group couldn't be found" });
+
+    const { memberId, status } = req.body;
+
+    // authorization:
+    const isOrganizer = await isOrganizerFun(req.params.groupId, req.user.id);
+    const isOrganizerCohost = await isOrganizerCohostFun(req.params.groupId, req.user.id);
+
+    if (status === 'member' && !isOrganizerCohost) {
+        return res.status(403).json({ message: "Forbidden" });
+    };
+
+    if (status === 'co-host' && !isOrganizer) {
+        return res.status(403).json({ message: "Forbidden" });
+    };
+
+    if (status === 'pending') {
+        return res.status(400).json({
+            "message": "Validations Error",
+            "errors": {
+                "status": "Cannot change a membership status to pending"
+            }
+        });
+    };
+
+    // need validation for memberId and status
+
+    const targetUser = await User.findByPk(memberId);
+    if (!targetUser) {
+        return res.status(400).json({
+            "message": "Validation Error",
+            "errors": {
+                "memberId": "User couldn't be found"
+            }
+        });
+    };
+
+    const targetMembership = await Membership.findOne({
+        where: {
+            userId: memberId,
+            groupId: req.params.groupId
+        }
+    });
+    if (!targetMembership) {
+        return res.status(404).json({
+            "message": "Membership between the user and the group does not exist"
+        });
+    };
+
+    targetMembership.status = status;
+    await targetMembership.save();
+    return res.json({
+        id: targetMembership.id,
+        groupId: targetMembership.groupId,
+        memberId: targetMembership.userId,
+        status: targetMembership.status
+    });
+});
+
+// 21. Delete membership to a group specified by id
+
 
 // Feature 5: attendance endpoints
 // Feature 6: image endpoints
