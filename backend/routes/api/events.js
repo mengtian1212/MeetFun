@@ -164,6 +164,72 @@ router.delete('/:eventId', requireAuth, isOrganizerCoHostEvent, async (req, res,
 
 // Feature 4: membership endpoints
 // Feature 5: attendance endpoints
+// 22. Get all Attendees of an Event specified by its id
+router.get('/:eventId/attendees', async (req, res, next) => {
+    const event = await Event.findByPk(req.params.eventId);
+    if (!event) return res.status(404).json({ message: "Event couldn't be found" });
+
+    const group = await Group.findByPk(event.groupId);
+    if (!group) return res.status(404).json({ message: "Group couldn't be found" });
+
+    let isOrganizerCoHost = false;
+    if (req.user) {
+        const membership = await Membership.findAll({
+            where: {
+                userId: req.user.id,
+                groupId: event.groupId,
+                status: {
+                    [Op.in]: ['co-host', 'organizer']
+                }
+            }
+        });
+        if (membership.length !== 0) isOrganizerCoHost = true;
+    };
+
+    let attendees = [];
+    if (isOrganizerCoHost) {
+        attendees = await User.findAll({
+            attributes: ['id', 'firstName', 'lastName'],
+            include: [{
+                model: Attendance,
+                where: {
+                    eventId: event.id
+                },
+                attributes: ['status']
+            }],
+            order: [['id']],
+        });
+    } else {
+        attendees = await User.findAll({
+            attributes: ['id', 'firstName', 'lastName'],
+            include: {
+                model: Attendance,
+                where: {
+                    eventId: event.id,
+                    status:
+                    {
+                        [Op.ne]: 'pending'
+                    }
+                },
+                attributes: ['status']
+            }
+        });
+    };
+
+    const payload = [];
+    for (let attendee of attendees) {
+        const attendeeData = attendee.toJSON();
+        attendeeData.Attendance = attendeeData.Attendances;
+        delete attendeeData.Attendances;
+        payload.push(attendeeData);
+    }
+
+    payload.sort((a, b) => a.id - b.id);
+    return res.json({ Attendees: payload });
+});
+
+// 23. Request to Attend an Event based on the Event's id
+
 // Feature 6: image endpoints
 
 module.exports = router;

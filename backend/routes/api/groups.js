@@ -383,7 +383,7 @@ router.get('/:groupId/members', async (req, res, next) => {
                 attributes: ['status']
             }
         });
-    }
+    };
 
     const payload = [];
     for (let member of members) {
