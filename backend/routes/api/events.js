@@ -229,6 +229,110 @@ router.get('/:eventId/attendees', async (req, res, next) => {
 });
 
 // 23. Request to Attend an Event based on the Event's id
+router.post('/:eventId/attendance', requireAuth, async (req, res, next) => {
+    // Error response for event not exists
+    const event = await Event.findByPk(req.params.eventId);
+    if (!event) return res.status(404).json({ message: "Event couldn't be found" });
+
+    // Authorization for req.user to be a member of the group of the event
+    const membership = await Membership.findAll({
+        where: {
+            userId: req.user.id,
+            groupId: event.groupId,
+            status: {
+                [Op.in]: ['member', 'co-host', 'organizer']
+            }
+        }
+    });
+    if (membership.length === 0) return res.status(403).json({ message: "Forbidden" });
+
+    const targetAttendee = await Attendance.findOne({
+        where: {
+            userId: req.user.id,
+            eventId: req.params.eventId
+        }
+    });
+
+    if (targetAttendee && targetAttendee.status === 'pending') {
+        return res.status(400).json({
+            "message": "Attendance has already been requested"
+        });
+    };
+
+    if (targetAttendee && targetAttendee.status !== 'pending') {
+        return res.status(400).json({
+            "message": "User is already an attendee of the event"
+        });
+    };
+
+    if (!targetAttendee) {
+        const newAttendee = await Attendance.create({
+            eventId: req.params.eventId,
+            userId: req.user.id,
+            status: 'pending'
+        });
+    };
+
+    return res.json({
+        userId: req.user.id,
+        status: 'pending'
+    });
+});
+
+// 24. Change the status of an attendance for an event specified by id
+router.put('/:eventId/attendance', requireAuth, isOrganizerCoHostEvent, async (req, res, next) => {
+    const event = await Event.findByPk(req.params.eventId);
+    const { userId, status } = req.body;
+
+    if (status === 'pending') {
+        return res.status(400).json({
+            "message": "Cannot change an attendance status to pending"
+        });
+    };
+
+    // similar to 20, might need to add validation for userId and status
+    // -- userId is a positive integer
+    // status is enum
+    const errors = {};
+    if (!Number.isInteger(userId) || (Number.isInteger(userId) && userId <= 0)) {
+        errors.userId = "User couldn't be found.";
+    };
+    const sta = ['attending', 'waitlist'];
+    if (!sta.includes(status)) {
+        errors.status = "Attendance status must be 'attending' or 'waitlist'.";
+    };
+
+    if (Object.keys(errors).length !== 0) {
+        return res.status(400).json({
+            message: "Validation Error",
+            errors
+        });
+    };
+
+    // Error response if attendance does not exist
+    const targetAttendee = await Attendance.findOne({
+        where: {
+            userId: userId,
+            eventId: req.params.eventId
+        }
+    });
+    if (!targetAttendee) {
+        return res.status(404).json({
+            "message": "Attendance between the user and the event does not exist"
+        });
+    };
+
+    // afterall, change the status
+    targetAttendee.status = status;
+    await targetAttendee.save();
+
+    return res.json({
+        id: targetAttendee.id,
+        eventId: targetAttendee.eventId,
+        userId: targetAttendee.userId,
+        status: targetAttendee.status
+    });
+});
 
 // Feature 6: image endpoints
 
