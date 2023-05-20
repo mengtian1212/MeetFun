@@ -189,7 +189,7 @@ const isOrganizerCohostFun = async (groupIdentifier, userIdentifier) => {
     return true;
 };
 
-// authorization8 function: check if the current user is the organizer of the group,
+// authorization8: check if the current user is the organizer of the group,
 // or the membership being deleted, return error
 const checkDeletedMember = async (req, res, next) => {
     const group = await Group.findByPk(req.params.groupId);
@@ -200,8 +200,29 @@ const checkDeletedMember = async (req, res, next) => {
     next();
 };
 
+// authorization9: check if the current user is the host of the group,
+// or the attendee being deleted, return error
+const checkDeletedAttendee = async (req, res, next) => {
+    const event = await Event.findByPk(req.params.eventId);
+    if (!event) return res.status(404).json({ message: "Event couldn't be found" });
+
+    const membership = await Membership.findAll({
+        where: {
+            userId: req.user.id,
+            groupId: event.groupId,
+            status: {
+                [Op.in]: ['co-host', 'organizer']
+            }
+        }
+    });
+    if (req.user.id !== req.body.userId && membership.length === 0) {
+        return res.status(403).json({ message: "Only the User or organizer may delete an Attendance" });
+    };
+    next();
+};
+
 module.exports = {
     setTokenCookie, restoreUser, requireAuth,
     isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue, isOrganizerCoHostEvent, isAttendeeByEventId,
-    isOrganizerFun, isOrganizerCohostFun, checkDeletedMember
+    isOrganizerFun, isOrganizerCohostFun, checkDeletedMember, checkDeletedAttendee
 };
