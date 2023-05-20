@@ -6,7 +6,7 @@ const { User, Group, GroupImage, Event, EventImage, Membership, Venue, Attendanc
 
 const { check } = require('express-validator');
 const { handleValidationErrors, validateGroup, validateVenue, validateEvent, validateImage, isVenueExist } = require('../../utils/validation');
-const { requireAuth, isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue, isOrganizerCoHostEvent, isAttendeeByEventId } = require('../../utils/auth');
+const { requireAuth, isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue, isOrganizerCoHostEvent, isAttendeeByEventId, checkDeletedAttendee } = require('../../utils/auth');
 
 const router = express.Router();
 
@@ -105,7 +105,6 @@ router.get('/:eventId', async (req, res, next) => {
 
 // 15. Add an Image to a Event based on the Event's id
 router.post('/:eventId/images', requireAuth, isAttendeeByEventId, validateImage, async (req, res, next) => {
-    const event = await Event.findByPk(req.params.eventId);
     const { url, preview } = req.body;
 
     const image = await EventImage.create({
@@ -295,7 +294,7 @@ router.put('/:eventId/attendance', requireAuth, isOrganizerCoHostEvent, async (r
     // status is enum
     const errors = {};
     if (!Number.isInteger(userId) || (Number.isInteger(userId) && userId <= 0)) {
-        errors.userId = "User couldn't be found.";
+        errors.userId = "userId is invalid";
     };
     const sta = ['attending', 'waitlist'];
     if (!sta.includes(status)) {
@@ -331,6 +330,49 @@ router.put('/:eventId/attendance', requireAuth, isOrganizerCoHostEvent, async (r
         eventId: targetAttendee.eventId,
         userId: targetAttendee.userId,
         status: targetAttendee.status
+    });
+});
+
+// 25. Delete attendance to an event specified by id
+router.delete('/:eventId/attendance', requireAuth, checkDeletedAttendee, async (req, res, next) => {
+    const { userId } = req.body;
+
+    // might need to add validation for userId being deleted
+    if (!Number.isInteger(userId) || (Number.isInteger(userId) && userId <= 0)) {
+        return res.status(400).json({
+            "message": "Validation Error",
+            "errors": {
+                "userId": "User couldn't be found"
+            }
+        });
+    };
+
+    // Error response if userId being deleted cannot be found in the user table
+    const targetUser = await User.findByPk(userId);
+    if (!targetUser) {
+        return res.status(400).json({
+            "message": "Validation Error",
+            "errors": {
+                "userId": "User couldn't be found"
+            }
+        });
+    };
+
+    const attendance = await Attendance.findOne({
+        where: {
+            userId: userId,
+            eventId: req.params.eventId
+        }
+    });
+    if (!attendance) {
+        return res.status(404).json({
+            "message": "Attendance does not exist for this User"
+        });
+    };
+
+    await attendance.destroy();
+    return res.json({
+        "message": "Successfully deleted attendance from event"
     });
 });
 

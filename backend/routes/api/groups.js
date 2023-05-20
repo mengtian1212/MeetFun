@@ -515,7 +515,17 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
 
 // 21. Delete membership to a group specified by id
 router.delete('/:groupId/membership', requireAuth, checkDeletedMember, async (req, res, next) => {
-    const { memberId, status } = req.body;
+    const { memberId } = req.body;
+
+    // might need to add validation for userId being deleted
+    if (!Number.isInteger(memberId) || (Number.isInteger(memberId) && userId <= 0)) {
+        return res.status(400).json({
+            "message": "Validation Error",
+            "errors": {
+                "memberId": "memberId is not a valid integer"
+            }
+        });
+    };
 
     // Error response if member cannot be found in the user table
     const targetUser = await User.findByPk(memberId);
