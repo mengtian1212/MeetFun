@@ -88,7 +88,7 @@ const validateEvent = async (req, res, next) => {
     } else if (venueId !== null && Number.isInteger(venueId) && venueId <= 0) {
         errors.venueId = "Venue does not exist";
     } else if (venueId !== null && Number.isInteger(venueId) && venueId > 0) {
-        const venue = await Venue.findByPk(gitvenueId);
+        const venue = await Venue.findByPk(venueId);
         if (!venue) errors.venueId = "Venue does not exist";
     }
 
@@ -151,16 +151,7 @@ const validateImage = [
 
 const isVenueExist = async (req, res, next) => {
     const { venueId } = req.body;
-    // venueId
-    // if (venueId !== null && !Number.isInteger(venueId)) {
-    //     return res.status(404).json({ message: "Venue couldn't be found" });
-    // } else if (venueId !== null && Number.isInteger(venueId) && venueId <= 0) {
-    //     return res.status(404).json({ message: "Venue couldn't be found" });
-    // } else if (venueId !== null && Number.isInteger(venueId) && venueId > 0) {
-    //     const venue = await Venue.findByPk(venueId);
-    //     if (!venue) return res.status(404).json({ message: "Venue couldn't be found" });
-    // };
-    // next();
+
     if (Number.isInteger(venueId) && venueId > 0) {
         const venue = await Venue.findByPk(venueId);
         if (!venue) return res.status(404).json({ message: "Venue couldn't be found" });

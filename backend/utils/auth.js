@@ -166,4 +166,42 @@ const isAttendeeByEventId = async (req, res, next) => {
     next();
 };
 
-module.exports = { setTokenCookie, restoreUser, requireAuth, isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue, isOrganizerCoHostEvent, isAttendeeByEventId };
+// authorization6 function: check if the current user is the organizer of the group, return an true/false
+const isOrganizerFun = async (groupIdentifier, userIdentifier) => {
+    const group = await Group.findByPk(groupIdentifier);
+    if (group.organizerId !== userIdentifier) return false;
+    return true;
+};
+
+// authorization7 function: check if the current user is the organizer or co-host of the group, return an true/false
+const isOrganizerCohostFun = async (groupIdentifier, userIdentifier) => {
+    const membership = await Membership.findAll({
+        where: {
+            userId: userIdentifier,
+            groupId: groupIdentifier,
+            status: {
+                [Op.in]: ['co-host', 'organizer']
+            }
+        }
+    });
+
+    if (membership.length === 0) return false;
+    return true;
+};
+
+// authorization8 function: check if the current user is the organizer of the group,
+// or the membership being deleted, return error
+const checkDeletedMember = async (req, res, next) => {
+    const group = await Group.findByPk(req.params.groupId);
+
+    if (!group) return res.status(404).json({ message: "Group couldn't be found" });
+
+    if (req.user.id !== req.body.memberId && req.user.id !== group.organizerId) return res.status(403).json({ message: "Forbidden" });
+    next();
+};
+
+module.exports = {
+    setTokenCookie, restoreUser, requireAuth,
+    isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue, isOrganizerCoHostEvent, isAttendeeByEventId,
+    isOrganizerFun, isOrganizerCohostFun, checkDeletedMember
+};

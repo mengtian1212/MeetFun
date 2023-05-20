@@ -6,9 +6,10 @@ const { User, Group, GroupImage, Event, EventImage, Membership, Venue, Attendanc
 
 const { check } = require('express-validator');
 const { handleValidationErrors, validateGroup, validateVenue, validateEvent, validateImage } = require('../../utils/validation');
-const { requireAuth, isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue } = require('../../utils/auth');
-const event = require('../../db/models/event');
-const e = require('express');
+const { requireAuth,
+    isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue,
+    isOrganizerFun, isOrganizerCohostFun,
+    checkDeletedMember } = require('../../utils/auth');
 
 const router = express.Router();
 
@@ -428,27 +429,6 @@ router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
     };
 });
 
-const isOrganizerFun = async (groupIdentifier, userIdentifier) => {
-    const group = await Group.findByPk(groupIdentifier);
-    if (group.organizerId !== userIdentifier) return false;
-    return true;
-};
-
-const isOrganizerCohostFun = async (groupIdentifier, userIdentifier) => {
-    const membership = await Membership.findAll({
-        where: {
-            userId: userIdentifier,
-            groupId: groupIdentifier,
-            status: {
-                [Op.in]: ['co-host', 'organizer']
-            }
-        }
-    });
-
-    if (membership.length === 0) return false;
-    return true;
-}
-
 // 20. Change the status of a membership for a group specified by id
 router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
     const group = await Group.findByPk(req.params.groupId);
@@ -468,6 +448,7 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
         return res.status(403).json({ message: "Forbidden" });
     };
 
+    // Error response if status changes to "pending"
     if (status === 'pending') {
         return res.status(400).json({
             "message": "Validations Error",
@@ -477,8 +458,26 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
         });
     };
 
-    // need validation for memberId and status
+    // might need to add validation for memberId and status
+    // -- memberId is a positive integer
+    // status is enum
+    const errors = {};
+    if (!Number.isInteger(memberId) || (Number.isInteger(memberId) && memberId <= 0)) {
+        errors.memberId = "User couldn't be found";
+    };
+    const sta = ['pending', 'member', 'co-host', 'organizer'];
+    if (!sta.includes(status)) {
+        errors.status = "Membership status must be 'pending', 'member', 'co-host', or 'organizer'.";
+    };
 
+    if (Object.keys(errors).length !== 0) {
+        return res.status(400).json({
+            message: "Validation Error",
+            errors
+        });
+    };
+
+    // Error response if member cannot be found in the user table
     const targetUser = await User.findByPk(memberId);
     if (!targetUser) {
         return res.status(400).json({
@@ -489,6 +488,7 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
         });
     };
 
+    // Error response if this membership doesn't exist.
     const targetMembership = await Membership.findOne({
         where: {
             userId: memberId,
@@ -501,8 +501,10 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
         });
     };
 
+    // afterall, change the status
     targetMembership.status = status;
     await targetMembership.save();
+
     return res.json({
         id: targetMembership.id,
         groupId: targetMembership.groupId,
@@ -512,6 +514,40 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
 });
 
 // 21. Delete membership to a group specified by id
+router.delete('/:groupId/membership', requireAuth, checkDeletedMember, async (req, res, next) => {
+    const { memberId, status } = req.body;
+
+    // Error response if member cannot be found in the user table
+    const targetUser = await User.findByPk(memberId);
+    if (!targetUser) {
+        return res.status(400).json({
+            "message": "Validation Error",
+            "errors": {
+                "memberId": "User couldn't be found"
+            }
+        });
+    };
+
+    // Error response if this membership doesn't exist.
+    const targetMembership = await Membership.findOne({
+        where: {
+            userId: memberId,
+            groupId: req.params.groupId
+        }
+    });
+    if (!targetMembership) {
+        return res.status(404).json({
+            "message": "Membership does not exist for this user"
+        });
+    };
+
+    // afterall, delete the membership
+    await targetMembership.destroy();
+
+    return res.json({
+        message: "Successfully deleted membership from this group."
+    });
+});
 
 
 // Feature 5: attendance endpoints
