@@ -17,7 +17,8 @@ const router = express.Router();
 
 // Route handlers:
 // Feature 1: group endpoints
-// 1. Get all groups:
+// 1. Get all groups.
+// don't require auth
 router.get('/', async (req, res, next) => {
     const groups = await Group.findAll({
         order: [['id', 'ASC']]
@@ -32,7 +33,7 @@ router.get('/', async (req, res, next) => {
             where: {
                 groupId: groupData.id,
                 status: {
-                    [Op.in]: ['member', 'co-host', 'organizer']
+                    [Op.in]: ['member', 'co-host']
                 }
             }
         });
@@ -64,6 +65,7 @@ router.get('/', async (req, res, next) => {
 });
 
 // 2. Get all Groups joined or organized by the Current User
+// require auth
 router.get('/current', requireAuth, async (req, res, next) => {
     const groups = await Group.findAll({
         include: [
@@ -72,7 +74,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
                 where: {
                     userId: req.user.id,
                     status: {
-                        [Op.in]: ['member', 'co-host', 'organizer']
+                        [Op.in]: ['member', 'co-host']
                     },
                 },
                 attributes: []
@@ -92,7 +94,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
             where: {
                 groupId: groupData.id,
                 status: {
-                    [Op.in]: ['member', 'co-host', 'organizer']
+                    [Op.in]: ['member', 'co-host']
                 }
             }
         });
@@ -142,7 +144,7 @@ router.get('/:groupId', async (req, res, next) => {
         where: {
             groupId: req.params.groupId,
             status: {
-                [Op.in]: ['member', 'co-host', 'organizer']
+                [Op.in]: ['member', 'co-host']
             }
         }
     });
@@ -172,7 +174,7 @@ router.post('/', requireAuth, validateGroup, async (req, res, next) => {
     const membership = await Membership.create({
         userId: req.user.id,
         groupId: group.id,
-        status: 'organizer'
+        status: 'co-host'
     });
 
     return res.status(201).json(group);
@@ -343,17 +345,15 @@ router.get('/:groupId/members', async (req, res, next) => {
 
     let isOrganizerCoHost = false;
     if (req.user) {
-        const organizerFound = await Membership.findAll({
+        const cohostFound = await Membership.findAll({
             where: {
                 userId: req.user.id,
                 groupId: req.params.groupId,
-                status: {
-                    [Op.in]: ['co-host', 'organizer']
-                }
+                status: 'co-host'
             }
         });
 
-        if (organizerFound.length !== 0) isOrganizerCoHost = true;
+        if (req.user.id === group.organizerId || cohostFound.length !== 0) isOrganizerCoHost = true;
     }
 
     let members = [];
@@ -444,7 +444,7 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
         return res.status(403).json({ message: "Forbidden" });
     };
 
-    if (status === 'co-host' && !isOrganizer) {
+    if ((status === 'co-host') && !isOrganizer) {
         return res.status(403).json({ message: "Forbidden" });
     };
 
@@ -465,9 +465,9 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
     if (!Number.isInteger(memberId) || (Number.isInteger(memberId) && memberId <= 0)) {
         errors.memberId = "User couldn't be found";
     };
-    const sta = ['pending', 'member', 'co-host', 'organizer'];
+    const sta = ['pending', 'member', 'co-host'];
     if (!sta.includes(status)) {
-        errors.status = "Membership status must be 'pending', 'member', 'co-host', or 'organizer'.";
+        errors.status = "Membership status must be 'pending', 'member', or 'co-host'.";
     };
 
     if (Object.keys(errors).length !== 0) {
@@ -518,7 +518,7 @@ router.delete('/:groupId/membership', requireAuth, checkDeletedMember, async (re
     const { memberId } = req.body;
 
     // might need to add validation for userId being deleted
-    if (!Number.isInteger(memberId) || (Number.isInteger(memberId) && userId <= 0)) {
+    if (!Number.isInteger(memberId) || (Number.isInteger(memberId) && memberId <= 0)) {
         return res.status(400).json({
             "message": "Validation Error",
             "errors": {
@@ -558,7 +558,6 @@ router.delete('/:groupId/membership', requireAuth, checkDeletedMember, async (re
         message: "Successfully deleted membership from this group."
     });
 });
-
 
 // Feature 5: attendance endpoints
 // Feature 6: image endpoints

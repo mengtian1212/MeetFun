@@ -75,7 +75,6 @@ const requireAuth = async (req, _res, next) => {
 // authorization1: check if the current user is the organizer of the group, return an error
 const isOrganizer = async (req, res, next) => {
     const group = await Group.findByPk(req.params.groupId);
-
     if (!group) return res.status(404).json({ message: "Group couldn't be found" });
     if (req.user.id !== group.organizerId) return res.status(403).json({ message: "Forbidden" });
     next();
@@ -84,20 +83,17 @@ const isOrganizer = async (req, res, next) => {
 // authorization2: check if the current user is the organizer or co-host of the group, return an error
 const isOrganizerCoHost = async (req, res, next) => {
     const group = await Group.findByPk(req.params.groupId);
-
     if (!group) return res.status(404).json({ message: "Group couldn't be found" });
 
     const membership = await Membership.findAll({
         where: {
             userId: req.user.id,
             groupId: req.params.groupId,
-            status: {
-                [Op.in]: ['co-host', 'organizer']
-            }
+            status: 'co-host'
         }
     });
 
-    if (membership.length === 0) return res.status(403).json({ message: "Forbidden" });
+    if (req.user.id !== group.organizerId && membership.length === 0) return res.status(403).json({ message: "Forbidden" });
     next();
 };
 
@@ -107,20 +103,17 @@ const isOrganizerCoHostVenue = async (req, res, next) => {
     if (!venue) return res.status(404).json({ message: "Venue couldn't be found" });
 
     const group = await venue.getGroup();
-
     if (!group) return res.status(404).json({ message: "Group couldn't be found" });
 
     const membership = await Membership.findAll({
         where: {
             userId: req.user.id,
             groupId: group.id,
-            status: {
-                [Op.in]: ['co-host', 'organizer']
-            }
+            status: 'co-host'
         }
     });
 
-    if (membership.length === 0) return res.status(403).json({ message: "Forbidden" });
+    if (req.user.id !== group.organizerId && membership.length === 0) return res.status(403).json({ message: "Forbidden" });
     next();
 };
 
@@ -136,56 +129,54 @@ const isOrganizerCoHostEvent = async (req, res, next) => {
         where: {
             userId: req.user.id,
             groupId: event.groupId,
-            status: {
-                [Op.in]: ['co-host', 'organizer']
-            }
+            status: 'co-host'
         }
     });
 
-    if (membership.length === 0) return res.status(403).json({ message: "Forbidden" });
+    if (req.user.id !== group.organizerId && membership.length === 0) return res.status(403).json({ message: "Forbidden" });
     next();
 };
 
 // authorization5: using eventId, check if the current user is the attendee of the event or organizer of the group, return an error
 const isAttendeeByEventId = async (req, res, next) => {
     const event = await Event.findByPk(req.params.eventId);
-
     if (!event) return res.status(404).json({ message: "Event couldn't be found" });
 
     const group = await event.getGroup();
+    if (!group) return res.status(404).json({ message: "Group couldn't be found" });
 
     const eventAttendance = await Attendance.findAll({
         where: {
-            eventId: req.params.eventId,
             userId: req.user.id,
+            eventId: req.params.eventId,
             status: 'attending'
         }
     });
 
-    if (group.organizerId !== req.user.id && eventAttendance.length === 0) return res.status(403).json({ message: "Forbidden" });
+    if (req.user.id !== group.organizerId && eventAttendance.length === 0) return res.status(403).json({ message: "Forbidden" });
     next();
 };
 
 // authorization6 function: check if the current user is the organizer of the group, return an true/false
 const isOrganizerFun = async (groupIdentifier, userIdentifier) => {
     const group = await Group.findByPk(groupIdentifier);
-    if (group.organizerId !== userIdentifier) return false;
+    if (userIdentifier !== group.organizerId) return false;
     return true;
 };
 
 // authorization7 function: check if the current user is the organizer or co-host of the group, return an true/false
 const isOrganizerCohostFun = async (groupIdentifier, userIdentifier) => {
+    const group = await Group.findByPk(req.params.groupId);
+
     const membership = await Membership.findAll({
         where: {
             userId: userIdentifier,
             groupId: groupIdentifier,
-            status: {
-                [Op.in]: ['co-host', 'organizer']
-            }
+            status: 'co-host'
         }
     });
 
-    if (membership.length === 0) return false;
+    if (userIdentifier !== group.organizerId && membership.length === 0) return false;
     return true;
 };
 
@@ -193,10 +184,9 @@ const isOrganizerCohostFun = async (groupIdentifier, userIdentifier) => {
 // or the membership being deleted, return error
 const checkDeletedMember = async (req, res, next) => {
     const group = await Group.findByPk(req.params.groupId);
-
     if (!group) return res.status(404).json({ message: "Group couldn't be found" });
 
-    if (req.user.id !== req.body.memberId && req.user.id !== group.organizerId) return res.status(403).json({ message: "Forbidden" });
+    if (req.user.id !== group.organizerId && req.user.id !== req.body.memberId) return res.status(403).json({ message: "Forbidden" });
     next();
 };
 
@@ -206,16 +196,10 @@ const checkDeletedAttendee = async (req, res, next) => {
     const event = await Event.findByPk(req.params.eventId);
     if (!event) return res.status(404).json({ message: "Event couldn't be found" });
 
-    const membership = await Membership.findAll({
-        where: {
-            userId: req.user.id,
-            groupId: event.groupId,
-            status: {
-                [Op.in]: ['co-host', 'organizer']
-            }
-        }
-    });
-    if (req.user.id !== req.body.userId && membership.length === 0) {
+    const group = await Group.findByPk(event.groupId);
+    if (!group) return res.status(404).json({ message: "Group couldn't be found" });
+
+    if (req.user.id !== group.organizerId && req.user.id !== req.body.userId) {
         return res.status(403).json({ message: "Only the User or organizer may delete an Attendance" });
     };
     next();

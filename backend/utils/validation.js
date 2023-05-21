@@ -45,6 +45,10 @@ const validateGroup = [
     check('state')
         .exists({ checkFalsy: true })
         .withMessage("State is required"),
+    check('state')
+        .isAlpha()
+        .isLength({ min: 2, max: 2 })
+        .withMessage("State must be 2 characters"),
     handleValidationErrors
 ];
 

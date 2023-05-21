@@ -38,7 +38,7 @@ module.exports = {
         private: true,
         city: "Chicago",
         state: "IL",
-        organizerId: 4
+        organizerId: 2
       },
       {
         name: "FakeGroup3",
@@ -47,7 +47,7 @@ module.exports = {
         private: false,
         city: "San Jose",
         state: "CA",
-        organizerId: 2
+        organizerId: 3
       }
     ];
     options.tableName = 'Groups';
