@@ -166,7 +166,7 @@ const isOrganizerFun = async (groupIdentifier, userIdentifier) => {
 
 // authorization7 function: check if the current user is the organizer or co-host of the group, return an true/false
 const isOrganizerCohostFun = async (groupIdentifier, userIdentifier) => {
-    const group = await Group.findByPk(req.params.groupId);
+    const group = await Group.findByPk(groupIdentifier);
 
     const membership = await Membership.findAll({
         where: {
