@@ -7,7 +7,7 @@ const { User, Group, GroupImage, Event, EventImage, Membership, Venue, Attendanc
 const { check } = require('express-validator');
 const { handleValidationErrors, validateGroup, validateVenue, validateEvent, validateImage } = require('../../utils/validation');
 const { requireAuth,
-    isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue,
+    isOrganizer, isOrganizerCoHost,
     isOrganizerFun, isOrganizerCohostFun,
     checkDeletedMember } = require('../../utils/auth');
 
