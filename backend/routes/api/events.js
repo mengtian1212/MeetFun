@@ -136,7 +136,9 @@ router.put('/:eventId', requireAuth, isOrganizerCoHostEvent, isVenueExist, valid
         if (endDate) event.endDate = endDate;
         await event.save();
     } catch (err) {
+        err.status = 400;
         console.log(err);
+        return next(err);
     }
 
     const updatedEvent = await Event.findByPk(req.params.eventId, {
@@ -173,16 +175,14 @@ router.get('/:eventId/attendees', async (req, res, next) => {
 
     let isOrganizerCoHost = false;
     if (req.user) {
-        const membership = await Membership.findAll({
+        const cohostFound = await Membership.findAll({
             where: {
                 userId: req.user.id,
                 groupId: event.groupId,
-                status: {
-                    [Op.in]: ['co-host', 'organizer']
-                }
+                status: 'co-host'
             }
         });
-        if (membership.length !== 0) isOrganizerCoHost = true;
+        if (req.user.id === group.organizerId || cohostFound.length !== 0) isOrganizerCoHost = true;
     };
 
     let attendees = [];
@@ -239,7 +239,7 @@ router.post('/:eventId/attendance', requireAuth, async (req, res, next) => {
             userId: req.user.id,
             groupId: event.groupId,
             status: {
-                [Op.in]: ['member', 'co-host', 'organizer']
+                [Op.in]: ['member', 'co-host']
             }
         }
     });

@@ -21,27 +21,27 @@ module.exports = {
     await queryInterface.bulkInsert(options, [
       {
         groupId: 1,
-        url: "https://www.url5.com/",
+        url: "https://fakeimageurl.com/image1.jpg",
         preview: true
       },
       {
         groupId: 1,
-        url: "https://www.url4.com/",
+        url: "https://fakeimageurl.com/image2.jpg",
         preview: false
       },
       {
         groupId: 2,
-        url: "https://www.url2.com/",
+        url: "https://fakeimageurl.com/image3.jpg",
         preview: false
       },
       {
         groupId: 2,
-        url: "https://www.url3.com/",
+        url: "https://fakeimageurl.com/image4.jpg",
         preview: true
       },
       {
         groupId: 3,
-        url: "https://www.url1.com/",
+        url: "https://fakeimageurl.com/image5.jpg",
         preview: false
       },
     ], {});

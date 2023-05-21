@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING,
       validate: {
-        isIn: { args: [['pending', 'member', 'co-host', 'organizer']], msg: "Membership status must be 'pending', 'member', 'co-host', or 'organizer'." }
+        isIn: { args: [['pending', 'member', 'co-host']], msg: "Membership status must be 'pending', 'member', or 'co-host'." }
       }
     }
   }, {
