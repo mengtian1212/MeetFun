@@ -17,8 +17,8 @@ const events = [
     description: "Join us for one hour of laid back song sharing and social time.",
     // startDate: new Date('1 Oct 2023 10:00:00 EST'),
     // endDate: new Date('1 Oct 2023 11:00:00 EST')
-    startDate: "2024-10-01 10:00:00",
-    endDate: "2024-10-01 11:00:00"
+    startDate: "2023-12-01 10:00:00",
+    endDate: "2023-12-01 11:00:00"
   },
   {
     venueId: 4,
@@ -30,8 +30,8 @@ const events = [
     description: "Come and join us at Story Music Bar for our monthly in-person meeting to play and listen to their wonderful collection of Steinway pianos. ",
     // startDate: new Date('31 May 2023 14:00:00 EST'),
     // endDate: new Date('31 May 2023 16:00:00 EST')
-    startDate: "2025-06-30 14:00:00",
-    endDate: "2025-06-30 16:00:00"
+    startDate: "2024-06-30 14:00:00",
+    endDate: "2024-06-30 16:00:00"
   }, {
     venueId: 2,
     groupId: 2,
