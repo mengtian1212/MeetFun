@@ -5,19 +5,54 @@ const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { User, Group, GroupImage, Event, EventImage, Membership, Venue, Attendance, sequelize } = require('../../db/models');
 
 const { check } = require('express-validator');
-const { handleValidationErrors, validateGroup, validateVenue, validateEvent, validateImage, isVenueExist } = require('../../utils/validation');
+const { handleValidationErrors, validateGroup, validateVenue, validateEvent, validateImage, isVenueExist, queryValidationCheck } = require('../../utils/validation');
 const { requireAuth, isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue, isOrganizerCoHostEvent, isAttendeeByEventId, checkDeletedAttendee } = require('../../utils/auth');
 
 const router = express.Router();
 
 // Middlewares:
-
 // Route handlers:
 // Feature 1: group endpoints
 // Feature 2: venue endpoints
 // Feature 3: event endpoints
 // 11. Get all Events
-router.get('/', async (req, res, next) => {
+router.get('/', queryValidationCheck, async (req, res, next) => {
+    // Endpoint 27. Add Query Filters to Get All Events
+    let { page, size, name, type, startDate } = req.query;
+
+    // After Query parameter validation check, construct queryOptions object
+    let queryOptions = {
+        where: {}
+    };
+    // Pagination
+    page = parseInt(page);
+    size = parseInt(size);
+    // default page and size:
+    if (Number.isNaN(page)) page = 1;
+    if (Number.isNaN(size)) size = 20;
+    queryOptions.limit = size;
+    queryOptions.offset = size * (page - 1);
+    console.log(page, size, queryOptions.limit, queryOptions.offset);
+
+    // Search filters
+    if (name) {
+        queryOptions.where.name = {
+            [Op.like]: `%${name}%`
+        };
+    };
+    console.log(name, queryOptions.where.name);
+    if (type) {
+        queryOptions.where.type = type;
+    };
+    console.log(type, queryOptions.where.type);
+    if (startDate) {
+        queryOptions.where.startDate = {
+            [Op.gt]: new Date(startDate)
+        };
+    };
+    console.log("my query", queryOptions);
+
+    ////////////
     const events = await Event.findAll({
         attributes: {
             exclude: ['createdAt', 'updatedAt', 'description', 'capacity', 'price']
@@ -32,7 +67,8 @@ router.get('/', async (req, res, next) => {
                 attributes: ['id', 'city', 'state']
             }
         ],
-        order: [['id', 'asc']]
+        order: [['id', 'asc']],
+        ...queryOptions // 27. Add Query Filters to Get All Events
     });
 
     const payload = [];
@@ -377,5 +413,8 @@ router.delete('/:eventId/attendance', requireAuth, checkDeletedAttendee, async (
 });
 
 // Feature 6: image endpoints
+// Feature 7: query
+// 27. Add Query Filters to Get All Events
+
 
 module.exports = router;

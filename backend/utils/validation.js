@@ -196,6 +196,83 @@ const isVenueExist = async (req, res, next) => {
 //     handleValidationErrors
 // ];
 
+const queryValidationCheck = async (req, res, next) => {
+    let { page, size, name, type, startDate } = req.query;
+    const t1 = typeof (name);
+    const t2 = typeof (type);
+    console.log("query parameter", req.query);
+    console.log("page print", page,
+        "size print", size,
+        "name print", name,
+        "type print", type,
+        "startDate print", startDate,
+        t1, t2);
+
+    const errors = {};
+    if (page) {
+        pageParsed = parseInt(page);
+        if (isNaN(page) ||
+            !Number.isInteger(pageParsed) ||
+            (Number.isInteger(pageParsed) && pageParsed < 1) ||
+            (Number.isInteger(pageParsed) && pageParsed > 10)) {
+            errors.page = "Page must be a number between 1 to 10";
+        };
+    };
+
+    if (size) {
+        sizeParsed = parseInt(size);
+        if (isNaN(size) ||
+            !Number.isInteger(sizeParsed) ||
+            (Number.isInteger(sizeParsed) && sizeParsed < 1) ||
+            (Number.isInteger(sizeParsed) && sizeParsed > 20)) {
+            errors.size = "Size must be a number between 1 to 20";
+        };
+    };
+
+    if (name) {
+        if (!isNaN(name) || typeof (name) !== 'string') {
+            errors.name = "Name must be a string";
+        };
+    };
+
+    if (type) {
+        if (!Array.isArray(type) && typeof (type) !== 'string') {
+            errors.type = "Type must be 'Online' or 'In Person'";
+        };
+
+        if (typeof (type) === 'string') {
+            // const typeDecoded = decodeURI(type);
+            if (!['Online', 'In person'].includes(type)) {
+                errors.type = "Type must be 'Online' or 'In Person'";
+            };
+        };
+
+        if (Array.isArray(type)) {
+            for (let eachType of type) {
+                // const typeDecoded = decodeURI(eachType);
+                if (!['Online', 'In person'].includes(eachType)) {
+                    errors.type = "Type must be 'Online' or 'In Person'";
+                    break;
+                };
+            };
+        };
+    };
+
+    if (startDate) {
+        if (typeof (startDate) !== 'string') errors.startDate = "Start date must be a valid datetime";
+        // if (new Date(startDate).toString() === 'Invalid Date') errors.startDate = "Start date must be a valid datetime";
+        if (isNaN(new Date(startDate).getTime())) errors.startDate = "Start date must be a valid datetime";
+
+    };
+
+    if (Object.keys(errors).length !== 0) {
+        return res.status(400).json({
+            message: "Bad Request",
+            errors
+        });
+    };
+    next();
+};
 module.exports = {
-    handleValidationErrors, validateGroup, validateVenue, validateEvent, validateImage, isVenueExist
+    handleValidationErrors, validateGroup, validateVenue, validateEvent, validateImage, isVenueExist, queryValidationCheck
 };
