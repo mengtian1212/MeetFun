@@ -200,32 +200,34 @@ const queryValidationCheck = async (req, res, next) => {
     let { page, size, name, type, startDate } = req.query;
     const t1 = typeof (name);
     const t2 = typeof (type);
-    console.log("query parameter", req.query);
-    console.log("page print", page,
-        "size print", size,
-        "name print", name,
-        "type print", type,
-        "startDate print", startDate,
-        t1, t2);
+    // console.log("query parameter", req.query);
+    // console.log("page print", page,
+    //     "size print", size,
+    //     "name print", name,
+    //     "type print", type,
+    //     "startDate print", startDate,
+    //     t1, t2);
 
     const errors = {};
     if (page) {
         pageParsed = parseInt(page);
-        if (isNaN(page) ||
-            !Number.isInteger(pageParsed) ||
-            (Number.isInteger(pageParsed) && pageParsed < 1) ||
-            (Number.isInteger(pageParsed) && pageParsed > 10)) {
-            errors.page = "Page must be a number between 1 to 10";
+        if (isNaN(page)
+            || !Number.isInteger(pageParsed)
+            || (Number.isInteger(pageParsed) && pageParsed < 1)
+            // || (Number.isInteger(pageParsed) && pageParsed > 10)
+        ) {
+            errors.page = "Page must be greater than or equal to 1";
         };
     };
 
     if (size) {
         sizeParsed = parseInt(size);
-        if (isNaN(size) ||
-            !Number.isInteger(sizeParsed) ||
-            (Number.isInteger(sizeParsed) && sizeParsed < 1) ||
-            (Number.isInteger(sizeParsed) && sizeParsed > 20)) {
-            errors.size = "Size must be a number between 1 to 20";
+        if (isNaN(size)
+            || !Number.isInteger(sizeParsed)
+            || (Number.isInteger(sizeParsed) && sizeParsed < 1)
+            // || (Number.isInteger(sizeParsed) && sizeParsed > 20)
+        ) {
+            errors.size = "Size must be greater than or equal to 1";
         };
     };
 

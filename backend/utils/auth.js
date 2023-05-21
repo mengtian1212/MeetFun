@@ -200,6 +200,7 @@ const checkDeletedAttendee = async (req, res, next) => {
     if (!group) return res.status(404).json({ message: "Group couldn't be found" });
 
     if (req.user.id !== group.organizerId && req.user.id !== req.body.userId) {
+        // console.log("don't pass the authorization!");
         return res.status(403).json({ message: "Only the User or organizer may delete an Attendance" });
     };
     next();
