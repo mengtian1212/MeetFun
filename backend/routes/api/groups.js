@@ -264,7 +264,6 @@ router.post('/:groupId/venues', requireAuth, isOrganizerCoHost, validateVenue, a
 // 12. Get all Events of a Group specified by its id
 router.get('/:groupId/events', async (req, res, next) => {
     const group = await Group.findByPk(req.params.groupId);
-    console.log(group);
     if (!group) {
         const err = new Error("Group couldn't be found");
         err.status = 404;

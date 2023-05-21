@@ -6,7 +6,7 @@ const { User, Group, GroupImage, Event, EventImage, Membership, Venue, Attendanc
 
 const { check } = require('express-validator');
 const { handleValidationErrors, validateGroup, validateVenue, validateEvent } = require('../../utils/validation');
-const { requireAuth, isOrganizerCoHostGroupImage } = require('../../utils/auth');
+const { requireAuth, isOrganizerCoHostEventImage } = require('../../utils/auth');
 
 const router = express.Router();
 
@@ -18,9 +18,9 @@ const router = express.Router();
 // Feature 4: membership endpoints
 // Feature 5: attendance endpoints
 // Feature 6: image endpoints
-// 26. Delete an Image for a Group
-router.delete('/:imageId', requireAuth, isOrganizerCoHostGroupImage, async (req, res, next) => {
-    const image = await GroupImage.findByPk(req.params.imageId);
+// 27. Delete an Image for an Event
+router.delete('/:imageId', requireAuth, isOrganizerCoHostEventImage, async (req, res, next) => {
+    const image = await EventImage.findByPk(req.params.imageId);
     await image.destroy();
     return res.json({
         message: "Successfully deleted"

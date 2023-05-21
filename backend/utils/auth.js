@@ -4,7 +4,7 @@ const { User, Group, GroupImage, Event, EventImage, Membership, Venue, Attendanc
 
 const { secret, expiresIn } = jwtConfig;
 
-const { Op, ValidationErrorItemType } = require('sequelize');
+const { Op } = require('sequelize');
 
 // Sends a JWT Cookie (used in the login and signup routes)
 const setTokenCookie = (res, user) => {
@@ -205,8 +205,55 @@ const checkDeletedAttendee = async (req, res, next) => {
     next();
 };
 
+// authorization10: using imageId in the GroupImage, check if the current user is the organizer or co-host of the group, return an error
+const isOrganizerCoHostGroupImage = async (req, res, next) => {
+    const image = await GroupImage.findByPk(req.params.imageId);
+    if (!image) return res.status(404).json({
+        "message": "Group Image couldn't be found"
+    });
+
+    const group = await Group.findByPk(image.groupId);
+    if (!group) return res.status(404).json({ message: "Group couldn't be found" });
+
+    const membership = await Membership.findAll({
+        where: {
+            userId: req.user.id,
+            groupId: image.groupId,
+            status: 'co-host'
+        }
+    });
+    if (req.user.id !== group.organizerId && membership.length === 0) return res.status(403).json({ message: "Forbidden" });
+    next();
+};
+
+// authorization11: using imageId in the EventImage, check if the current user is the organizer of co-host of the group
+// that the event belongs to, return an error
+const isOrganizerCoHostEventImage = async (req, res, next) => {
+    const image = await EventImage.findByPk(req.params.imageId);
+    if (!image) return res.status(404).json({
+        "message": "Event Image couldn't be found"
+    });
+
+    const event = await Event.findByPk(image.eventId);
+    if (!event) return res.status(404).json({ message: "Event couldn't be found" });
+
+    const group = await event.getGroup();
+    if (!group) return res.status(404).json({ message: "Group couldn't be found" });
+
+    const membership = await Membership.findAll({
+        where: {
+            userId: req.user.id,
+            groupId: event.groupId,
+            status: 'co-host'
+        }
+    });
+    if (req.user.id !== group.organizerId && membership.length === 0) return res.status(403).json({ message: "Forbidden" });
+    next();
+};
+
 module.exports = {
     setTokenCookie, restoreUser, requireAuth,
     isOrganizer, isOrganizerCoHost, isOrganizerCoHostVenue, isOrganizerCoHostEvent, isAttendeeByEventId,
-    isOrganizerFun, isOrganizerCohostFun, checkDeletedMember, checkDeletedAttendee
+    isOrganizerFun, isOrganizerCohostFun, checkDeletedMember, checkDeletedAttendee,
+    isOrganizerCoHostGroupImage, isOrganizerCoHostEventImage
 };

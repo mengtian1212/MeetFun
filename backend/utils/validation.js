@@ -84,7 +84,6 @@ const validateVenue = [
 const validateEvent = async (req, res, next) => {
     const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
     const errors = {};
-    console.log(errors);
 
     // venueId
     if (venueId && !Number.isInteger(venueId)) {
