@@ -440,50 +440,43 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
     const isOrganizerCohost = await isOrganizerCohostFun(req.params.groupId, req.user.id);
 
     if (status === 'member' && !isOrganizerCohost) {
+        // console.log("if change the status to member", isOrganizer, isOrganizerCohost);
         return res.status(403).json({ message: "Forbidden" });
     };
 
     if ((status === 'co-host') && !isOrganizer) {
+        // console.log("if change the status to co-host", isOrganizer, isOrganizerCohost);
         return res.status(403).json({ message: "Forbidden" });
-    };
-
-    // Error response if status changes to "pending"
-    if (status === 'pending') {
-        return res.status(400).json({
-            "message": "Validations Error",
-            "errors": {
-                "status": "Cannot change a membership status to pending"
-            }
-        });
     };
 
     // might need to add validation for memberId and status
     // -- memberId is a positive integer
-    // status is enum
+    // -- status must be 'member' or 'co-host'
     const errors = {};
     if (!Number.isInteger(memberId) || (Number.isInteger(memberId) && memberId <= 0)) {
-        errors.memberId = "User couldn't be found";
+        // memberId is a positive integer
+        errors.memberId = "memberId is invalid";
+    } else {
+        // Error response if member cannot be found in the user table
+        const targetUser = await User.findByPk(memberId);
+        if (!targetUser) {
+            errors.memberId = "User couldn't be found";
+        };
+    }
+
+    if (status === 'pending') {
+        // Error response if status changes to "pending"
+        errors.status = "Cannot change a membership status to pending";
+    } else if (!['member', 'co-host'].includes(status)) {
+        // status must be 'member' or 'co-host'
+        errors.status = "Membership status must be 'member' or 'co-host'";
     };
-    const sta = ['pending', 'member', 'co-host'];
-    if (!sta.includes(status)) {
-        errors.status = "Membership status must be 'pending', 'member', or 'co-host'.";
-    };
+
 
     if (Object.keys(errors).length !== 0) {
         return res.status(400).json({
             message: "Validation Error",
             errors
-        });
-    };
-
-    // Error response if member cannot be found in the user table
-    const targetUser = await User.findByPk(memberId);
-    if (!targetUser) {
-        return res.status(400).json({
-            "message": "Validation Error",
-            "errors": {
-                "memberId": "User couldn't be found"
-            }
         });
     };
 

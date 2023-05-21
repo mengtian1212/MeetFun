@@ -30,9 +30,13 @@ router.get('/', queryValidationCheck, async (req, res, next) => {
     // default page and size:
     if (Number.isNaN(page)) page = 1;
     if (Number.isNaN(size)) size = 20;
+
+    // maximum page and size:
+    if (Number.isInteger(page) && page > 10) page = 10;
+    if (Number.isInteger(size) && size > 20) size = 20;
     queryOptions.limit = size;
     queryOptions.offset = size * (page - 1);
-    console.log(page, size, queryOptions.limit, queryOptions.offset);
+    // console.log(page, size, queryOptions.limit, queryOptions.offset);
 
     // Search filters
     if (name) {
@@ -40,17 +44,17 @@ router.get('/', queryValidationCheck, async (req, res, next) => {
             [Op.like]: `%${name}%`
         };
     };
-    console.log(name, queryOptions.where.name);
+    // console.log(name, queryOptions.where.name);
     if (type) {
         queryOptions.where.type = type;
     };
-    console.log(type, queryOptions.where.type);
+    // console.log(type, queryOptions.where.type);
     if (startDate) {
         queryOptions.where.startDate = {
             [Op.gt]: new Date(startDate)
         };
     };
-    console.log("my query", queryOptions);
+    // console.log("my query", queryOptions);
 
     ////////////
     const events = await Event.findAll({
@@ -173,7 +177,7 @@ router.put('/:eventId', requireAuth, isOrganizerCoHostEvent, isVenueExist, valid
         await event.save();
     } catch (err) {
         err.status = 400;
-        console.log(err);
+        // console.log(err);
         return next(err);
     }
 
