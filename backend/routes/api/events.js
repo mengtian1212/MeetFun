@@ -31,9 +31,9 @@ router.get('/', queryValidationCheck, async (req, res, next) => {
     if (Number.isNaN(page)) page = 1;
     if (Number.isNaN(size)) size = 20;
 
-    // maximum page and size:
-    if (Number.isInteger(page) && page > 10) page = 10;
-    if (Number.isInteger(size) && size > 20) size = 20;
+    // // maximum page and size:
+    // if (Number.isInteger(page) && page > 10) page = 10;
+    // if (Number.isInteger(size) && size > 20) size = 20;
     queryOptions.limit = size;
     queryOptions.offset = size * (page - 1);
     // console.log(page, size, queryOptions.limit, queryOptions.offset);
