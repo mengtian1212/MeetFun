@@ -1,0 +1,98 @@
+.landing-page-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.landing-page {
+  max-width: 1120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.body {
+  padding: 5rem 0;
+  text-align: center;
+  /* display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; */
+}
+
+/* section 1 */
+.sec1-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.sec1-left-title {
+  font-size: 48px;
+  font-weight: 700;
+}
+
+.sec1-right-container > img {
+  width: 520px;
+  height: 232px;
+}
+
+/* section 2 */
+.sec2-container {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sec2-title {
+  font-size: 30px;
+  font-weight: 600;
+  padding: 0px 0px 8px;
+}
+
+.sec2-text {
+  padding: 0px 280px 40px;
+}
+
+/* section 3 */
+.sec3-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.sec3-card {
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.sec3-card-text-container > h3 {
+  color: var(--meetup-green);
+  font-size: 1.25rem;
+  margin: 0 0 12px;
+}
+
+/* section 4 */
+.sec4-container {
+  display: flex;
+  justify-content: center;
+}
+
+.join-btn {
+  padding: 8px 16px;
+  border: 0px solid;
+  border-radius: 8px;
+  background-color: var(--meetup-green);
+  color: #ffffff;
+}
+
+.join-btn:hover {
+  background-color: rgba(59, 130, 246, 0.5);
+  cursor: pointer;
+}

@@ -1,3 +1,36 @@
 .hidden {
-    display: none;
+  display: none;
+}
+
+.meet-up {
+  font-family: "Marck Script", cursive;
+  font-size: 40px;
+  color: var(--meetup-red);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.header {
+  list-style: none;
+  padding: 0 100px;
+  border-bottom: 2px solid grey;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+}
+
+.header-right-container {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+}
+
+.profile-dropdown {
+  list-style: none;
+
+  position: absolute;
+  right: 20px;
+  top: 50px;
 }
