@@ -1,14 +1,21 @@
 import "./GroupsList.css";
 
-function GroupListItem({ group }) {
+function GroupListCard({ group }) {
   return (
     <>
       <div className="group-list-card cursor">
         <div className="group-list-img-container">
-          <img src={group.previewImage} alt="placeholder" />
+          <img
+            src={
+              group.previewImage === `No preview image for this group`
+                ? "No Image Pic"
+                : group.previewImage
+            }
+            alt="placeholder"
+          />
         </div>
         <div className="group-list-text-container">
-          <div id="group-name">
+          <div className="group-name">
             <h2>{group.name}</h2>
             <h3>
               {group.city.toUpperCase()}
@@ -17,7 +24,7 @@ function GroupListItem({ group }) {
             </h3>
           </div>
           <p>{group.about}</p>
-          <div id="numMembers">
+          <div className="numMembers">
             {group.numMembers} Members · {group.private ? "Private" : "Public"}
           </div>
         </div>
@@ -26,4 +33,4 @@ function GroupListItem({ group }) {
   );
 }
 
-export default GroupListItem;
+export default GroupListCard;

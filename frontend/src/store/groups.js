@@ -13,14 +13,10 @@ export const fetchGroups = () => async (dispatch) => {
   if (res.ok) {
     const data = await res.json();
     dispatch(loadGroups(data.Groups));
-
-
-
-      
   }
 };
 
-/** Group Reducer: */
+/** Groups Reducer: */
 const groupsReducer = (state = {}, action) => {
   switch (action.type) {
     case LOAD_GROUPS:

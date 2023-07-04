@@ -1,0 +1,19 @@
+.event-list-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
+}
+
+.event-card-top {
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+}
+
+#event-date-time {
+  color: var(--meetup-green);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}

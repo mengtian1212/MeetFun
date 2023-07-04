@@ -11,11 +11,13 @@ function GroupsList() {
       state.groups.allGroups ? state.groups.allGroups : []
     )
   ).filter((group) => !Array.isArray(group));
-
+ 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchGroups());
   }, [dispatch]);
+
+  if (groups.length === 0) return null;
 
   return (
     <>
