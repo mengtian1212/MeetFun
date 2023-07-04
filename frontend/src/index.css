@@ -1,1 +1,30 @@
 /* TODO Add site wide styles */
+* {
+  margin: 0px 0px;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 14pt;
+  font-family: "Graphik Meetup", -apple-system, BlinkMacSystemFont, Roboto,
+    Helvetica, Arial, sans-serif;
+  list-style-type: none;
+}
+
+:root {
+  /* General colors: */
+  --white: #ffffff;
+  --black: #000000;
+  --dark-gray: #999999;
+  --light-gray: #cccccc;
+  --red: #ff5a5f;
+  --teal: #00525e;
+  --light-teal: #e8f0fe;
+
+  /* Colors for meetup */
+  --meetup-red: #f64060;
+  --meetup-green: #00798a;
+  --btn-hover: #3a879b;
+}
+
+.cursor {
+  cursor: pointer;
+}

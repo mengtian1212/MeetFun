@@ -38,15 +38,18 @@ function ProfileButton({ user }) {
   };
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
+  const profileArrowDirection = showMenu ? "up" : "down";
 
   return (
     <>
-      <button onClick={openMenu}>
-        <i className="fas fa-user-circle" />
-      </button>
-      <ul className={ulClassName} ref={ulRef}>
-        {user ? (
-          <>
+      {user ? (
+        <div className="header-right-container">
+          <div>Start a new group</div>
+          <button onClick={openMenu}>
+            <i className="fas fa-user-circle" />
+            <i className={`fa-solid fa-chevron-${profileArrowDirection}`}></i>
+          </button>
+          <ul className={ulClassName} ref={ulRef}>
             <li>{user.username}</li>
             <li>
               {user.firstName} {user.lastName}
@@ -55,25 +58,24 @@ function ProfileButton({ user }) {
             <li>
               <button onClick={logout}>Log Out</button>
             </li>
-          </>
-        ) : (
-          <>
-            <OpenModalMenuItem
-              itemText="Log In"
-              onItemClick={closeMenu}
-              modalComponent={<LoginFormModal />}
-            />
-            <OpenModalMenuItem
-              itemText="Sign Up"
-              onItemClick={closeMenu}
-              modalComponent={<SignupFormModal />}
-            />
-          </>
-        )}
-      </ul>
+          </ul>
+        </div>
+      ) : (
+        <div className="header-right-container">
+          <OpenModalMenuItem
+            itemText="Log In"
+            onItemClick={closeMenu}
+            modalComponent={<LoginFormModal />}
+          />
+          <OpenModalMenuItem
+            itemText="Sign Up"
+            onItemClick={closeMenu}
+            modalComponent={<SignupFormModal />}
+          />
+        </div>
+      )}
     </>
   );
 }
-
 
 export default ProfileButton;

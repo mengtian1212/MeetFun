@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model, Validator
-} = require('sequelize');
+"use strict";
+const { Model, Validator } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class GroupImage extends Model {
     /**
@@ -11,27 +9,30 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      GroupImage.belongsTo(models.Group, { foreignKey: 'groupId' })
+      GroupImage.belongsTo(models.Group, { foreignKey: "groupId" });
     }
   }
-  GroupImage.init({
-    groupId: {
-      allowNull: false,
-      type: DataTypes.INTEGER,
-      onDelete: 'cascade'
-      // references: { model: 'Users', key: 'id' }
+  GroupImage.init(
+    {
+      groupId: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        onDelete: "cascade",
+        // references: { model: 'Users', key: 'id' }
+      },
+      url: {
+        allowNull: false,
+        type: DataTypes.TEXT,
+      },
+      preview: {
+        allowNull: false,
+        type: DataTypes.BOOLEAN,
+      },
     },
-    url: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    preview: {
-      allowNull: false,
-      type: DataTypes.BOOLEAN,
+    {
+      sequelize,
+      modelName: "GroupImage",
     }
-  }, {
-    sequelize,
-    modelName: 'GroupImage',
-  });
+  );
   return GroupImage;
 };

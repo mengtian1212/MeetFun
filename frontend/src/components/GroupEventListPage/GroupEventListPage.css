@@ -1,0 +1,35 @@
+.group-event-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: rgb(112 112 112/1);
+  margin-bottom: 4rem;
+}
+
+.event-or-group-container {
+  width: 993px;
+  display: flex;
+  padding-bottom: 0.75rem;
+}
+
+.event-or-group {
+  color: gray;
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.75rem;
+  margin-right: 1rem;
+  text-decoration: none;
+  padding-bottom: 2px;
+}
+
+.event-or-group.active {
+  color: var(--meetup-green);
+  border-bottom: 4px solid var(--meetup-green);
+}
+
+.group-event-list-containter {
+  padding-bottom: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

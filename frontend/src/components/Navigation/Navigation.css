@@ -1,3 +1,41 @@
 .hidden {
-    display: none;
+  display: none;
+}
+
+.header {
+  list-style: none;
+  padding-left: 3rem;
+  padding-right: 20px;
+  margin-bottom: 2.5rem;
+  border-bottom: 2px solid rgb(217 217 217);
+  min-height: 70px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.meet-up {
+  font-family: "Marck Script", cursive;
+  font-size: 25pt;
+  color: var(--meetup-red);
+  font-weight: 1000;
+  text-decoration: none;
+  background-color: transparent;
+  border: none;
+}
+
+.header-right-container {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+}
+
+.profile-dropdown {
+  list-style: none;
+
+  position: absolute;
+  right: 20px;
+  top: 50px;
 }
