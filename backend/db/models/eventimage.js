@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model, Validator
-} = require('sequelize');
+"use strict";
+const { Model, Validator } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class EventImage extends Model {
     /**
@@ -11,27 +9,30 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      EventImage.belongsTo(models.Event, { foreignKey: 'eventId' });
+      EventImage.belongsTo(models.Event, { foreignKey: "eventId" });
     }
   }
-  EventImage.init({
-    eventId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      onDelete: 'cascade'
-      // references: { model: 'Events', key: 'id' }
+  EventImage.init(
+    {
+      eventId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        onDelete: "cascade",
+        // references: { model: 'Events', key: 'id' }
+      },
+      url: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      preview: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
     },
-    url: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    preview: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false
+    {
+      sequelize,
+      modelName: "EventImage",
     }
-  }, {
-    sequelize,
-    modelName: 'EventImage',
-  });
+  );
   return EventImage;
 };

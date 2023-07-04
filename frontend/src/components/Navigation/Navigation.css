@@ -2,23 +2,28 @@
   display: none;
 }
 
-.meet-up {
-  font-family: "Marck Script", cursive;
-  font-size: 40px;
-  color: var(--meetup-red);
-  font-weight: bold;
-  text-decoration: none;
-}
-
 .header {
   list-style: none;
-  padding: 0 100px;
-  border-bottom: 2px solid grey;
+  padding-left: 3rem;
+  padding-right: 20px;
+  margin-bottom: 2.5rem;
+  border-bottom: 2px solid rgb(217 217 217);
+  min-height: 70px;
 
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.meet-up {
+  font-family: "Marck Script", cursive;
+  font-size: 25pt;
+  color: var(--meetup-red);
+  font-weight: 1000;
+  text-decoration: none;
+  background-color: transparent;
+  border: none;
 }
 
 .header-right-container {

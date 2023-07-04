@@ -1,4 +1,7 @@
 .landing-page-container {
+  margin-top: 5rem;
+  margin-bottom: 3rem;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,10 +17,6 @@
 .body {
   padding: 5rem 0;
   text-align: center;
-  /* display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center; */
 }
 
 /* section 1 */
@@ -27,9 +26,18 @@
   align-items: center;
 }
 
+.sec1-left-container {
+  margin-right: 4rem;
+}
+
 .sec1-left-title {
   font-size: 48px;
   font-weight: 700;
+  line-height: 1;
+}
+
+.sec1-left-text {
+  margin-top: 1.5rem;
 }
 
 .sec1-right-container > img {
@@ -46,9 +54,11 @@
 }
 
 .sec2-title {
-  font-size: 30px;
+  font-size: 1.875rem;
+  line-height: 2.25rem;
   font-weight: 600;
-  padding: 0px 0px 8px;
+
+  margin-bottom: 0.5rem;
 }
 
 .sec2-text {
@@ -59,40 +69,63 @@
 .sec3-container {
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  align-items: center;
 }
 
 .sec3-card {
+  width: 33.333333%;
   padding: 0 24px;
+  text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  text-align: center;
 }
 
-.sec3-card-text-container > h3 {
+.card-pic {
+  width: 160px;
+  height: 151px;
+}
+
+.sec3-card-text-container {
+  margin-top: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.card-title {
   color: var(--meetup-green);
   font-size: 1.25rem;
-  margin: 0 0 12px;
+  font-weight: 600;
+  line-height: 1.75rem;
+  /* margin-top: 0.5rem; */
+  /* margin-bottom: 3rem; */
+  text-decoration: none;
+}
+
+.card-title:hover {
+  text-decoration: underline;
+}
+
+.sec3-card-text-container > p {
+  margin-top: 12px;
+  color: rgb(33 33 33/1);
 }
 
 /* section 4 */
 .sec4-container {
+  margin-top: 3rem;
   display: flex;
   justify-content: center;
 }
 
 .join-btn {
-  padding: 8px 16px;
+  padding: 0.5rem 1rem;
   border: 0px solid;
   border-radius: 8px;
+  text-align: center;
   background-color: var(--meetup-green);
   color: #ffffff;
 }
 
 .join-btn:hover {
-  background-color: rgba(59, 130, 246, 0.5);
+  background-color: var(--btn-hover);
   cursor: pointer;
 }
