@@ -10,6 +10,7 @@ function Navigation({ isLoaded }) {
 
   const handleClick = () => {
     history.push("/");
+    window.scrollTo(0, 0);
   };
 
   return (

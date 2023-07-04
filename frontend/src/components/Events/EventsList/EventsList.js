@@ -1,30 +1,45 @@
-// import { useEffect } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { fetchGroups } from "../../../store/groups";
-// import "./GroupList.css";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchEvents } from "../../../store/events";
+import "./EventsList.css";
 
-// import GroupListCard from "./GroupListCard";
+import EventListCard from "./EventListCard";
 
-// function GroupsList() {
-//   const groups = Object.values(
-//     useSelector((state) =>
-//       state.groups.allGroups ? state.groups.allGroups : []
-//     )
-//   ).filter((group) => !Array.isArray(group));
+function EventsList() {
+  const events = Object.values(
+    useSelector((state) =>
+      state.events.allEvents ? state.events.allEvents : []
+    )
+  );
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchEvents());
+  }, [dispatch]);
 
-//   const dispatch = useDispatch();
-//   useEffect(() => {
-//     dispatch(fetchGroups());
-//   }, [dispatch]);
+  if (events.length === 0) return null;
 
-//   return (
-//     <section className="group-event-list-containter">
-//       <div id="groups-in-meetfun">Groups in MeetFun</div>
-//       {groups.map((group) => (
-//         <GroupListCard key={group.id} group={group} />
-//       ))}
-//     </section>
-//   );
-// }
+  events.sort((a, b) => {
+    const dateA = a.startDate;
+    const dateB = b.startDate;
+    if (dateA < dateB) {
+      return -1;
+    } else if (dateA > dateB) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
 
-// export default GroupsList;
+  return (
+    <>
+      <div id="groups-in-meetfun">Events in MeetFun</div>
+      <div className="list-item">
+        {events.map((event) => (
+          <EventListCard key={event.id} event={event} />
+        ))}
+      </div>
+    </>
+  );
+}
+
+export default EventsList;

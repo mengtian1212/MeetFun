@@ -24,8 +24,8 @@ function App() {
           <Route path="/groups">
             <GroupEventListPage showtype="groups" />
           </Route>
-          <Route path="/events" showtype="events">
-            <GroupEventListPage />
+          <Route path="/events">
+            <GroupEventListPage showtype="events" />
           </Route>
         </Switch>
       )}

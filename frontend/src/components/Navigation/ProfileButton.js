@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import * as sessionActions from "../../store/session";
 import OpenModalMenuItem from "./OpenModalMenuItem";
@@ -7,6 +8,7 @@ import SignupFormModal from "../SignupFormModal";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
+  const history = useHistory();
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
 
@@ -31,10 +33,12 @@ function ProfileButton({ user }) {
 
   const closeMenu = () => setShowMenu(false);
 
-  const logout = (e) => {
+  const logout = async (e) => {
     e.preventDefault();
-    dispatch(sessionActions.logout());
+    const response = await dispatch(sessionActions.logout());
+    console.log(response);
     closeMenu();
+    if (response.ok) history.push("/");
   };
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
@@ -44,18 +48,19 @@ function ProfileButton({ user }) {
     <>
       {user ? (
         <div className="header-right-container">
-          <div>Start a new group</div>
-          <button onClick={openMenu}>
+          <div className="start-new-group">Start a new group</div>
+          <button onClick={openMenu} className="user-icon-container cursor">
             <i className="fas fa-user-circle" />
-            <i className={`fa-solid fa-chevron-${profileArrowDirection}`}></i>
+            <i
+              className={`fa-solid fa-chevron-${profileArrowDirection} arrow`}
+            ></i>
           </button>
           <ul className={ulClassName} ref={ulRef}>
-            <li>{user.username}</li>
             <li>
-              {user.firstName} {user.lastName}
+              Hello, {user.firstName} {user.lastName}!
             </li>
             <li>{user.email}</li>
-            <li>
+            <li className="logout-in-menu">
               <button onClick={logout}>Log Out</button>
             </li>
           </ul>

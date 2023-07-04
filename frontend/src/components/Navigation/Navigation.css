@@ -3,12 +3,16 @@
 }
 
 .header {
+  /* position: fixed;
+  top: 0;
+  width: 100%; */
   list-style: none;
   padding-left: 3rem;
   padding-right: 20px;
   margin-bottom: 2.5rem;
   border-bottom: 2px solid rgb(217 217 217);
-  min-height: 70px;
+  min-height: 65px;
+  background-color: white;
 
   display: flex;
   flex-direction: row;
@@ -16,9 +20,10 @@
   justify-content: space-between;
 }
 
+/* Logo */
 .meet-up {
   font-family: "Marck Script", cursive;
-  font-size: 25pt;
+  font-size: 26pt;
   color: var(--meetup-red);
   font-weight: 1000;
   text-decoration: none;
@@ -27,15 +32,74 @@
 }
 
 .header-right-container {
+  gap: 40px;
   display: flex;
   flex-direction: row;
-  gap: 30px;
+  align-items: center;
 }
 
+.start-new-group {
+  color: var(--meetup-green);
+  font-weight: 450;
+}
+
+/* header right */
+.user-icon-container {
+  border: 0px;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.fas.fa-user-circle {
+  color: var(--meetup-red);
+  border: 2px solid black;
+  border-radius: 50%;
+  font-size: 2rem;
+}
+
+.arrow {
+  color: rgb(112 112 112/1);
+}
+
+/* User Menu */
 .profile-dropdown {
   list-style: none;
-
+  transform: translate3d(0px, 56px, 0px);
   position: absolute;
   right: 20px;
-  top: 50px;
+  top: 1.25rem;
+  min-width: 210px;
+  padding: 0.75rem 1rem;
+  font-weight: 300;
+  line-height: 1.3rem;
+
+  border: 0.7px solid rgb(112 112 112/1);
+  border-radius: 0.25rem;
+  box-shadow: 3px 3px 4px rgba(112, 112, 112, 0.5);
+  color: rgb(112 112 112/1);
+  background-color: white;
+}
+
+.profile-dropdown li:nth-child(2) {
+  padding-bottom: 0.3rem;
+}
+
+.profile-dropdown li:last-child {
+  padding-top: 0.35rem;
+  border-top: 1px solid rgb(217 217 217/1);
+}
+
+.profile-dropdown button {
+  width: 100%;
+  text-align: left;
+  color: rgb(112 112 112/1);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.profile-dropdown button:hover {
+  color: var(--meetup-green);
 }
