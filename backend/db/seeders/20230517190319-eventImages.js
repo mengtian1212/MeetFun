@@ -81,6 +81,36 @@ module.exports = {
           url: "https://as2.ftcdn.net/v2/jpg/01/34/70/41/1000_F_134704156_jOe9FP7AVcQum5jUICTbCNdfsCRQ32Wd.jpg",
           preview: false,
         },
+        {
+          eventId: 7,
+          url: "https://a.cdn-hotels.com/gdcs/production81/d1247/c0664d9b-f990-44f2-8cfe-ed0541088c8a.jpg?impolicy=fcrop&w=1600&h=1066&q=medium",
+          preview: true,
+        },
+        {
+          eventId: 8,
+          url: "https://hellscanyon.tours/wp-content/uploads/2023/01/RiverAdventuresInc-214207-Pieces-Fishing-Equipment-blogbanner1-1080x675.jpg",
+          preview: true,
+        },
+        {
+          eventId: 9,
+          url: "https://secure.meetupstatic.com/photos/event/3/6/7/5/clean_507373941.webp",
+          preview: true,
+        },
+        {
+          eventId: 10,
+          url: "https://www.levantina.com/blog/wp-content/uploads/2019/10/c1.jpg",
+          preview: true,
+        },
+        {
+          eventId: 11,
+          url: "https://secure.meetupstatic.com/photos/event/9/9/a/6/600_514179334.webp?w=384",
+          preview: true,
+        },
+        {
+          eventId: 12,
+          url: "https://img.freepik.com/free-photo/vibrant-colors-shapes-patterns-modern-mosaic-art-generated-by-ai_188544-29132.jpg?t=st=1688591034~exp=1688594634~hmac=1329abf351b99fc6a32b855d8cbe7badf8112c87a3e78df4f97b583a1175f941&w=1380",
+          preview: true,
+        },
       ],
       {}
     );

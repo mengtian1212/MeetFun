@@ -73,7 +73,7 @@ function LoginFormModal() {
   return (
     <section className="modal-container">
       <div className="xmark-container" onClick={closeModal}>
-        <i class="fa-solid fa-xmark"></i>
+        <i className="fa-solid fa-xmark"></i>
       </div>
       <form onSubmit={(e) => handleSubmit(e, "")}>
         <div className="logo-container">

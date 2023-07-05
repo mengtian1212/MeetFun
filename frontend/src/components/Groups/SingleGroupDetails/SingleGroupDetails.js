@@ -1,23 +1,82 @@
 import "./SingleGroupDetails.css";
-// import "../GroupsList/GroupsList.css";
 import { useParams, NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { fetchSingleGroup } from "../../../store/groups";
 import LineBreakHelper from "../../../utils/LineBreakHelper";
+
+import { fetchSingleGroupThunk } from "../../../store/groups";
+import { fetchEventsByGroupIdThunk } from "../../../store/events";
+import EventListCard from "../../Events/EventsList/EventListCard";
 
 function SingleGroupDetails() {
   const { groupId } = useParams();
   const targetGroup = useSelector((state) =>
     state.groups.singleGroup ? state.groups.singleGroup : {}
   );
+
+  const groupEvents = Object.values(
+    useSelector((state) =>
+      state.events.allEvents ? state.events.allEvents : {}
+    )
+  );
+
+  const upcomingEventsArr = groupEvents.filter((event) => {
+    const startDateTime = new Date(event.startDate).getTime();
+    const currDateTime = new Date().getTime();
+    return startDateTime > currDateTime;
+  });
+
+  upcomingEventsArr.sort((a, b) => {
+    const dateA = a.startDate;
+    const dateB = b.startDate;
+    if (dateA < dateB) {
+      return -1;
+    } else if (dateA > dateB) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+
+  const pastEventsArr = groupEvents.filter((event) => {
+    const startDateTime = new Date(event.startDate).getTime();
+    const currDateTime = new Date().getTime();
+    return startDateTime <= currDateTime;
+  });
+
+  pastEventsArr.sort((a, b) => {
+    const dateA = a.startDate;
+    const dateB = b.startDate;
+    if (dateA < dateB) {
+      return 1;
+    } else if (dateA > dateB) {
+      return -1;
+    } else {
+      return 0;
+    }
+  });
+
+  upcomingEventsArr.sort((a, b) => {
+    const dateA = a.startDate;
+    const dateB = b.startDate;
+    if (dateA < dateB) {
+      return -1;
+    } else if (dateA > dateB) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     console.log("useEffect thunk ran");
-    dispatch(fetchSingleGroup(groupId));
+    dispatch(fetchSingleGroupThunk(groupId));
+    dispatch(fetchEventsByGroupIdThunk(groupId));
     window.scroll(0, 0);
   }, [dispatch, groupId]);
+
   if (targetGroup === null) return null;
 
   let imgUrl = `No preview image for this group`;
@@ -58,7 +117,7 @@ function SingleGroupDetails() {
                 <div className="small-text-container">
                   <div className="detail-container">
                     <div className="icon-container">
-                      <i class="fa-solid fa-location-dot"></i>
+                      <i className="fa-solid fa-location-dot"></i>
                     </div>
                     <div>
                       {targetGroup.city}
@@ -68,7 +127,7 @@ function SingleGroupDetails() {
                   </div>
                   <div className="detail-container">
                     <div className="icon-container">
-                      <i class="fa-solid fa-user-group"></i>
+                      <i className="fa-solid fa-user-group"></i>
                     </div>
                     <div>
                       {targetGroup.numMembers}{" "}
@@ -79,11 +138,14 @@ function SingleGroupDetails() {
                   <div>
                     <div className="detail-container">
                       <div className="icon-container">
-                        <i class="fa-solid fa-user"></i>{" "}
+                        <i className="fa-solid fa-user"></i>{" "}
                       </div>
                       <div>
-                        Organized by {targetGroup.Organizer.firstName}{" "}
-                        {targetGroup.Organizer.lastName}
+                        Organized by{" "}
+                        <span className="organizer-name">
+                          {targetGroup.Organizer.firstName}{" "}
+                          {targetGroup.Organizer.lastName}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -108,13 +170,35 @@ function SingleGroupDetails() {
                 <LineBreakHelper text={targetGroup.about} />
               </div>
             </div>
-            <div className="upcoming-events-copntainer">
-              <h2>Upcoming Events (????)</h2>
-              <div>Leave blank card1</div>
+            <div className="group-events-container">
+              {upcomingEventsArr.length > 0 && (
+                <h2>Upcoming events ({upcomingEventsArr.length})</h2>
+              )}
+              <div className="list-item">
+                {upcomingEventsArr.length > 0 &&
+                  upcomingEventsArr.map((event) => (
+                    <EventListCard
+                      key={event.id}
+                      event={event}
+                      cardMode={true}
+                    />
+                  ))}
+              </div>
             </div>
-            <div className="past-events-container">
-              <h2>Past Events (????)</h2>
-              <div>Leave blank card2</div>
+            <div className="group-events-container">
+              {pastEventsArr.length > 0 && (
+                <h2>Past events ({pastEventsArr.length})</h2>
+              )}
+              <div className="list-item">
+                {pastEventsArr.length > 0 &&
+                  pastEventsArr.map((event) => (
+                    <EventListCard
+                      key={event.id}
+                      event={event}
+                      cardMode={true}
+                    />
+                  ))}
+              </div>
             </div>
           </div>
         </div>

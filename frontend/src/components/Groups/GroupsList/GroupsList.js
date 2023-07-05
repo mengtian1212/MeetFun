@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchGroups } from "../../../store/groups";
+import { fetchGroupsThunk } from "../../../store/groups";
 import "./GroupsList.css";
 
 import GroupListCard from "./GroupListCard";
@@ -8,13 +8,13 @@ import GroupListCard from "./GroupListCard";
 function GroupsList() {
   const groups = Object.values(
     useSelector((state) =>
-      state.groups.allGroups ? state.groups.allGroups : []
+      state.groups.allGroups ? state.groups.allGroups : {}
     )
   ).filter((group) => !Array.isArray(group));
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchGroups());
+    dispatch(fetchGroupsThunk());
     window.scroll(0, 0);
   }, [dispatch]);
 

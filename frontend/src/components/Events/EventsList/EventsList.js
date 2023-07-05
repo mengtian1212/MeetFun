@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchEvents } from "../../../store/events";
+import { fetchEventsThunk } from "../../../store/events";
 import "./EventsList.css";
 
 import EventListCard from "./EventListCard";
@@ -8,12 +8,12 @@ import EventListCard from "./EventListCard";
 function EventsList() {
   const events = Object.values(
     useSelector((state) =>
-      state.events.allEvents ? state.events.allEvents : []
+      state.events.allEvents ? state.events.allEvents : {}
     )
   );
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchEvents());
+    dispatch(fetchEventsThunk());
     window.scroll(0, 0);
   }, [dispatch]);
 

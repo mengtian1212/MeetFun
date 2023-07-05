@@ -1,3 +1,5 @@
+import { csrfFetch } from "./csrf";
+
 /** Action Type Constants: */
 export const LOAD_GROUPS = "groups/LOAD_GROUPS";
 export const LOAD_SINGLE_GROUP = "groups/LOAD_SINGLE_GROUP";
@@ -14,16 +16,16 @@ export const loadSingleGroup = (group) => ({
 });
 
 /** Thunk Action Creators: */
-export const fetchGroups = () => async (dispatch) => {
-  const res = await fetch("/api/groups");
+export const fetchGroupsThunk = () => async (dispatch) => {
+  const res = await csrfFetch("/api/groups");
   if (res.ok) {
     const data = await res.json();
     dispatch(loadGroups(data.Groups));
   }
 };
 
-export const fetchSingleGroup = (groupId) => async (dispatch) => {
-  const res = await fetch(`/api/groups/${groupId}`);
+export const fetchSingleGroupThunk = (groupId) => async (dispatch) => {
+  const res = await csrfFetch(`/api/groups/${groupId}`);
   console.log("in the thunk..");
   if (res.ok) {
     const data = await res.json();
@@ -42,13 +44,10 @@ const groupsReducer = (state = {}, action) => {
       action.groups.forEach((group) => {
         groupsState[group.id] = group;
       });
-      console.log({
-        ...state,
-        allGroups: { ...groupsState, optionalOrderedList: [] },
-      });
       return {
         ...state,
         allGroups: { ...groupsState, optionalOrderedList: [] },
+        singleGroup: {},
       };
     case LOAD_SINGLE_GROUP:
       return { ...state, singleGroup: { ...action.group } };
