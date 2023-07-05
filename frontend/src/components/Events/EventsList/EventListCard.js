@@ -1,15 +1,31 @@
 import { useHistory } from "react-router-dom";
 
-function EventListCard({ event }) {
+function EventListCard({ event, cardMode }) {
   const history = useHistory();
   const handleClick = () => {
     history.push(`/events/${event.id}`);
   };
 
+  const startDateTime = new Date(event.startDate);
+  const options = {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    timeZoneName: "short",
+  };
+  const formattedStartDate = startDateTime.toLocaleString("en-US", options);
+  const cardClassName = cardMode ? "show-as-white-card" : "";
+
   return (
     <>
-      <div className="group-list-card cursor d" onClick={handleClick}>
-        <div className="event-list-car">
+      <div
+        className={`group-list-card cursor d ${cardClassName}`}
+        onClick={handleClick}
+      >
+        <div className={`event-list-card ${cardClassName} ${cardMode && "aa"}`}>
           <div className="event-card-top">
             <div className="group-list-img-container">
               <img
@@ -22,12 +38,15 @@ function EventListCard({ event }) {
               />
             </div>
             <div className="group-list-text-container">
-              <div className="group-name">
-                <h3 id="event-date-time">
+              <div className={`group-name`}>
+                {/* <h3 id="event-date-time">
                   {event.startDate.slice(0, 10)} ·{" "}
                   {event.startDate.slice(11, 19)}
-                </h3>
-                <h2>{event.name}</h2>
+                </h3> */}
+                <h3 id={`event-date-time`}>{formattedStartDate}</h3>
+                <h2 className={cardMode && "text-format-title"}>
+                  {event.name}
+                </h2>
                 <h3>
                   {event.Venue?.city.toUpperCase()}
                   {",  "}
@@ -37,7 +56,9 @@ function EventListCard({ event }) {
             </div>
           </div>
 
-          <p className="event-card-bottom">{event.description}</p>
+          <p className={`event-card-bottom ${cardMode && "text-format-p"}`}>
+            {event.description}
+          </p>
         </div>
       </div>
     </>

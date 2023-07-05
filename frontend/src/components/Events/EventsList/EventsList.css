@@ -5,6 +5,11 @@
   align-items: space-between;
 }
 
+.aa:hover {
+  border: 1px solid transparent;
+  box-shadow: 2px 2px 3px rgba(112, 112, 112, 0.5);
+}
+
 .event-card-top {
   width: 100%;
 
@@ -27,4 +32,15 @@
 
   font-size: 0.875rem;
   line-height: 1.25rem;
+}
+
+.text-format-title {
+  margin-bottom: 8px;
+}
+.text-format-p {
+  font-size: 15px;
+  /* line-height: 1.43; */
+  color: rgb(112 112 112/1);
+  padding-top: 20px;
+  margin-bottom: 8px;
 }

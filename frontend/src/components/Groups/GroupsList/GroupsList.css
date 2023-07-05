@@ -16,6 +16,19 @@
   flex-direction: row;
 }
 
+.group-list-card .show-as-white-card {
+  background-color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 20px;
+
+  line-height: 1.25rem;
+}
+
+.list-item .show-as-white-card {
+  border: none;
+}
+
 .group-list-img-container {
   margin-right: 1rem;
 }
@@ -37,6 +50,7 @@
   font-weight: 600;
   font-size: 1.25rem;
   line-height: 1.75rem;
+  /* margin-bottom: 8px; */
 }
 
 .group-name > h3 {
