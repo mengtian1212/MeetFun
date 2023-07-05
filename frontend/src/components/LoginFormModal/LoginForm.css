@@ -1,3 +1,91 @@
-.label{
-    color: red;
+.modal-container {
+  background-color: transparent;
+  padding-right: 2.5rem;
+  padding-left: 2.5rem;
+  padding-top: 2.25rem;
+  padding-bottom: 2rem;
+}
+
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.logo-container > h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 36px;
+  margin-top: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.logo-container > img {
+  width: 48px;
+  height: 48px;
+}
+
+/* username or email input  */
+.credential-input {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0.75rem;
+  gap: 1.5rem;
+}
+
+.labels {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.25rem;
+}
+
+.login-credential {
+  border: 1px solid rgb(230 230 230);
+  border-radius: 0.5rem;
+  margin-top: 5px;
+  padding: 0.5rem 0.75rem;
+}
+
+.login-btn-container {
+  padding: 0.5rem 0.75rem;
+}
+
+.login-button {
+  margin-top: 1rem;
+  padding: 0.5rem 0.75rem;
+  height: 3rem;
+  width: 100%;
+  font-weight: 500;
+  font-size: 14pt;
+  color: white;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  border: white;
+  border-radius: 8px;
+}
+
+.enabledBtn {
+  background-color: var(--meetup-red);
+}
+
+.enabledBtn:hover {
+  background-color: #e32359;
+}
+
+.disabledBtn {
+  background-color: var(--dark-gray);
+}
+
+/* demo user  */
+.demo-container {
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.demo {
+  /* border-radius: 0.5rem; */
+  padding: 0.4rem 0.5rem;
 }

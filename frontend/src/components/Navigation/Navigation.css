@@ -54,6 +54,7 @@
 
 .fas.fa-user-circle {
   color: var(--meetup-red);
+  fill: var(--meetup-red);
   border: 2px solid black;
   border-radius: 50%;
   font-size: 2rem;
@@ -71,9 +72,9 @@
   right: 20px;
   top: 1.25rem;
   min-width: 210px;
-  padding: 0.75rem 1rem;
+  padding: 0.8rem 1rem;
   font-weight: 300;
-  line-height: 1.3rem;
+  line-height: 1.4rem;
 
   border: 0.7px solid rgb(112 112 112/1);
   border-radius: 0.25rem;

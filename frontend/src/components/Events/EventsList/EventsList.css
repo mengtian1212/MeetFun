@@ -17,3 +17,14 @@
   font-size: 0.875rem;
   line-height: 1.25rem;
 }
+
+.event-card-bottom {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}

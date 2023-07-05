@@ -45,8 +45,21 @@
   line-height: 1.25rem;
 }
 
-#numMembers {
+.group-list-text-container > p {
+  padding: 0 0 4px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.numMembers {
   padding: 24px 0 0;
   font-size: 0.875rem;
   line-height: 1.25rem;
+  padding-top: 1.5rem;
 }
