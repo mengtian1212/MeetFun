@@ -15,7 +15,12 @@ function OpenModalMenuItem({
     if (onItemClick) onItemClick();
   };
 
-  return <li onClick={onClick}>{itemText}</li>;
+  const btnClassName = itemText === "Log In" ? "login" : "signup";
+  return (
+    <li onClick={onClick} className={btnClassName}>
+      {itemText}
+    </li>
+  );
 }
 
 export default OpenModalMenuItem;

@@ -1,9 +1,25 @@
+.xmark-container {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  cursor: pointer;
+  color: grey;
+}
+
+.fa-solid.fa-xmark {
+  font-size: 23px;
+}
+
 .modal-container {
   background-color: transparent;
   padding-right: 2.5rem;
   padding-left: 2.5rem;
   padding-top: 2.25rem;
   padding-bottom: 2rem;
+
+  width: 484px;
+  max-height: 100vh;
+  overflow-y: auto;
 }
 
 .logo-container {
@@ -24,6 +40,37 @@
 .logo-container > img {
   width: 48px;
   height: 48px;
+}
+
+/* not a member */
+.not-a-member-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.not-a-member-container > h2 {
+  font-weight: 400;
+  font-size: 14pt;
+}
+
+/* not a member sign up button  */
+.signup-text .signup {
+  color: var(--meetup-green);
+  background-color: white;
+  padding-left: 8px;
+}
+
+.signup-text .signup:hover {
+  background-color: white;
+  color: var(--meetup-green);
+}
+
+/* error-message */
+.error-message {
+  color: red;
+  font-weight: 400;
+  font-size: 16px;
 }
 
 /* username or email input  */
@@ -86,6 +133,5 @@
 }
 
 .demo {
-  /* border-radius: 0.5rem; */
   padding: 0.4rem 0.5rem;
 }
