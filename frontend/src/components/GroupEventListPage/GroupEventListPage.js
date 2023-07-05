@@ -7,10 +7,10 @@ function GroupEventListPage({ showtype }) {
   return (
     <div className="group-event-main">
       <div className="event-or-group-container">
-        <NavLink to="/events" className="event-or-group">
+        <NavLink exact to="/events" className="event-or-group">
           Events
         </NavLink>
-        <NavLink to="/groups" className="event-or-group">
+        <NavLink exact to="/groups" className="event-or-group">
           Groups
         </NavLink>
       </div>

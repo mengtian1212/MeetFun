@@ -1,7 +1,14 @@
+import { useHistory } from "react-router-dom";
+
 function EventListCard({ event }) {
+  const history = useHistory();
+  const handleClick = () => {
+    history.push(`/events/${event.id}`);
+  };
+
   return (
     <>
-      <div className="group-list-card cursor d">
+      <div className="group-list-card cursor d" onClick={handleClick}>
         <div className="event-list-car">
           <div className="event-card-top">
             <div className="group-list-img-container">
@@ -11,7 +18,7 @@ function EventListCard({ event }) {
                     ? "https://i0.wp.com/orstx.org/wp-content/uploads/2019/10/no-photo-available-icon-12.jpg?fit=300%2C245&ssl=1"
                     : event.previewImage
                 }
-                alt="placeholder"
+                alt="No preview for this event"
               />
             </div>
             <div className="group-list-text-container">
@@ -30,12 +37,7 @@ function EventListCard({ event }) {
             </div>
           </div>
 
-          <p className="event-card-bottom">
-            The theme of this meetFun event is {event.name}. However, the
-            organizer doesn't provide any description yet. Please click to check
-            more details or dm the organizer for detailed information. We look
-            forward to seeing you there!
-          </p>
+          <p className="event-card-bottom">{event.description}</p>
         </div>
       </div>
     </>

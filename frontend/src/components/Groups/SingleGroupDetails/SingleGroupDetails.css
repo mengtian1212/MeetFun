@@ -1,0 +1,149 @@
+/* back to groups Navlink */
+.back-to-groups-container {
+  text-decoration: none;
+}
+
+.selected {
+  color: var(--meetup-green);
+}
+
+.selected:hover {
+  border-bottom: 4px solid var(--meetup-green);
+}
+
+.group-detail-main {
+  display: flex;
+  flex-direction: column;
+}
+
+/* top */
+.group-detail-top {
+  background-color: #fff;
+  max-width: 1100px;
+  align-self: center;
+  line-height: 1.5;
+  width: 100%;
+  gap: 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.top-container {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.group-detail-img {
+  max-width: 700px;
+  width: 600px;
+  border-radius: 8px;
+  /* flex-grow: 3; */
+}
+
+/* top right */
+.top-right-text-container {
+  padding: 0 0 0 35px;
+  /* flex-grow: 2; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.title-and-text > h2 {
+  font-weight: 700;
+  font-size: 32px;
+  color: #212121;
+  stroke: transparent;
+  fill: #2e3e48;
+}
+
+.small-text-container {
+  font-size: 14px;
+  line-height: 1.43rem;
+  margin-top: 20px;
+}
+
+.detail-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.icon-container {
+  width: 20px;
+  text-align: center;
+}
+
+/* join this group button  */
+.top-right-text-container > button {
+  font-weight: 500;
+  font-size: 14pt;
+  color: white;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  background-color: var(--meetup-red);
+  border: white;
+  border-radius: 8px;
+  cursor: pointer;
+
+  align-self: flex-start;
+}
+
+.top-right-text-container button:hover {
+  background-color: #e32359;
+}
+
+/* Bottom */
+.group-detail-bottom {
+  background-color: var(--background-grey);
+  display: flex;
+  justify-content: center;
+}
+
+.bottom-inner {
+  max-width: 1100px;
+  width: 100%;
+  padding: 40px 0 0 0;
+}
+
+/* Organizer  */
+.bottom1-organizer > h2 {
+  line-height: 1.4rem;
+  padding-bottom: 20px;
+  font-size: 16pt;
+}
+
+.bottom1-organizer > h3 {
+  font-weight: 400;
+  font-size: 14pt;
+}
+
+/* what we're about  */
+.bottom2-what-we-are-about {
+  padding: 40px 0 0 0;
+}
+
+.bottom2-what-we-are-about > h2 {
+  padding-bottom: 20px;
+  font-size: 16pt;
+}
+
+.paragraphs > p {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.paragraphs > p:not(:last-child) {
+  margin-bottom: 28px;
+}
+
+/* Upcoming events  */
+.upcoming-events-copntainer {
+  padding: 40px 0 0 0;
+}
+.upcoming-events-copntainer > h2 {
+  padding-bottom: 20px;
+  font-size: 16pt;
+}

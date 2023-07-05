@@ -14,6 +14,7 @@ function EventsList() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchEvents());
+    window.scroll(0, 0);
   }, [dispatch]);
 
   if (events.length === 0) return null;

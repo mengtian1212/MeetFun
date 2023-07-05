@@ -45,7 +45,7 @@ function LandingPage() {
                 alt="left pic"
               ></img>
               <div className="sec3-card-text-container">
-                <NavLink to="/groups" className="card-title">
+                <NavLink exact to="/groups" className="card-title">
                   See all groups
                 </NavLink>
                 <p>
@@ -61,7 +61,7 @@ function LandingPage() {
                 alt="mid pic"
               ></img>
               <div className="sec3-card-text-container">
-                <NavLink to="/events" className="card-title">
+                <NavLink exact to="/events" className="card-title">
                   Find an event
                 </NavLink>
                 <p>
@@ -77,7 +77,7 @@ function LandingPage() {
                 alt="right pic"
               ></img>
               <div className="sec3-card-text-container">
-                <NavLink to="" className="card-title">
+                <NavLink exact to="" className="card-title">
                   Start a group
                 </NavLink>
                 <p>
