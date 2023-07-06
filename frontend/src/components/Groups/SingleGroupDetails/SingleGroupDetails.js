@@ -77,8 +77,6 @@ function SingleGroupDetails() {
     window.scroll(0, 0);
   }, [dispatch, groupId]);
 
-  if (targetGroup === null) return null;
-
   let imgUrl = `No preview image for this group`;
   if (Object.keys(targetGroup).length === 0) {
     return null;
@@ -86,7 +84,9 @@ function SingleGroupDetails() {
     const previewImage = targetGroup.GroupImages.find(
       (img) => img.preview === true
     );
-    if (previewImage) imgUrl = previewImage.url;
+    if (previewImage && Object.keys(previewImage).length > 0) {
+      imgUrl = previewImage.url;
+    }
   }
 
   return (
@@ -170,21 +170,21 @@ function SingleGroupDetails() {
                 <LineBreakHelper text={targetGroup.about} />
               </div>
             </div>
-            <div className="group-events-container">
-              {upcomingEventsArr.length > 0 && (
+            {upcomingEventsArr.length > 0 && (
+              <div className="group-events-container">
                 <h2>Upcoming events ({upcomingEventsArr.length})</h2>
-              )}
-              <div className="list-item">
-                {upcomingEventsArr.length > 0 &&
-                  upcomingEventsArr.map((event) => (
-                    <EventListCard
-                      key={event.id}
-                      event={event}
-                      cardMode={true}
-                    />
-                  ))}
+                <div className="list-item">
+                  {upcomingEventsArr.length > 0 &&
+                    upcomingEventsArr.map((event) => (
+                      <EventListCard
+                        key={event.id}
+                        event={event}
+                        cardMode={true}
+                      />
+                    ))}
+                </div>
               </div>
-            </div>
+            )}
             <div className="group-events-container">
               {pastEventsArr.length > 0 && (
                 <h2>Past events ({pastEventsArr.length})</h2>

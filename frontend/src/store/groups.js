@@ -5,12 +5,12 @@ export const LOAD_GROUPS = "groups/LOAD_GROUPS";
 export const LOAD_SINGLE_GROUP = "groups/LOAD_SINGLE_GROUP";
 
 /**  Action Creators: */
-export const loadGroups = (groups) => ({
+export const loadGroupsAction = (groups) => ({
   type: LOAD_GROUPS,
   groups,
 });
 
-export const loadSingleGroup = (group) => ({
+export const loadSingleGroupAction = (group) => ({
   type: LOAD_SINGLE_GROUP,
   group,
 });
@@ -20,7 +20,7 @@ export const fetchGroupsThunk = () => async (dispatch) => {
   const res = await csrfFetch("/api/groups");
   if (res.ok) {
     const data = await res.json();
-    dispatch(loadGroups(data.Groups));
+    dispatch(loadGroupsAction(data.Groups));
   }
 };
 
@@ -29,7 +29,7 @@ export const fetchSingleGroupThunk = (groupId) => async (dispatch) => {
   console.log("in the thunk..");
   if (res.ok) {
     const data = await res.json();
-    dispatch(loadSingleGroup(data));
+    dispatch(loadSingleGroupAction(data));
   } else {
     const errors = await res.json();
     return errors;

@@ -28,7 +28,7 @@ module.exports = {
         },
         {
           eventId: 2,
-          url: "https://img.freepik.com/free-photo/caucasian-pianist-playing-chord-with-focus-generated-by-ai_188544-11104.jpg?t=st=1688500950~exp=1688501550~hmac=92afa30df696b4039c10d6b315fc32a45c376c0a083621d009c9c068e1d5fd3a&w=1380",
+          url: "https://d.newsweek.com/en/full/1989687/woman-playing-piano.webp?w=790&f=31d561264d5c942c692be9cbac0337f5",
           preview: true,
         },
         {
