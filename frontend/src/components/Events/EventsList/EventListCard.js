@@ -1,4 +1,5 @@
 import { useHistory } from "react-router-dom";
+import { formatDateTime } from "../../../utils/helper-functions";
 
 function EventListCard({ event, cardMode }) {
   const history = useHistory();
@@ -6,17 +7,6 @@ function EventListCard({ event, cardMode }) {
     history.push(`/events/${event.id}`);
   };
 
-  const startDateTime = new Date(event.startDate);
-  const options = {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    timeZoneName: "short",
-  };
-  const formattedStartDate = startDateTime.toLocaleString("en-US", options);
   const cardClassName = cardMode ? "show-as-white-card" : "";
 
   return (
@@ -43,7 +33,9 @@ function EventListCard({ event, cardMode }) {
                   {event.startDate.slice(0, 10)} ·{" "}
                   {event.startDate.slice(11, 19)}
                 </h3> */}
-                <h3 id={`event-date-time`}>{formattedStartDate}</h3>
+                <h3 id={`event-date-time`}>
+                  {formatDateTime(event.startDate)}
+                </h3>
                 <h2 className={cardMode && "text-format-title"}>
                   {event.name}
                 </h2>

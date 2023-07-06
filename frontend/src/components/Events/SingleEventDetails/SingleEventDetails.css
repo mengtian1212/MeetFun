@@ -1,0 +1,121 @@
+.top-white-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.background {
+  background-color: var(--background-grey);
+}
+
+.group-detail-main .background {
+  padding: 40px 0 0;
+}
+
+.event-title {
+  font-weight: 700;
+  line-height: 1.375;
+  font-size: 1.875rem;
+}
+
+.host {
+  margin-bottom: 1rem;
+}
+
+.hostby {
+  font-weight: 400;
+  font-size: 0.875rem;
+  margin-bottom: 3px;
+  line-height: 1;
+}
+
+.hostname {
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+/* grey area:  */
+.top-right-text-container {
+  display: flex;
+  justify-content: flex-start;
+}
+.group-detail-img1 {
+  max-width: 650px;
+  width: 640px;
+  border-radius: 8px;
+  /* flex-grow: 3; */
+}
+
+.small-group-container {
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  padding: 1.3rem;
+  border-radius: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.small-group-container:hover {
+  border: 1px solid transparent;
+  box-shadow: 0.5px 0.5px 4px rgba(112, 112, 112, 0.5);
+}
+
+.small-group-img {
+  max-width: 300px;
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.small-group-text-container {
+  padding-left: 20px;
+}
+.small-group-title {
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.25;
+  margin-bottom: 4px;
+}
+.small-group-type {
+  font-weight: 500;
+  font-size: 14px;
+  color: #707070;
+}
+
+.event-metadata-container {
+  display: flex;
+  flex-direction: column;
+  padding: 1.3rem;
+  border-radius: 1.5rem;
+  background-color: white;
+}
+
+.detail-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.detail-container * {
+  font-size: 14px;
+  line-height: 1.25;
+  margin-bottom: 4px;
+  align-self: flex-start;
+}
+
+.icon-container > i {
+  color: #707070;
+}
+/* details  */
+.bottom3-what-we-are-about {
+  max-width: 984px;
+  width: 100%;
+  align-self: center;
+  padding: 40px 0 50px 0;
+}
+
+.bottom3-what-we-are-about > h2 {
+  padding-bottom: 20px;
+  font-size: 16pt;
+}
