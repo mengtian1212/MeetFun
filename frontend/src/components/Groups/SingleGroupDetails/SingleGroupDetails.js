@@ -127,7 +127,6 @@ function SingleGroupDetails() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("useEffect thunk ran");
     dispatch(fetchSingleGroupThunk(groupId));
     dispatch(fetchEventsByGroupIdThunk(groupId));
     // if (targetGroup && Object.values(targetGroup).length) return null;

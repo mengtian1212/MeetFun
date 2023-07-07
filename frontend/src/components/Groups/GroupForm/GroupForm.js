@@ -92,13 +92,11 @@ const GroupForm = ({ group, formType }) => {
       private: privateStatus === "private" ? true : false,
       // imageDataArr: imageData,
     };
-    console.log("formdata:", formData);
     let res;
     if (formType === "Create Group") {
       res = await dispatch(createGroupThunk(formData, sessionUser));
     } else {
       res = await dispatch(updateGroupThunk(formData));
-      console.log("res before json", res);
     }
     if (res.id) {
       resetForm();

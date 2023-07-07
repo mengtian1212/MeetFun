@@ -25,7 +25,7 @@ function EventListCard({ event, cardMode }) {
                     ? "https://i0.wp.com/orstx.org/wp-content/uploads/2019/10/no-photo-available-icon-12.jpg?fit=300%2C245&ssl=1"
                     : event.previewImage
                 }
-                alt="No preview for this event"
+                alt="No event preview"
               />
             </div>
             <div className="group-list-text-container">

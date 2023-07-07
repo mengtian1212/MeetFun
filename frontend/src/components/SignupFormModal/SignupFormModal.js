@@ -59,7 +59,6 @@ function SignupFormModal() {
           }
         });
     }
-    console.log(capitalizeFirstChar(firstName), capitalizeFirstChar(lastName));
     setErrors({
       confirmPassword:
         "Confirm Password field must be the same as the Password field",

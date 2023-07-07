@@ -17,6 +17,7 @@ function App() {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
   }, [dispatch]);
 
+  // NEED TO ADD REDIRECTING IF NOT AUTHORIZED TO VISIT EACH ROUTE
   return (
     <div className="entire">
       <Navigation isLoaded={isLoaded} />

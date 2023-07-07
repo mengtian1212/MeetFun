@@ -15,7 +15,6 @@ export const formatDateTime = (timeData) => {
 export const capitalizeFirstChar = (words) => {
   let processedWord = words.trim().replace(/\s+/g, " ");
   const wordArr = processedWord.split(" ");
-  console.log(wordArr);
   const resArr = [];
   for (let word of wordArr) {
     const newWord = word[0].toUpperCase() + word.slice(1).toLowerCase();

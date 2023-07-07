@@ -36,7 +36,6 @@ function ProfileButton({ user }) {
   const logout = async (e) => {
     e.preventDefault();
     const response = await dispatch(sessionActions.logout());
-    console.log(response);
     closeMenu();
     if (response.ok) history.push("/");
   };

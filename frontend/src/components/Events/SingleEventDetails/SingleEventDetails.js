@@ -28,7 +28,6 @@ function SingleEventDetails() {
   useEffect(() => {
     const fetchData = async () => {
       const event = await dispatch(fetchSingleEventThunk(eventId));
-      console.log("event", event);
       await dispatch(fetchSingleGroupThunk(event.Group?.id));
       window.scroll(0, 0);
     };
@@ -87,7 +86,7 @@ function SingleEventDetails() {
                     ? "https://i0.wp.com/orstx.org/wp-content/uploads/2019/10/no-photo-available-icon-12.jpg?fit=300%2C245&ssl=1"
                     : imgUrl
                 }
-                alt="No preview for this event"
+                alt="No event preview"
                 className="group-detail-img1"
               />
             </div>
@@ -103,7 +102,7 @@ function SingleEventDetails() {
                         ? "https://i0.wp.com/orstx.org/wp-content/uploads/2019/10/no-photo-available-icon-12.jpg?fit=300%2C245&ssl=1"
                         : imgUrlGroup
                     }
-                    alt="No preview for this group"
+                    alt="No group preview"
                     className="small-group-img"
                   />
                 </div>
