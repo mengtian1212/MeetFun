@@ -15,7 +15,11 @@ function OpenModalButton({
     setModalContent(modalComponent);
   };
 
-  return <button onClick={onClick}>{buttonText}</button>;
+  return (
+    <button onClick={onClick} className="organizerbtns">
+      {buttonText}
+    </button>
+  );
 }
 
 export default OpenModalButton;

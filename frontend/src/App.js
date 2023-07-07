@@ -5,8 +5,10 @@ import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 import LandingPage from "./components/LandingPage";
 import GroupEventListPage from "./components/GroupEventListPage";
-import SingleGroupDetails from "./components/Groups/SingleGroupDetails/SingleGroupDetails";
-import SingleEventDetails from "./components/Events/SingleEventDetails/SingleEventDetails";
+import SingleGroupDetails from "./components/Groups/SingleGroupDetails";
+import SingleEventDetails from "./components/Events/SingleEventDetails";
+import CreateGroup from "./components/Groups/CreateGroup";
+import UpdateGroup from "./components/Groups/UpdateGroup";
 
 function App() {
   const dispatch = useDispatch();
@@ -15,8 +17,9 @@ function App() {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
   }, [dispatch]);
 
+  // NEED TO ADD REDIRECTING IF NOT AUTHORIZED TO VISIT EACH ROUTE
   return (
-    <div>
+    <div className="entire">
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
@@ -28,6 +31,12 @@ function App() {
           </Route>
           <Route exact path="/events">
             <GroupEventListPage showtype="events" />
+          </Route>
+          <Route exact path="/groups/new">
+            <CreateGroup />
+          </Route>
+          <Route exact path="/groups/:groupId/edit">
+            <UpdateGroup />
           </Route>
           <Route exact path="/groups/:groupId">
             <SingleGroupDetails />

@@ -3,7 +3,10 @@ import "./SingleEventDetails.css";
 import { NavLink, useParams, useHistory } from "react-router-dom";
 import { useEffect } from "react";
 import LineBreakHelper from "../../../utils/LineBreakHelper";
-import { formatDateTime } from "../../../utils/helper-functions";
+import {
+  formatDateTime,
+  capitalizeFirstChar,
+} from "../../../utils/helper-functions";
 
 import { fetchSingleEventThunk } from "../../../store/events";
 import { fetchSingleGroupThunk } from "../../../store/groups";
@@ -25,7 +28,6 @@ function SingleEventDetails() {
   useEffect(() => {
     const fetchData = async () => {
       const event = await dispatch(fetchSingleEventThunk(eventId));
-      console.log("event", event);
       await dispatch(fetchSingleGroupThunk(event.Group?.id));
       window.scroll(0, 0);
     };
@@ -55,7 +57,7 @@ function SingleEventDetails() {
   }
 
   return (
-    <>
+    <div className="event-whole-container">
       <section className="group-detail-main">
         <div className="group-detail-top">
           <div>
@@ -84,7 +86,7 @@ function SingleEventDetails() {
                     ? "https://i0.wp.com/orstx.org/wp-content/uploads/2019/10/no-photo-available-icon-12.jpg?fit=300%2C245&ssl=1"
                     : imgUrl
                 }
-                alt="No preview for this event"
+                alt="No event preview"
                 className="group-detail-img1"
               />
             </div>
@@ -100,7 +102,7 @@ function SingleEventDetails() {
                         ? "https://i0.wp.com/orstx.org/wp-content/uploads/2019/10/no-photo-available-icon-12.jpg?fit=300%2C245&ssl=1"
                         : imgUrlGroup
                     }
-                    alt="No preview for this group"
+                    alt="No group preview"
                     className="small-group-img"
                   />
                 </div>
@@ -144,7 +146,7 @@ function SingleEventDetails() {
                   <div>
                     {targetEvent.Venue.address}
                     <div>
-                      {targetEvent.Venue.city}
+                      {capitalizeFirstChar(targetEvent.Venue.city)}
                       {",  "}
                       {targetEvent.Venue.state}
                     </div>
@@ -162,7 +164,7 @@ function SingleEventDetails() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }
 

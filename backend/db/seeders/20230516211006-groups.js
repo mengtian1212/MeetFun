@@ -23,7 +23,7 @@ module.exports = {
     // method 1: using bulkInsert
     const groups = [
       {
-        /* group 1 */ name: "Music Lovers Club",
+        /* group 1 */ name: "Music Mania Club: For All Genres Music Lovers & Players",
         about:
           "Welcome to the Music Lovers Club! Are you passionate about music? Do you find yourself constantly tapping your feet to the rhythm and humming your favorite tunes? Then this club is perfect for you! \nOur club offers a vibrant community of fellow music enthusiasts where you can connect, share, and discuss your favorite songs, albums, and artists. Discover new melodies, exchange recommendations, and broaden your musical horizons as we embark on this harmonious journey together. But it's not just about discussions and recommendations! We organize regular events where you can showcase your own musical talents, whether you're a singer, instrumentalist, or DJ. From open mic nights to jam sessions, you'll have the opportunity to share your skills and connect with fellow music lovers who appreciate your passion.\n So, dust off your headphones, tune up your instruments, and get ready to immerse yourself in the world of music. Join the Music Lovers Club today and let's create melodies, share stories, and experience the incredible power of music together! \nNote: The Music Lovers Club is open to all music enthusiasts, regardless of skill level or musical background. Whether you're a professional musician or simply enjoy listening to music, you'll find a warm and welcoming community here. Let's unite in our love for music!",
         type: "Online",

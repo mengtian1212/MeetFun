@@ -94,6 +94,12 @@
   padding: 0.5rem 0.75rem;
 }
 
+.login-credential:hover,
+.login-credential:focus,
+.login-credential::before {
+  border: 1px solid var(--meetup-green) !important;
+}
+
 .login-btn-container {
   padding: 0.5rem 0.75rem;
 }

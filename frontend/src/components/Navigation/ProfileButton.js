@@ -36,7 +36,6 @@ function ProfileButton({ user }) {
   const logout = async (e) => {
     e.preventDefault();
     const response = await dispatch(sessionActions.logout());
-    console.log(response);
     closeMenu();
     if (response.ok) history.push("/");
   };
@@ -44,11 +43,18 @@ function ProfileButton({ user }) {
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
   const profileArrowDirection = showMenu ? "up" : "down";
 
+  const handleClick = () => {
+    history.push("/groups/new");
+    window.scrollTo(0, 0);
+  };
+
   return (
     <>
       {user ? (
         <div className="header-right-container">
-          <div className="start-new-group">Start a new group</div>
+          <div className="start-new-group cursor" onClick={handleClick}>
+            Start a new group
+          </div>
           <button onClick={openMenu} className="user-icon-container cursor">
             <i className="fas fa-user-circle" />
             <i

@@ -16,7 +16,8 @@ function GroupListCard({ group }) {
                 ? "https://i0.wp.com/orstx.org/wp-content/uploads/2019/10/no-photo-available-icon-12.jpg?fit=300%2C245&ssl=1"
                 : group.previewImage
             }
-            alt="No preview for this group"
+            alt="No group preview"
+            className="img-class"
           />
         </div>
         <div className="group-list-text-container">
