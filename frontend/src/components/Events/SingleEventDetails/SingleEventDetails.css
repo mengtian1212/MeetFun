@@ -12,6 +12,11 @@
   padding: 40px 0 0;
 }
 
+.group-detail-main.background {
+  min-height: 980px;
+  height: auto;
+}
+
 .event-title {
   font-weight: 700;
   line-height: 1.375;
@@ -113,6 +118,7 @@
   width: 100%;
   align-self: center;
   padding: 40px 0 50px 0;
+  background-size: fill;
 }
 
 .bottom3-what-we-are-about > h2 {

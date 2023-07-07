@@ -38,6 +38,13 @@
   height: 100px;
 }
 
+/*right  */
+.group-list-text-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  word-wrap: break-word;
+}
 .group-name {
   padding: 0 0 16px;
   color: black;
@@ -51,6 +58,7 @@
   font-size: 1.25rem;
   line-height: 1.75rem;
   /* margin-bottom: 8px; */
+  overflow: hidden;
 }
 
 .group-name > h3 {

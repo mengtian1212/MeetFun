@@ -11,3 +11,68 @@ export const formatDateTime = (timeData) => {
   };
   return startDateTime.toLocaleString("en-US", options);
 };
+
+export const capitalizeFirstChar = (words) => {
+  let processedWord = words.trim().replace(/\s+/g, " ");
+  const wordArr = processedWord.split(" ");
+  console.log(wordArr);
+  const resArr = [];
+  for (let word of wordArr) {
+    const newWord = word[0].toUpperCase() + word.slice(1).toLowerCase();
+    resArr.push(newWord);
+  }
+  return resArr.join(" ");
+};
+
+export const USSTATES = [
+  "AL",
+  "AK",
+  "AZ",
+  "AR",
+  "CA",
+  "CO",
+  "CT",
+  "DE",
+  "FL",
+  "GA",
+  "HI",
+  "ID",
+  "IL",
+  "IN",
+  "IA",
+  "KS",
+  "KY",
+  "LA",
+  "ME",
+  "MD",
+  "MA",
+  "MI",
+  "MN",
+  "MS",
+  "MO",
+  "MT",
+  "NE",
+  "NV",
+  "NH",
+  "NJ",
+  "NM",
+  "NY",
+  "NC",
+  "ND",
+  "OH",
+  "OK",
+  "OR",
+  "PA",
+  "RI",
+  "SC",
+  "SD",
+  "TN",
+  "TX",
+  "UT",
+  "VT",
+  "VA",
+  "WA",
+  "WV",
+  "WI",
+  "WY",
+];

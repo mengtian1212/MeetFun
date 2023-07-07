@@ -1,5 +1,5 @@
 import "./SingleGroupDetails.css";
-import { useParams, NavLink } from "react-router-dom";
+import { useHistory, useParams, NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import LineBreakHelper from "../../../utils/LineBreakHelper";
@@ -7,12 +7,68 @@ import LineBreakHelper from "../../../utils/LineBreakHelper";
 import { fetchSingleGroupThunk } from "../../../store/groups";
 import { fetchEventsByGroupIdThunk } from "../../../store/events";
 import EventListCard from "../../Events/EventsList/EventListCard";
+import { capitalizeFirstChar } from "../../../utils/helper-functions";
+import OpenModalButton from "../../OpenModalButton/OpenModalButton";
+import DeleteGroupModal from "../DeleteGroupModal";
 
 function SingleGroupDetails() {
   const { groupId } = useParams();
+  const history = useHistory();
+  const sessionUser = useSelector((state) => state.session.user);
+
   const targetGroup = useSelector((state) =>
     state.groups.singleGroup ? state.groups.singleGroup : {}
   );
+
+  const handleClickJoin = (e) => {
+    alert("Feature coming soon!");
+  };
+
+  const handleClickCreateEvent = (e) => {
+    history.push(`/groups/${groupId}/events/new`);
+  };
+
+  const handleClickUpdate = (e) => {
+    history.push(`/groups/${groupId}/edit`);
+  };
+
+  let joinGroupBtn = null;
+  if (
+    sessionUser &&
+    targetGroup &&
+    Number(sessionUser.id) !== Number(targetGroup.organizerId)
+  ) {
+    joinGroupBtn = (
+      <div className="join-this-group-container">
+        <button onClick={handleClickJoin} className="join-this-group-btn">
+          Join this group
+        </button>
+      </div>
+    );
+  } // Might need to change to check if he is the organizer to check if he is already a member of group
+
+  let organizerBtns = null;
+  if (
+    sessionUser &&
+    Number(sessionUser.id) === Number(targetGroup.organizerId)
+  ) {
+    organizerBtns = (
+      <div className="organizerbtns-containers">
+        <button className="organizerbtns" onClick={handleClickCreateEvent}>
+          Create event
+        </button>
+        <button className="organizerbtns" onClick={handleClickUpdate}>
+          Update group
+        </button>
+        <OpenModalButton
+          modalComponent={<DeleteGroupModal groupId={groupId} />}
+          buttonText="Delete group"
+          // className="organizerbtns"
+          // onItemClick={closeMenu}
+        />
+      </div>
+    );
+  }
 
   const groupEvents = Object.values(
     useSelector((state) =>
@@ -74,20 +130,24 @@ function SingleGroupDetails() {
     console.log("useEffect thunk ran");
     dispatch(fetchSingleGroupThunk(groupId));
     dispatch(fetchEventsByGroupIdThunk(groupId));
+    // if (targetGroup && Object.values(targetGroup).length) return null;
+
     window.scroll(0, 0);
   }, [dispatch, groupId]);
 
   let imgUrl = `No preview image for this group`;
-  if (Object.keys(targetGroup).length === 0) {
+  if (!targetGroup || (targetGroup && !Object.values(targetGroup).length)) {
     return null;
   } else {
-    const previewImage = targetGroup.GroupImages.find(
+    const previewImage = targetGroup.GroupImages?.find(
       (img) => img.preview === true
     );
     if (previewImage && Object.keys(previewImage).length > 0) {
       imgUrl = previewImage.url;
     }
   }
+
+  if (!Object.keys(targetGroup)) return <div>Loading in progress...</div>;
 
   return (
     <>
@@ -120,7 +180,7 @@ function SingleGroupDetails() {
                       <i className="fa-solid fa-location-dot"></i>
                     </div>
                     <div>
-                      {targetGroup.city}
+                      {capitalizeFirstChar(targetGroup.city)}
                       {",  "}
                       {targetGroup.state}
                     </div>
@@ -143,15 +203,16 @@ function SingleGroupDetails() {
                       <div>
                         Organized by{" "}
                         <span className="organizer-name">
-                          {targetGroup.Organizer.firstName}{" "}
-                          {targetGroup.Organizer.lastName}
+                          {targetGroup?.Organizer?.firstName}{" "}
+                          {targetGroup?.Organizer?.lastName}
                         </span>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <button>Join this group</button>
+              {joinGroupBtn}
+              {organizerBtns}
             </div>
           </div>
         </div>
@@ -160,8 +221,8 @@ function SingleGroupDetails() {
             <div className="bottom1-organizer">
               <h2>Organizer</h2>
               <h3>
-                {targetGroup.Organizer.firstName}{" "}
-                {targetGroup.Organizer.lastName}
+                {targetGroup?.Organizer?.firstName}{" "}
+                {targetGroup?.Organizer?.lastName}
               </h3>
             </div>
             <div className="bottom2-what-we-are-about">
@@ -170,21 +231,25 @@ function SingleGroupDetails() {
                 <LineBreakHelper text={targetGroup.about} />
               </div>
             </div>
-            {upcomingEventsArr.length > 0 && (
-              <div className="group-events-container">
+            <div className="group-events-container">
+              {(!groupEvents.length ||
+                (groupEvents.length && !upcomingEventsArr.length)) && (
+                <h2>No Upcoming Events</h2>
+              )}
+              {upcomingEventsArr.length > 0 && (
                 <h2>Upcoming events ({upcomingEventsArr.length})</h2>
-                <div className="list-item">
-                  {upcomingEventsArr.length > 0 &&
-                    upcomingEventsArr.map((event) => (
-                      <EventListCard
-                        key={event.id}
-                        event={event}
-                        cardMode={true}
-                      />
-                    ))}
-                </div>
+              )}
+              <div className="list-item">
+                {upcomingEventsArr.length > 0 &&
+                  upcomingEventsArr.map((event) => (
+                    <EventListCard
+                      key={event.id}
+                      event={event}
+                      cardMode={true}
+                    />
+                  ))}
               </div>
-            )}
+            </div>
             <div className="group-events-container">
               {pastEventsArr.length > 0 && (
                 <h2>Past events ({pastEventsArr.length})</h2>

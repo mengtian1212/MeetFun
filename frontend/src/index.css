@@ -25,6 +25,12 @@
   --btn-hover: #3a879b;
   --background-grey: #f6f7f8;
   --date-color: #0098ab;
+  --organizerBtnColor: #656565;
+}
+
+html body {
+  margin: 0;
+  height: 100%;
 }
 
 .cursor {

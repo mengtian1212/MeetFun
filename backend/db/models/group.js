@@ -53,8 +53,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.TEXT,
       validate: {
-        notNull: { msg: "About must be 50 characters or more" },
-        len: { args: [50, 100000], msg: "About must be 50 characters or more" }
+        notNull: { msg: "About must be 30 characters or more" },
+        len: { args: [30, 100000], msg: "About must be 30 characters or more" }
       }
     },
     type: {

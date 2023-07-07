@@ -28,7 +28,7 @@ module.exports = {
         },
         {
           eventId: 2,
-          url: "https://d.newsweek.com/en/full/1989687/woman-playing-piano.webp?w=790&f=31d561264d5c942c692be9cbac0337f5",
+          url: "https://d.newsweek.com/en/full/1989687/woman-playing-piano.webp",
           preview: true,
         },
         {
@@ -53,12 +53,12 @@ module.exports = {
         },
         {
           eventId: 4,
-          url: "https://img.freepik.com/premium-photo/couple-taking-with-real-state-agent_23-2148346264.jpg?w=1060",
+          url: "https://img.freepik.com/premium-photo/couple-taking-with-real-state-agent_23-2148346264.jpg",
           preview: false,
         },
         {
           eventId: 5,
-          url: "https://img.freepik.com/free-vector/hand-drawn-world-music-day-background_23-2149424753.jpg?t=st=1688422777~exp=1688423377~hmac=de576424628c68c4c89b716cdc5b5bc098b8c8fa65345029ea5e5efccc581c51",
+          url: "https://img.freepik.com/free-vector/hand-drawn-world-music-day-background_23-2149424753.jpg",
           preview: false,
         },
         {
@@ -68,12 +68,12 @@ module.exports = {
         },
         {
           eventId: 6,
-          url: "https://secure.meetupstatic.com/photos/event/4/f/d/9/600_512960441.webp?w=384",
+          url: "https://secure.meetupstatic.com/photos/event/4/f/d/9/600_512960441.webp",
           preview: false,
         },
         {
           eventId: 6,
-          url: "https://img.freepik.com/free-vector/hand-drawn-ice-cream-blackboard-menu-template_52683-63807.jpg?w=1060&t=st=1688496320~exp=1688496920~hmac=00de89025cd700527e9ed89a6bbfe2885d4be1033112bc64838986c7eb7778a5",
+          url: "https://img.freepik.com/free-vector/hand-drawn-ice-cream-blackboard-menu-template_52683-63807.jpg",
           preview: false,
         },
         {
@@ -83,7 +83,7 @@ module.exports = {
         },
         {
           eventId: 7,
-          url: "https://a.cdn-hotels.com/gdcs/production81/d1247/c0664d9b-f990-44f2-8cfe-ed0541088c8a.jpg?impolicy=fcrop&w=1600&h=1066&q=medium",
+          url: "https://a.cdn-hotels.com/gdcs/production81/d1247/c0664d9b-f990-44f2-8cfe-ed0541088c8a.jpg",
           preview: true,
         },
         {
@@ -103,12 +103,12 @@ module.exports = {
         },
         {
           eventId: 11,
-          url: "https://secure.meetupstatic.com/photos/event/9/9/a/6/600_514179334.webp?w=384",
+          url: "https://secure.meetupstatic.com/photos/event/9/9/a/6/600_514179334.webp",
           preview: true,
         },
         {
           eventId: 12,
-          url: "https://img.freepik.com/free-photo/vibrant-colors-shapes-patterns-modern-mosaic-art-generated-by-ai_188544-29132.jpg?t=st=1688591034~exp=1688594634~hmac=1329abf351b99fc6a32b855d8cbe7badf8112c87a3e78df4f97b583a1175f941&w=1380",
+          url: "https://img.freepik.com/free-photo/vibrant-colors-shapes-patterns-modern-mosaic-art-generated-by-ai_188544-29132.jpg",
           preview: true,
         },
       ],

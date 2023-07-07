@@ -3,7 +3,10 @@ import "./SingleEventDetails.css";
 import { NavLink, useParams, useHistory } from "react-router-dom";
 import { useEffect } from "react";
 import LineBreakHelper from "../../../utils/LineBreakHelper";
-import { formatDateTime } from "../../../utils/helper-functions";
+import {
+  formatDateTime,
+  capitalizeFirstChar,
+} from "../../../utils/helper-functions";
 
 import { fetchSingleEventThunk } from "../../../store/events";
 import { fetchSingleGroupThunk } from "../../../store/groups";
@@ -55,7 +58,7 @@ function SingleEventDetails() {
   }
 
   return (
-    <>
+    <div className="event-whole-container">
       <section className="group-detail-main">
         <div className="group-detail-top">
           <div>
@@ -144,7 +147,7 @@ function SingleEventDetails() {
                   <div>
                     {targetEvent.Venue.address}
                     <div>
-                      {targetEvent.Venue.city}
+                      {capitalizeFirstChar(targetEvent.Venue.city)}
                       {",  "}
                       {targetEvent.Venue.state}
                     </div>
@@ -162,7 +165,7 @@ function SingleEventDetails() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }
 

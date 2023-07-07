@@ -5,6 +5,7 @@ import { useModal } from "../../context/Modal";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import "./SignupForm.css";
+import { capitalizeFirstChar } from "../../utils/helper-functions";
 
 import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
 import LoginFormModal from "../LoginFormModal/LoginFormModal";
@@ -44,8 +45,8 @@ function SignupFormModal() {
         sessionActions.signup({
           email,
           username,
-          firstName,
-          lastName,
+          firstName: capitalizeFirstChar(firstName),
+          lastName: capitalizeFirstChar(lastName),
           password,
         })
       )
@@ -58,6 +59,7 @@ function SignupFormModal() {
           }
         });
     }
+    console.log(capitalizeFirstChar(firstName), capitalizeFirstChar(lastName));
     setErrors({
       confirmPassword:
         "Confirm Password field must be the same as the Password field",
@@ -85,11 +87,11 @@ function SignupFormModal() {
       err.email = "Please provide a valid Email";
     }
     if (username.length < 4 && username.length > 0) {
-      err.username = "Please provide a username with at least 4 characters.";
+      err.username = "Please provide a username with at least 4 characters";
     }
 
     if (password.length < 6 && password.length > 0) {
-      err.password = "Please provide a password with at least 6 characters.";
+      err.password = "Please provide a password with at least 6 characters";
     }
 
     if (password !== confirmPassword) {

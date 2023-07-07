@@ -5,6 +5,7 @@ function EventListCard({ event, cardMode }) {
   const history = useHistory();
   const handleClick = () => {
     history.push(`/events/${event.id}`);
+    window.scroll(0, 0);
   };
 
   const cardClassName = cardMode ? "show-as-white-card" : "";
