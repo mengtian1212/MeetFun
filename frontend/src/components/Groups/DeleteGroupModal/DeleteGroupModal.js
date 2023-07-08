@@ -20,10 +20,20 @@ function DeleteGroupModal({ groupId }) {
   };
 
   return (
-    <section>
-      <h2>Are you sure you want to delete this group?</h2>
-      <button onClick={handleClickDelete}>Yes! Delete it</button>
-      <button onClick={closeModal}>Cancel</button>
+    <section className="delete-modal modal-container">
+      <h2 className="delete-title">Confirm Delete</h2>
+      <h3 className="delete-text">
+        Are you sure you want to remove this group?
+      </h3>
+      <div className="delete-btn-container">
+        <button onClick={closeModal} className="yes-delete  no-keep cursor">
+          No (Keep Group)
+        </button>
+
+        <button onClick={handleClickDelete} className="yes-delete  cursor">
+          Yes (Delete Group)
+        </button>
+      </div>
     </section>
   );
 }
