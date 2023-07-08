@@ -40,7 +40,7 @@ function CreateGroup() {
     setValidationErrors({});
     const err = {};
     if (city.trim().length === 0) err.city = "City is required";
-    if (!state) err.state = "Please select a state";
+    if (!state) err.state = "State is required";
     if (name.trim().length === 0) err.name = "Name is required";
     if (about.trim().length < 30)
       err.about = "Description must be at least 30 characters long";
@@ -114,22 +114,21 @@ function CreateGroup() {
   }
 
   return (
-    <div>
-      <div className="event-or-group-container">
-        <NavLink exact to={`/groups`} className="event-or-group">
-          Groups
+    <form onSubmit={handleSubmit} className="group-form-container">
+      <div className="main-container">
+        <NavLink exact to="/groups" className="back-to-groups-container">
+          <i className={`fa-solid fa-chevron-left arrow`}></i>{" "}
+          <span className="event-or-group selected">Back to all groups</span>
         </NavLink>
-      </div>
-      <form onSubmit={handleSubmit} className="group-form-container">
         <div className="title-container">
-          <h2>BECOME AN ORGANIZER</h2>
-          <h3>
+          <h2 className="biggest-green">BECOME AN ORGANIZER</h2>
+          <h3 className="biggest">
             We'll walk you through a few steps to build your local community
           </h3>
         </div>
-        <div className="1st-container">
-          <h2>First, set your group's location.</h2>
-          <p>
+        <div className="title-container">
+          <h2 className="biggest">First, set your group's location.</h2>
+          <p className="form-description">
             Meetup groups meet locally, in person and online. We'll connect you
             with people in your area, and more can join you online.
           </p>
@@ -141,13 +140,16 @@ function CreateGroup() {
               onChange={(e) => setCity(e.target.value)}
             />
             <select
-              placeholder="(select one)"
+              // placeholder=""
               value={state}
               onChange={(e) => setState(e.target.value)}
+              className={state === "" ? "first-option" : ""}
             >
-              <option value="">Select State</option>
+              <option value="">-- Select State --</option>
               {USSTATES.map((state) => (
-                <option key={state}>{state}</option>
+                <option key={state} value={state}>
+                  {state}
+                </option>
               ))}
             </select>
           </div>
@@ -159,9 +161,9 @@ function CreateGroup() {
           )}
         </div>
 
-        <div className="1st-container">
-          <h2>What will your group's name be?</h2>
-          <p>
+        <div className="title-container">
+          <h2 className="biggest">What will your group's name be?</h2>
+          <p className="form-description">
             Choose a name that will give people a clear idea of what the group
             is about. Feel free to get creative! You can edit this later if you
             change your mind.
@@ -171,21 +173,30 @@ function CreateGroup() {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            className="input-box1"
           />
           {validationErrors.name && (
             <div className="errors">{validationErrors.name}</div>
           )}
         </div>
-        <div className="1st-container">
-          <h2>Now describe what your group will be about</h2>
-          <p>
+        <div className="title-container">
+          <h2 className="biggest">
+            Now describe what your group will be about
+          </h2>
+          <p className="form-description">
             People will see this when we promote your group, but you'll be able
             to add to it later, too.
           </p>
-          <p>1. What's the purpose of the group?</p>
-          <p>2. Who should join?</p>
-          <p>3. What will you do at your events?</p>
-          <input
+          <div>
+            <p className="form-description1">
+              1. What's the purpose of the group?
+            </p>
+            <p className="form-description1">2. Who should join?</p>
+            <p className="form-description1">
+              3. What will you do at your events?
+            </p>
+          </div>
+          <textarea
             placeholder="Please write at least 30 characters"
             type="textarea"
             value={about}
@@ -195,12 +206,18 @@ function CreateGroup() {
             <div className="errors">{validationErrors.about}</div>
           )}
         </div>
-        <div className="1st-container">
-          <h2>Final steps...</h2>
+        <div className="title-container">
+          <h2 className="biggest">Final steps...</h2>
           <div className="final-step-questions">
-            <p>Is this an in person or online group?</p>
-            <select value={type} onChange={(e) => setType(e.target.value)}>
-              <option value="">(select one)</option>
+            <p className="form-description">
+              Is this an in person or online group?
+            </p>
+            <select
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+              className={type === "" ? "first-option" : ""}
+            >
+              <option value="">-- Select group type --</option>
               <option value="In person">In person</option>
               <option value="Online">Online</option>
             </select>
@@ -208,30 +225,39 @@ function CreateGroup() {
               <div className="errors">{validationErrors.type}</div>
             )}
           </div>
-          <p>Is this group private or public?</p>
-          <select
-            value={privateStatus}
-            onChange={(e) => setPrivateStatus(e.target.value)}
-          >
-            <option value="">(select one)</option>
-            <option value="private">Private</option>
-            <option value="public">Public</option>
-          </select>
-          {validationErrors.privateStatus && (
-            <div className="errors">{validationErrors.privateStatus}</div>
-          )}
-          <p>
-            Please add in image url as the preview image for your group below:
-            Optional if you would like to decide later.
-          </p>
-          <input
-            type="text"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-          />
-          {validationErrors.imageUrl && (
-            <div className="errors">{validationErrors.imageUrl}</div>
-          )}
+          <div className="final-step-questions">
+            <p className="form-description">Is this group private or public?</p>
+            <select
+              value={privateStatus}
+              onChange={(e) => setPrivateStatus(e.target.value)}
+              className={privateStatus === "" ? "first-option" : ""}
+            >
+              <option value="">-- Select visibility type --</option>
+              <option value="private">Private</option>
+              <option value="public">Public</option>
+            </select>
+            {validationErrors.privateStatus && (
+              <div className="errors">{validationErrors.privateStatus}</div>
+            )}
+          </div>
+          <div className="final-step-questions">
+            <p className="form-description">
+              Please add in image url as the preview image for your group below:
+              <br />
+              optional if you would like to decide later.
+            </p>
+            <input
+              placeholder="Preview image URL"
+              type="text"
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+              className="input-box2"
+            />
+            {validationErrors.imageUrl && (
+              <div className="errors">{validationErrors.imageUrl}</div>
+            )}
+          </div>
+
           {/* <p>Set as preview image?</p>
         <input
           type="checkbox"
@@ -242,12 +268,20 @@ function CreateGroup() {
           <div className="errors">{validationErrors.previewStatus}</div>
         )} */}
         </div>
-        <button type="submit">Create Group</button>
-        <button type="button" onClick={handleResetClick}>
-          Reset
-        </button>
-      </form>
-    </div>
+        <div className="btns-container">
+          <button type="submit" className="yes-delete1 cursor">
+            Create Group
+          </button>
+          <button
+            type="button"
+            className="yes-delete1 no-keep1 cursor"
+            onClick={handleResetClick}
+          >
+            Reset
+          </button>
+        </div>
+      </div>
+    </form>
   );
 }
 

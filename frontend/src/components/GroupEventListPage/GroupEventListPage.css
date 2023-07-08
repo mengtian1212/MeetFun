@@ -27,6 +27,11 @@
   border-bottom: 4px solid var(--meetup-green);
 }
 
+.event-or-group:hover {
+  color: var(--meetup-green);
+  /* color: #707070; */
+}
+
 .group-event-list-containter {
   padding-bottom: 0.75rem;
   display: flex;

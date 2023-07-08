@@ -1,9 +1,140 @@
 .group-form-container {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 30px;
-  padding: 50px 300px 200px 300px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 130px;
+}
+
+.main-container {
+  width: 960px;
+}
+
+/* navigator */
+.back-to-groups-container:hover > * {
+  color: var(--meetup-green);
+}
+
+/* form main  */
+.title-container {
+  padding-top: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 2px solid #cccccc;
+}
+
+.biggest-green {
+  line-height: 2rem;
+  color: var(--meetup-green);
+  font-size: 16pt;
+  font-weight: 550;
+  margin-top: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.biggest {
+  font-weight: bold;
+  line-height: 22pt;
+  font-size: 1.4rem;
+  padding-bottom: 0.25rem;
+}
+
+.form-description {
+  font-size: 16pt;
+  line-height: 1.25rem;
+
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+}
+
+.city-state-input-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+input,
+select,
+textarea {
+  border: 2px solid #333;
+  border-radius: 0.25rem;
+  background-color: var(--light-teal);
+  padding: 6px;
+  font-size: 16pt;
+}
+.input-box1 {
+  width: 493px;
+}
+.input-box2 {
+  width: 100%;
+}
+/* the 2 css below makes the default value of select box grey */
+select,
+select option {
+  color: #000000;
+}
+
+.first-option {
+  color: rgb(117, 117, 117);
+}
+
+textarea {
+  display: block;
+  box-sizing: border-box;
+  /* max-width: 100%; */
+  width: 650px;
+  min-height: 100px;
+  padding: 0.5rem 0.75rem;
+}
+
+.final-step-questions:not(:last-child) {
+  margin-bottom: 0.875rem;
+}
+
+.form-description1 {
+  font-size: 14pt;
+  line-height: 1.3rem;
+}
+
+.form-description1:last-child {
+  padding-bottom: 0.6rem;
+}
+
+.btns-container {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+  width: 50%;
+  padding-top: 20px;
+}
+
+.yes-delete1 {
+  margin-top: 0.875rem;
+  margin-bottom: 0.875rem;
+  padding: 8px 8px;
+  height: 2.7rem;
+  width: 100%;
+
+  font-weight: 500;
+  font-size: 14pt;
+  color: white;
+  border: white;
+  border-radius: 8px;
+  background-color: var(--meetup-red);
+  box-shadow: 2px 2px 1px black;
+}
+
+.yes-delete1:hover {
+  border: 0.5px solid transparent;
+  /* background-color: var(--btn-hover); */
+  background-color: #e32359;
+}
+
+.no-keep1 {
+  background-color: #999999;
+}
+
+.no-keep1:hover {
+  background-color: #707070;
 }
 
 .need-log-in {
@@ -11,4 +142,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 20px;
+  font-size: 80pt;
+}
+
+.errors {
+  padding-top: 5px;
+  color: red;
+  font-weight: 400;
+  font-size: 14pt;
 }
