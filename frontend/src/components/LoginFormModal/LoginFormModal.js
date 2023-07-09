@@ -34,11 +34,11 @@ function LoginFormModal() {
         credential: "FakeUser1",
         password: "password1",
       };
-    } else if (demo === "demo3") {
+    } else if (demo === "demo5") {
       loginInfo = {
         ...loginInfo,
-        credential: "FakeUser3",
-        password: "password3",
+        credential: "FakeUser5",
+        password: "password5",
       };
     }
 
@@ -149,7 +149,7 @@ function LoginFormModal() {
         </button>
         <button
           className="demo cursor"
-          onClick={(e) => handleSubmit(e, "demo3")}
+          onClick={(e) => handleSubmit(e, "demo5")}
         >
           Demo user 2
         </button>

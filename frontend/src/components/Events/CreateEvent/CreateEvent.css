@@ -1,0 +1,57 @@
+.group-form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 130px;
+}
+
+.main-container {
+  width: 960px;
+}
+
+.price-container {
+  position: relative;
+}
+
+.price-container:before {
+  content: "$";
+  position: absolute;
+  left: 9.5px;
+  top: 8px;
+  font-weight: 500;
+  font-size: 16pt;
+}
+
+.price {
+  text-align: right;
+  width: 120px;
+}
+
+.textarea2 {
+  border: 2px solid #333;
+  border-radius: 0.25rem;
+  background-color: var(--light-teal);
+  padding: 6px;
+  font-size: 16pt;
+  display: block;
+  box-sizing: border-box;
+  max-width: 100% !important;
+  width: 100%;
+  min-height: 230px;
+  padding: 0.5rem 0.75rem;
+  outline: none;
+}
+
+.textarea2:focus,
+.textarea2:hover {
+  border: 2px solid var(--date-color) !important;
+}
+
+.datetime-input {
+  color: grey;
+}
+
+.datetime-input.has-value {
+  color: black;
+}

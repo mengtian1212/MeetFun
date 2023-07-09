@@ -47,17 +47,17 @@ function UpdateGroup() {
     dispatch(fetchSingleGroupThunk(Number(groupId)));
   }, [dispatch, groupId]);
 
-  const resetForm = () => {
-    setCity("");
-    setState("");
-    setName("");
-    setAbout("");
-    setType("");
-    setPrivateStatus("");
-    setPreviewImgUrl("");
-    // setPreviewStatus("");
-    return;
-  };
+  // const resetForm = () => {
+  //   setCity("");
+  //   setState("");
+  //   setName("");
+  //   setAbout("");
+  //   setType("");
+  //   setPrivateStatus("");
+  //   setPreviewImgUrl("");
+  //   // setPreviewStatus("");
+  //   return;
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -142,7 +142,15 @@ function UpdateGroup() {
         <h2>Redirect to home page...</h2>
       </div>
     );
-  } else if (group?.organizerId !== sessionUser.id) {
+  }
+
+  if (!group || !Object.keys(group).length) return null;
+
+  if (
+    group &&
+    Object.keys(group).length &&
+    group?.organizerId !== sessionUser.id
+  ) {
     setTimeout(() => history.push(`/groups`), 3000);
     window.scroll(0, 0);
     return (

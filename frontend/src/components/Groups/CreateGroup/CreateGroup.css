@@ -60,7 +60,18 @@ textarea {
   background-color: var(--light-teal);
   padding: 6px;
   font-size: 16pt;
+  outline: none;
 }
+
+input:focus,
+input:hover,
+select:focus,
+select:hover,
+textarea:focus,
+textarea:hover {
+  border: 2px solid var(--date-color) !important;
+}
+
 .input-box1 {
   width: 493px;
 }
@@ -80,7 +91,7 @@ select option {
 textarea {
   display: block;
   box-sizing: border-box;
-  /* max-width: 100%; */
+  max-width: 100%;
   width: 650px;
   min-height: 100px;
   padding: 0.5rem 0.75rem;

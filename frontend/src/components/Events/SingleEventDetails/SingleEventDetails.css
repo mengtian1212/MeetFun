@@ -125,3 +125,27 @@
   padding-bottom: 20px;
   font-size: 16pt;
 }
+
+.organizerbtns1 {
+  margin-top: 20px;
+  width: 120px;
+  font-weight: 500;
+  font-size: 16px;
+  color: white;
+  padding: 7px 0;
+  background-color: var(--meetup-green);
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  box-shadow: 2px 2px 1px #707070;
+  border: white;
+  border-radius: 5px;
+  cursor: pointer;
+
+  align-self: flex-end;
+}
+
+.organizerbtns1:hover {
+  background-color: var(--btn-hover);
+}
+.organizerbtns.foreventdelete {
+  margin-top: 0 !important;
+}
