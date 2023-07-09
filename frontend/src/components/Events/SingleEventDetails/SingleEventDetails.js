@@ -158,7 +158,9 @@ function SingleEventDetails() {
                     <i className="fa-solid fa-dollar-sign"></i>
                   </div>
                   <div>
-                    {targetEvent.price === 0 ? "FREE" : targetEvent.price}
+                    {targetEvent.price === "0" || targetEvent.price === 0
+                      ? "FREE"
+                      : targetEvent.price}
                   </div>
                 </div>
                 <div className="detail-container">
