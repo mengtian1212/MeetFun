@@ -99,6 +99,32 @@
   border: 2px solid var(--meetup-green) !important;
 }
 
+.pw-container {
+  position: relative;
+}
+
+.pw {
+  width: 100%;
+}
+
+.pwicon {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  font-weight: 500;
+  font-size: 16pt;
+}
+
+.price-container:before {
+  content: "$";
+  position: absolute;
+  left: 9.5px;
+  top: 8px;
+  font-weight: 500;
+  font-size: 16pt;
+}
+
+/* buttons */
 .login-btn-container {
   padding: 0.5rem 0.75rem;
 }

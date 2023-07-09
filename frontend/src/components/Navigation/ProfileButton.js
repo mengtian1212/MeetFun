@@ -48,6 +48,18 @@ function ProfileButton({ user }) {
     window.scrollTo(0, 0);
   };
 
+  const handleViewGroups = () => {
+    history.push("/groups");
+    closeMenu();
+    window.scrollTo(0, 0);
+  };
+
+  const handleViewEvents = () => {
+    history.push("/events");
+    closeMenu();
+    window.scrollTo(0, 0);
+  };
+
   return (
     <>
       {user ? (
@@ -66,6 +78,12 @@ function ProfileButton({ user }) {
               Hello, {user.firstName} {user.lastName}!
             </li>
             <li>{user.email}</li>
+            <li className="logout-in-menu">
+              <button onClick={handleViewGroups}>View groups</button>
+            </li>
+            <li className="logout-in-menu">
+              <button onClick={handleViewEvents}>View events</button>
+            </li>
             <li className="logout-in-menu">
               <button onClick={logout}>Log Out</button>
             </li>

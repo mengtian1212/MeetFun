@@ -103,18 +103,20 @@
   top: 1.25rem;
   min-width: 210px;
   padding: 0.8rem 1rem;
+
   font-weight: 300;
   line-height: 1.4rem;
 
   border: 0.7px solid rgb(112 112 112/1);
   border-radius: 0.25rem;
   box-shadow: 3px 3px 4px rgba(112, 112, 112, 0.5);
-  color: rgb(112 112 112/1);
+  /* color: rgb(112, 112, 112, 1); */
+  color: rgb(33 33 33/0.8);
   background-color: white;
 }
 
-.profile-dropdown li:nth-child(2) {
-  padding-bottom: 0.3rem;
+.profile-dropdown li:nth-child(4) {
+  padding-bottom: 0.4rem;
 }
 
 .profile-dropdown li:last-child {
@@ -125,7 +127,10 @@
 .profile-dropdown button {
   width: 100%;
   text-align: left;
-  color: rgb(112 112 112/1);
+  /* color: rgb(112 112 112/1); */
+  color: rgb(33 33 33/0.8);
+  padding: 3px 0;
+
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -133,4 +138,5 @@
 
 .profile-dropdown button:hover {
   color: var(--meetup-green);
+  /* color: var(--teal); */
 }

@@ -21,6 +21,8 @@ function SignupFormModal() {
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [visiblepw, setVisiblepw] = useState(false);
+  const [visiblepwc, setVisiblepwc] = useState(false);
 
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
@@ -34,6 +36,7 @@ function SignupFormModal() {
     setLastName("");
     setPassword("");
     setConfirmPassword("");
+
     return;
   };
 
@@ -196,13 +199,25 @@ function SignupFormModal() {
           <div className="password">
             <label className="labels">
               Password
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="login-credential"
-              />
+              <div className="pw-container">
+                <input
+                  type={visiblepw ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="login-credential pw"
+                />
+                <div
+                  onClick={() => setVisiblepw(!visiblepw)}
+                  className="pwicon"
+                >
+                  {visiblepw ? (
+                    <i className="fa-regular fa-eye"></i>
+                  ) : (
+                    <i className="fa-regular fa-eye-slash"></i>
+                  )}
+                </div>
+              </div>
             </label>
             {errors.password && (
               <p className="error-message">{errors.password}</p>
@@ -211,13 +226,25 @@ function SignupFormModal() {
           <div className="password2">
             <label className="labels">
               Confirm Password
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                className="login-credential"
-              />
+              <div className="pw-container">
+                <input
+                  type={visiblepwc ? "text" : "password"}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  className="login-credential pw"
+                />
+                <div
+                  onClick={() => setVisiblepwc(!visiblepwc)}
+                  className="pwicon"
+                >
+                  {visiblepwc ? (
+                    <i className="fa-regular fa-eye"></i>
+                  ) : (
+                    <i className="fa-regular fa-eye-slash"></i>
+                  )}
+                </div>
+              </div>
             </label>
             {errors.confirmPassword && (
               <p className="error-message">{errors.confirmPassword}</p>
