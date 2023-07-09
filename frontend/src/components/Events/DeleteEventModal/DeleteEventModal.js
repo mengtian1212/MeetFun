@@ -1,6 +1,6 @@
-import { useDispatch } from "react-redux";
 import "./DeleteEventModal.css";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { useModal } from "../../../context/Modal";
 import { deleteEventThunk } from "../../../store/events";
 

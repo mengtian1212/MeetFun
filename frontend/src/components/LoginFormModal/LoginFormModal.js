@@ -17,6 +17,7 @@ function LoginFormModal() {
 
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
+  const [visible, setVisible] = useState(false);
 
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
@@ -115,13 +116,22 @@ function LoginFormModal() {
           <div className="password">
             <label className="labels">
               Password
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="login-credential"
-              />
+              <div className="pw-container">
+                <input
+                  type={visible ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="login-credential pw"
+                />
+                <div onClick={() => setVisible(!visible)} className="pwicon">
+                  {visible ? (
+                    <i className="fa-regular fa-eye"></i>
+                  ) : (
+                    <i className="fa-regular fa-eye-slash"></i>
+                  )}
+                </div>
+              </div>
             </label>
             {password.length < 6 && password.length > 0 && (
               <p className="error-message">
