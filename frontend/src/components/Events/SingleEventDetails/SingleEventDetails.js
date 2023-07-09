@@ -1,5 +1,5 @@
-import { useDispatch, useSelector } from "react-redux";
 import "./SingleEventDetails.css";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useParams, useHistory } from "react-router-dom";
 import { useEffect } from "react";
 import LineBreakHelper from "../../../utils/LineBreakHelper";
@@ -10,17 +10,19 @@ import {
 
 import { fetchSingleEventThunk } from "../../../store/events";
 import { fetchSingleGroupThunk } from "../../../store/groups";
+import OpenModalButton from "../../OpenModalButton/OpenModalButton";
+import DeleteEventModal from "../DeleteEventModal/DeleteEventModal";
 
 function SingleEventDetails() {
   const { eventId } = useParams();
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const sessionUser = useSelector((state) => state.session.user);
   const targetEvent = useSelector((state) =>
     state.events.singleEvent ? state.events.singleEvent : {}
   );
   const targetGroup = useSelector((state) => state.groups.singleGroup);
 
-  const dispatch = useDispatch();
-
-  const history = useHistory();
   const handleClick = () => {
     history.push(`/groups/${targetGroup.id}`);
   };
@@ -38,7 +40,7 @@ function SingleEventDetails() {
   if (Object.keys(targetEvent).length === 0) {
     return null;
   } else {
-    const previewImage = targetEvent.EventImages.find(
+    const previewImage = targetEvent.EventImages?.find(
       (img) => img.preview === true
     );
     if (previewImage && Object.keys(previewImage).length > 0) {
@@ -54,6 +56,32 @@ function SingleEventDetails() {
     if (previewImage && Object.keys(previewImage).length > 0) {
       imgUrlGroup = previewImage.url;
     }
+  }
+
+  const handleClickUpdate = (e) => {
+    alert("Feature coming soon!");
+  };
+  let organizerBtns = null;
+  if (
+    sessionUser &&
+    Number(sessionUser.id) === Number(targetGroup?.Organizer?.id)
+  ) {
+    organizerBtns = (
+      <div className="organizerbtns-containers">
+        <button className="organizerbtns1" onClick={handleClickUpdate}>
+          Update event
+        </button>
+        <OpenModalButton
+          modalComponent={
+            <DeleteEventModal eventId={eventId} groupId={targetGroup.id} />
+          }
+          buttonText="Delete event"
+          // className="organizerbtns"
+          // onItemClick={closeMenu}
+          foreventdelete="foreventdelete"
+        />
+      </div>
+    );
   }
 
   return (
@@ -127,7 +155,7 @@ function SingleEventDetails() {
                 </div>
                 <div className="detail-container">
                   <div className="icon-container">
-                    <i class="fa-solid fa-dollar-sign"></i>
+                    <i className="fa-solid fa-dollar-sign"></i>
                   </div>
                   <div>
                     {targetEvent.price === 0 ? "FREE" : targetEvent.price}
@@ -141,17 +169,19 @@ function SingleEventDetails() {
                 </div>
                 <div className="detail-container">
                   <div className="icon-container">
-                    <i class="fa-solid fa-map-pin"></i>
+                    <i className="fa-solid fa-map-pin"></i>
                   </div>
                   <div>
-                    {targetEvent.Venue.address}
+                    {targetEvent.Venue?.address}
                     <div>
-                      {capitalizeFirstChar(targetEvent.Venue.city)}
+                      {Object.keys(targetEvent.Venue).length &&
+                        capitalizeFirstChar(targetEvent.Venue?.city)}
                       {",  "}
-                      {targetEvent.Venue.state}
+                      {targetEvent.Venue?.state}
                     </div>
                   </div>
                 </div>
+                {organizerBtns}
               </div>
             </div>
           </div>

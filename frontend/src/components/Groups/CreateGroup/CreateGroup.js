@@ -32,6 +32,7 @@ function CreateGroup() {
     setPrivateStatus("");
     setImageUrl("");
     // setPreviewStatus("");
+    setValidationErrors({});
     return;
   };
 

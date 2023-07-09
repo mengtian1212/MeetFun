@@ -28,12 +28,12 @@ module.exports = {
         },
         {
           eventId: 2,
-          url: "https://d.newsweek.com/en/full/1989687/woman-playing-piano.webp",
+          url: "https://kvno-wordpress-spaces.nyc3.digitaloceanspaces.com/wp-content/uploads/2022/03/18043644/iStock-1129332575-749x500.jpg",
           preview: true,
         },
         {
           eventId: 3,
-          url: "https://cdn-ggnil.nitrocdn.com/rNcFJQpzIMsOVgisYGJujSATSJIOUVpu/assets/images/optimized/rev-628bfb6/wp-content/uploads/2023/03/trading-psychology-1024x576-760x.jpg",
+          url: "https://assets.entrepreneur.com/content/3x2/2000/1641286563-Trading.jpg",
           preview: true,
         },
         {

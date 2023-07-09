@@ -124,11 +124,7 @@ const validateEvent = async (req, res, next) => {
   )
     errors.capacity = "Capacity must be an integer";
   //price
-  if (
-    !price ||
-    typeof price !== "number" ||
-    (typeof price === "number" && price < 0)
-  )
+  if (typeof price !== "number" || (typeof price === "number" && price < 0))
     errors.price = "Price is invalid";
 
   // startDate
@@ -152,8 +148,8 @@ const validateEvent = async (req, res, next) => {
   } else {
     const startDateTime = new Date(startDate).getTime();
     const endDateTime = new Date(endDate).getTime();
-    if (endDateTime < startDateTime) {
-      errors.endDate = "End date is less than start date";
+    if (endDateTime <= startDateTime) {
+      errors.endDate = "End date must be after start date";
     }
   }
 

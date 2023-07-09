@@ -34,10 +34,10 @@ const venues = [
   {
     /* venue 4 */ groupId: 3,
     address: "1001 NE Snow Way",
-    city: "Anchorage",
-    state: "AK",
-    lat: 61.217381,
-    lng: -149.863129,
+    city: "Houston",
+    state: "TX",
+    lat: 29.7604,
+    lng: -95.3698,
   },
   {
     /* venue 5 */ groupId: 4,
@@ -102,6 +102,14 @@ const venues = [
     state: "WA",
     lat: 47.6815,
     lng: -122.2087,
+  },
+  {
+    /* venue 13 */ groupId: 1,
+    address: "30 Newport Way",
+    city: "Jersey City",
+    state: "NJ",
+    lat: 40.0583,
+    lng: -74.4057,
   },
 ];
 

@@ -187,6 +187,15 @@ const groupsReducer = (state = {}, action) => {
         allGroups: {},
         singleGroup: newSingleGroupState,
       };
+    case ADD_GROUP_IMAGES_BY_GROUPID:
+      return {
+        ...state,
+        allGroups: {},
+        singleGroup: {
+          ...state.singleGroup,
+          GroupImages: action.newGroupImages,
+        },
+      };
     case UPDATE_GROUP: // exactly the same as CREATE_GROUP, just the variable name change
       const { updatedGroup, sessionUser1 } = action.payload;
       const updatedSingleGroupState = {
@@ -204,15 +213,7 @@ const groupsReducer = (state = {}, action) => {
         allGroups: {},
         singleGroup: updatedSingleGroupState,
       };
-    case ADD_GROUP_IMAGES_BY_GROUPID:
-      return {
-        ...state,
-        allGroups: {},
-        singleGroup: {
-          ...state.singleGroup,
-          GroupImages: action.newGroupImages,
-        },
-      };
+
     case DELETE_GROUP:
       const newAllGroups = { ...state.allGroups };
       delete newAllGroups[action.groupId];
