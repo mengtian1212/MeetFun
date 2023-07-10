@@ -112,18 +112,6 @@ function SingleGroupDetails() {
     }
   });
 
-  upcomingEventsArr.sort((a, b) => {
-    const dateA = a.startDate;
-    const dateB = b.startDate;
-    if (dateA < dateB) {
-      return -1;
-    } else if (dateA > dateB) {
-      return 1;
-    } else {
-      return 0;
-    }
-  });
-
   const dispatch = useDispatch();
 
   useEffect(() => {
