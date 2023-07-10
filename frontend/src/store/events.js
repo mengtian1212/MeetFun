@@ -148,7 +148,7 @@ const eventsReducer = (state = {}, action) => {
       const newSingleEventState = {
         ...newEvent,
         Group: group,
-        Venue: group.Venues[0]?.id,
+        Venue: group.Venues[0]?.id || null,
         EventImages: [],
       };
       return { ...state, allEvents: {}, singleEvent: newSingleEventState };
