@@ -18,7 +18,12 @@ function GroupsList() {
     window.scroll(0, 0);
   }, [dispatch]);
 
-  if (groups.length === 0) return null;
+  if (groups.length === 0)
+    return (
+      <div className="need-log-in">
+        <h2>Loading in progress...</h2>
+      </div>
+    );
 
   return (
     <>
