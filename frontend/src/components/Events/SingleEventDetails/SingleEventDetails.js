@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import LineBreakHelper from "../../../utils/LineBreakHelper";
 import {
   formatDateTime,
+  replaceThirdCommaDot,
   capitalizeFirstChar,
 } from "../../../utils/helper-functions";
 
@@ -156,8 +157,17 @@ function SingleEventDetails() {
                     <i className="fa-regular fa-clock"></i>
                   </div>
                   <div>
-                    <div>{formatDateTime(targetEvent.startDate)} to</div>
-                    <div>{formatDateTime(targetEvent.endDate)}</div>
+                    <div>
+                      {replaceThirdCommaDot(
+                        formatDateTime(targetEvent.startDate)
+                      )}{" "}
+                      to
+                    </div>
+                    <div>
+                      {replaceThirdCommaDot(
+                        formatDateTime(targetEvent.endDate)
+                      )}
+                    </div>
                   </div>
                 </div>
                 <div className="detail-container">
