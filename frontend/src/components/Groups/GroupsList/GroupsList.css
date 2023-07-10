@@ -85,3 +85,9 @@
   line-height: 1.25rem;
   padding-top: 1.5rem;
 }
+
+.spinner {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+}

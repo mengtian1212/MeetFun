@@ -39,8 +39,11 @@ function SingleEventDetails() {
   let imgUrl = `No preview image for this event`;
   if (Object.keys(targetEvent).length === 0) {
     return (
-      <div className="need-log-in">
-        <h2>Loading in progress...</h2>
+      <div className="spinner">
+        <img
+          src="../../image/Spin-1s-118px.gif"
+          alt="Loading in progress"
+        ></img>
       </div>
     );
   } else {
