@@ -110,10 +110,10 @@ function CreateEvent() {
       venueId: group.Venues[0]?.id || null, /// check here: group.Venues[0] might no exist!
     };
 
-    console.log("GROUP", group);
-    console.log("formdata", formData);
-    console.log("imageData:", imageData);
-    console.log("sessionUser:", sessionUser);
+    // console.log("GROUP", group);
+    // console.log("formdata", formData);
+    // console.log("imageData:", imageData);
+    // console.log("sessionUser:", sessionUser);
 
     // data preparation done, now dispatch thunks
     dispatch(createEventThunk(formData, group))

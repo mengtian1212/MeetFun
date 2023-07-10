@@ -80,9 +80,9 @@ function CreateGroup() {
       city: capitalizeFirstChar(city),
       state,
     };
-    console.log("formdata:", formData);
-    console.log("imageData:", imageData);
-    console.log("sessionUser:", sessionUser);
+    // console.log("formdata:", formData);
+    // console.log("imageData:", imageData);
+    // console.log("sessionUser:", sessionUser);
 
     // data preparation done, now dispatch thunks
     dispatch(createGroupThunk(formData, sessionUser))
