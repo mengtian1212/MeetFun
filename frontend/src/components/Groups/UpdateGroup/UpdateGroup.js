@@ -151,12 +151,12 @@ function UpdateGroup() {
     Object.keys(group).length &&
     group?.organizerId !== sessionUser.id
   ) {
-    setTimeout(() => history.push(`/groups`), 3000);
+    setTimeout(() => history.push(`/`), 3000);
     window.scroll(0, 0);
     return (
       <div className="need-log-in">
         <h2 className="">Unauthorized to update this group</h2>
-        <h2>Redirect to all groups...</h2>
+        <h2>Redirect to home page...</h2>
       </div>
     );
   }

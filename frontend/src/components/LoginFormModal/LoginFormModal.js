@@ -43,7 +43,6 @@ function LoginFormModal() {
       };
     }
 
-    console.log({ loginInfo });
     return dispatch(sessionActions.login(loginInfo))
       .then(closeModal)
       .catch(async (res) => {

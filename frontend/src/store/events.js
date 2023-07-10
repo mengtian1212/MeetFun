@@ -101,7 +101,6 @@ export const addEventImagesThunk =
       }
     }
     await dispatch(addEventImagesAction(newEventImages));
-    console.log("newEventImages", newEventImages);
     return newEventImages;
   };
 

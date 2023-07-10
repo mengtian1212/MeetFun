@@ -96,7 +96,6 @@ export const addGroupImagesThunk =
       }
     }
     await dispatch(addGroupImagesAction(newGroupImages));
-    console.log("newGroupImages", newGroupImages);
     return newGroupImages;
   };
 
