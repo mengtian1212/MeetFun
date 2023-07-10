@@ -12,6 +12,22 @@ export const formatDateTime = (timeData) => {
   return startDateTime.toLocaleString("en-US", options);
 };
 
+export const replaceThirdCommaDot = (string) => {
+  let commaCount = 0;
+  let newString = "";
+  for (let i = 0; i < string.length; i++) {
+    if (string[i] === ",") {
+      commaCount++;
+      if (commaCount === 3) {
+        newString += " ·";
+        continue;
+      }
+    }
+    newString += string[i];
+  }
+  return newString;
+};
+
 export const capitalizeFirstChar = (words) => {
   let processedWord = words.trim().replace(/\s+/g, " ");
   const wordArr = processedWord.split(" ");

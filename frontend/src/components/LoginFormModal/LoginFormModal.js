@@ -82,7 +82,7 @@ function LoginFormModal() {
             src="https://raw.githubusercontent.com/mengtian1212/API-project/main/frontend/public/image/favicon6.png"
             alt="MeetFun Logo"
           />
-          <img src="./image/favicon6.png" alt="MeetFun Logo" />
+          {/* <img src="./image/favicon6.png" alt="MeetFun Logo" /> */}
           <h1>Log in</h1>
           <div className="not-a-member-container">
             <h2>Not a member yet? </h2>

@@ -1,5 +1,8 @@
 import { useHistory } from "react-router-dom";
-import { formatDateTime } from "../../../utils/helper-functions";
+import {
+  formatDateTime,
+  replaceThirdCommaDot,
+} from "../../../utils/helper-functions";
 
 function EventListCard({ event, cardMode }) {
   const history = useHistory();
@@ -30,12 +33,8 @@ function EventListCard({ event, cardMode }) {
             </div>
             <div className="group-list-text-container">
               <div className={`group-name`}>
-                {/* <h3 id="event-date-time">
-                  {event.startDate.slice(0, 10)} ·{" "}
-                  {event.startDate.slice(11, 19)}
-                </h3> */}
                 <h3 id={`event-date-time`}>
-                  {formatDateTime(event.startDate)}
+                  {replaceThirdCommaDot(formatDateTime(event.startDate))}
                 </h3>
                 <h2 className={cardMode && "text-format-title"}>
                   {event.name}

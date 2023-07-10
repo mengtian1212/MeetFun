@@ -118,7 +118,11 @@ function SignupFormModal() {
       </div>
       <form onSubmit={handleSubmit}>
         <div className="logo-container">
-          <img src="./image/favicon6.png" alt="MeetFun Logo" />
+          <img
+            src="https://raw.githubusercontent.com/mengtian1212/API-project/main/frontend/public/image/favicon6.png"
+            alt="MeetFun Logo"
+          />
+          {/* <img src="./image/favicon6.png" alt="MeetFun Logo" /> */}
           <h1>Sign up</h1>
           <div className="not-a-member-container">
             <h2>Already a member? </h2>
