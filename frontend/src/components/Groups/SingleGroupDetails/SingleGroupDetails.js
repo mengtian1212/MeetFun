@@ -125,8 +125,11 @@ function SingleGroupDetails() {
   let imgUrl = `No preview image for this group`;
   if (!targetGroup || (targetGroup && !Object.values(targetGroup).length)) {
     return (
-      <div className="need-log-in">
-        <h2>Loading in progress...</h2>
+      <div className="spinner">
+        <img
+          src="../../image/Spin-1s-118px.gif"
+          alt="Loading in progress"
+        ></img>
       </div>
     );
   } else {
@@ -140,8 +143,11 @@ function SingleGroupDetails() {
 
   if (!Object.keys(targetGroup))
     return (
-      <div className="need-log-in">
-        <h2>Loading in progress...</h2>
+      <div className="spinner">
+        <img
+          src="../../image/Spin-1s-118px.gif"
+          alt="Loading in progress"
+        ></img>
       </div>
     );
 
