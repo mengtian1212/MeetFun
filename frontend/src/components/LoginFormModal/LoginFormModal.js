@@ -98,7 +98,7 @@ function LoginFormModal() {
           )}
           <div className="username">
             <label className="labels">
-              Username or Email
+              Username / Email
               <input
                 type="text"
                 value={credential}
