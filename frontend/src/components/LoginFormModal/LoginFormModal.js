@@ -78,6 +78,10 @@ function LoginFormModal() {
       </div>
       <form onSubmit={(e) => handleSubmit(e, "")}>
         <div className="logo-container">
+          <img
+            src="https://raw.githubusercontent.com/mengtian1212/API-project/main/frontend/public/image/favicon6.png"
+            alt="MeetFun Logo"
+          />
           <img src="./image/favicon6.png" alt="MeetFun Logo" />
           <h1>Log in</h1>
           <div className="not-a-member-container">
