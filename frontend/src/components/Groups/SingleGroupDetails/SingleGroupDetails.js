@@ -124,7 +124,11 @@ function SingleGroupDetails() {
 
   let imgUrl = `No preview image for this group`;
   if (!targetGroup || (targetGroup && !Object.values(targetGroup).length)) {
-    return null;
+    return (
+      <div className="need-log-in">
+        <h2>Loading in progress...</h2>
+      </div>
+    );
   } else {
     const previewImage = targetGroup.GroupImages?.find(
       (img) => img.preview === true
@@ -134,7 +138,12 @@ function SingleGroupDetails() {
     }
   }
 
-  if (!Object.keys(targetGroup)) return <div>Loading in progress...</div>;
+  if (!Object.keys(targetGroup))
+    return (
+      <div className="need-log-in">
+        <h2>Loading in progress...</h2>
+      </div>
+    );
 
   return (
     <>

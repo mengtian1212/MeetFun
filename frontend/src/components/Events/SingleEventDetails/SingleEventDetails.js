@@ -38,7 +38,11 @@ function SingleEventDetails() {
 
   let imgUrl = `No preview image for this event`;
   if (Object.keys(targetEvent).length === 0) {
-    return null;
+    return (
+      <div className="need-log-in">
+        <h2>Loading in progress...</h2>
+      </div>
+    );
   } else {
     const previewImage = targetEvent.EventImages?.find(
       (img) => img.preview === true
