@@ -39,11 +39,13 @@ function EventListCard({ event, cardMode }) {
                 <h2 className={cardMode && "text-format-title"}>
                   {event.name}
                 </h2>
-                <h3>
-                  {event.Venue?.city.toUpperCase()}
-                  {",  "}
-                  {event.Venue?.state}
-                </h3>
+                {event.Venue && (
+                  <h3>
+                    {event.Venue?.city.toUpperCase()}
+                    {",  "}
+                    {event.Venue?.state}
+                  </h3>
+                )}
               </div>
             </div>
           </div>

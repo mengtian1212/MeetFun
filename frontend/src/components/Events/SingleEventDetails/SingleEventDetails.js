@@ -186,20 +186,22 @@ function SingleEventDetails() {
                   </div>
                   <div>{targetEvent.type}</div>
                 </div>
-                <div className="detail-container">
-                  <div className="icon-container">
-                    <i className="fa-solid fa-map-pin"></i>
-                  </div>
-                  <div>
-                    {targetEvent.Venue?.address}
+                {targetEvent.Venue && (
+                  <div className="detail-container">
+                    <div className="icon-container">
+                      <i className="fa-solid fa-map-pin"></i>
+                    </div>
                     <div>
-                      {Object.keys(targetEvent.Venue).length &&
-                        capitalizeFirstChar(targetEvent.Venue?.city)}
-                      {",  "}
-                      {targetEvent.Venue?.state}
+                      {targetEvent.Venue?.address}
+                      <div>
+                        {Object.keys(targetEvent.Venue).length &&
+                          capitalizeFirstChar(targetEvent.Venue?.city)}
+                        {",  "}
+                        {targetEvent.Venue?.state}
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
                 {organizerBtns}
               </div>
             </div>

@@ -107,7 +107,7 @@ function CreateEvent() {
       endDate: formatDateTime(endDate),
       description: description.trim(),
       capacity: 20,
-      venueId: group.Venues[0]?.id, /// check here: group.Venues[0] might no exist!
+      venueId: group.Venues[0]?.id || null, /// check here: group.Venues[0] might no exist!
     };
 
     console.log("GROUP", group);
