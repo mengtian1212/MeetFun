@@ -2,7 +2,10 @@ import "./CreateEvent.css";
 import { useState, useEffect } from "react";
 import { useHistory, NavLink, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { capitalizeFirstChar } from "../../../utils/helper-functions";
+import {
+  capitalizeFirstChar,
+  formatDateTime,
+} from "../../../utils/helper-functions";
 import { fetchSingleGroupThunk } from "../../../store/groups";
 import { createEventThunk, addEventImagesThunk } from "../../../store/events";
 
@@ -100,8 +103,8 @@ function CreateEvent() {
       type,
       private: privateStatus === "private" ? true : false,
       price: Number(price),
-      startDate,
-      endDate,
+      startDate: formatDateTime(startDate),
+      endDate: formatDateTime(endDate),
       description: description.trim(),
       capacity: 20,
       venueId: group.Venues[0]?.id, /// check here: group.Venues[0] might no exist!
