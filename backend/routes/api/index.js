@@ -1,11 +1,13 @@
-const router = require('express').Router();
-const sessionRouter = require('./session.js');
-const usersRouter = require('./users.js');
-const groupsRouter = require('./groups.js');
-const venuesRouter = require('./venues.js');
-const eventsRouter = require('./events.js');
-const groupImagesRouter = require('./group-images.js');
-const eventImagesRouter = require('./event-images.js');
+const router = require("express").Router();
+const sessionRouter = require("./session.js");
+const usersRouter = require("./users.js");
+const groupsRouter = require("./groups.js");
+const venuesRouter = require("./venues.js");
+const eventsRouter = require("./events.js");
+const groupImagesRouter = require("./group-images.js");
+const eventImagesRouter = require("./event-images.js");
+const attendancesRouter = require("./attendances.js");
+const membershipsRouter = require("./memberships.js");
 
 const { restoreUser } = require("../../utils/auth.js");
 
@@ -14,21 +16,25 @@ const { restoreUser } = require("../../utils/auth.js");
 // If current user session is not valid, set req.user to null
 router.use(restoreUser);
 
-router.use('/session', sessionRouter);
+router.use("/session", sessionRouter);
 
-router.use('/users', usersRouter);
+router.use("/users", usersRouter);
 
-router.use('/groups', groupsRouter);
+router.use("/groups", groupsRouter);
 
-router.use('/venues', venuesRouter);
+router.use("/venues", venuesRouter);
 
-router.use('/events', eventsRouter);
+router.use("/events", eventsRouter);
 
-router.use('/group-images', groupImagesRouter);
+router.use("/group-images", groupImagesRouter);
 
-router.use('/event-images', eventImagesRouter);
+router.use("/event-images", eventImagesRouter);
 
-router.post('/test', (req, res) => {
-    res.json({ requestBody: req.body });
+router.use("/attendances", attendancesRouter);
+
+router.use("/memberships", membershipsRouter);
+
+router.post("/test", (req, res) => {
+  res.json({ requestBody: req.body });
 });
 module.exports = router;

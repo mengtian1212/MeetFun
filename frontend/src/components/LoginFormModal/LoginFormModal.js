@@ -88,7 +88,7 @@ function LoginFormModal() {
             <span className="signup-text">
               <OpenModalMenuItem
                 className="not-a-member-sign-up"
-                itemText="Sign up"
+                itemText="Sign Up"
                 // onItemClick={closeMenu}
                 modalComponent={<SignupFormModal />}
               />

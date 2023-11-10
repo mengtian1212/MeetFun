@@ -249,7 +249,7 @@ router.post(
 router.put(
   "/:groupId",
   requireAuth,
-  isOrganizer,
+  isOrganizerCoHost,
   validateGroup,
   async (req, res, next) => {
     const { name, about, type, private, city, state } = req.body;
@@ -269,17 +269,22 @@ router.put(
 );
 
 // 7. Delete a Group
-router.delete("/:groupId", requireAuth, isOrganizer, async (req, res, next) => {
-  const group = await Group.findByPk(req.params.groupId);
-  try {
-    await group.destroy();
-  } catch (err) {
-    console.log(err);
+router.delete(
+  "/:groupId",
+  requireAuth,
+  isOrganizerCoHost,
+  async (req, res, next) => {
+    const group = await Group.findByPk(req.params.groupId);
+    try {
+      await group.destroy();
+    } catch (err) {
+      console.log(err);
+    }
+    return res.json({
+      message: "Successfully deleted",
+    });
   }
-  return res.json({
-    message: "Successfully deleted",
-  });
-});
+);
 
 // Feature 2: venue endpoints
 // 8. Get All Venues for a Group specified by its id
@@ -375,7 +380,9 @@ router.get("/:groupId/events", async (req, res, next) => {
       eventData.numAttending = await Attendance.count({
         where: {
           eventId: event.id,
-          status: "attending",
+          status: {
+            [Op.in]: ["organizer", "attending"],
+          },
         },
       });
 
@@ -416,6 +423,7 @@ router.post(
       startDate,
       endDate,
     } = req.body;
+
     const event = await Event.create({
       groupId: req.params.groupId,
       venueId: venueId ? venueId : null,
@@ -426,6 +434,12 @@ router.post(
       description,
       startDate,
       endDate,
+    });
+
+    const attendance = await Attendance.create({
+      userId: req.user.id,
+      eventId: event.id,
+      status: "organizer",
     });
 
     return res.json({
@@ -473,7 +487,7 @@ router.get("/:groupId/members", async (req, res, next) => {
         where: {
           groupId: group.id,
         },
-        attributes: ["status"],
+        attributes: ["id", "status", "updatedAt"],
       },
     });
   } else {
@@ -487,7 +501,7 @@ router.get("/:groupId/members", async (req, res, next) => {
             [Op.ne]: "pending",
           },
         },
-        attributes: ["status"],
+        attributes: ["id", "status", "updatedAt"],
       },
     });
   }
@@ -502,7 +516,20 @@ router.get("/:groupId/members", async (req, res, next) => {
   return res.json({ Members: payload });
 });
 
+// additional. Get all Memberships of a Group specified by its id
+router.get("/:groupId/memberships", async (req, res, next) => {
+  const group = await Group.findByPk(req.params.groupId);
+  if (!group)
+    return res.status(404).json({ message: "Group couldn't be found" });
+
+  const memberships = await group.getMemberships();
+  return res.json({
+    Memberships: memberships,
+  });
+});
+
 // 19. Request a Membership for a Group based on the Group's id
+// no membership -> pending
 router.post("/:groupId/membership", requireAuth, async (req, res, next) => {
   const group = await Group.findByPk(req.params.groupId);
   if (!group)
@@ -518,11 +545,12 @@ router.post("/:groupId/membership", requireAuth, async (req, res, next) => {
   if (membership === null) {
     const member = await Membership.create({
       userId: req.user.id,
-      groupId: req.params.groupId,
+      groupId: parseInt(req.params.groupId),
       status: "pending",
     });
     return res.json({
-      memberId: member.userId,
+      id: member.id,
+      userId: member.userId,
       groupId: member.groupId,
       status: "pending",
     });

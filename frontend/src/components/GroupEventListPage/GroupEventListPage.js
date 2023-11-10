@@ -6,17 +6,19 @@ import EventsList from "../Events/EventsList";
 function GroupEventListPage({ showtype }) {
   return (
     <div className="group-event-main">
-      <div className="event-or-group-container">
-        <NavLink exact to="/events" className="event-or-group">
-          Events
-        </NavLink>
-        <NavLink exact to="/groups" className="event-or-group">
-          Groups
-        </NavLink>
+      <div>
+        <div className="event-or-group-container">
+          <NavLink exact to="/events" className="event-or-group">
+            Events
+          </NavLink>
+          <NavLink exact to="/groups" className="event-or-group">
+            Groups
+          </NavLink>
+        </div>
+        <section className="group-event-list-containter">
+          {showtype === "groups" ? <GroupsList /> : <EventsList />}
+        </section>
       </div>
-      <section className="group-event-list-containter">
-        {showtype === "groups" ? <GroupsList /> : <EventsList />}
-      </section>
     </div>
   );
 }

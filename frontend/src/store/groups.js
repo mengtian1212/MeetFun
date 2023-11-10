@@ -3,6 +3,8 @@ import { csrfFetch } from "./csrf";
 /** Action Type Constants: */
 export const LOAD_GROUPS = "groups/LOAD_GROUPS";
 export const LOAD_SINGLE_GROUP = "groups/LOAD_SINGLE_GROUP";
+export const LOAD_CURRENT_GROUPS = "groups/LOAD_CURRENT_GROUPS";
+
 export const CREATE_GROUP = "groups/CREATE_GROUP";
 export const ADD_GROUP_IMAGES_BY_GROUPID = "groups/ADD_GROUP_IMAGES_BY_GROUPID";
 export const UPDATE_GROUP = "groups/UPDATE_GROUP";
@@ -13,6 +15,11 @@ export const DELETE_GROUPIMAGE = "groups/DELETE_GROUPIMAGE";
 export const loadGroupsAction = (groups) => ({
   type: LOAD_GROUPS,
   groups,
+});
+
+export const loadCurrentGroupsAction = (groups) => ({
+  type: LOAD_CURRENT_GROUPS,
+  payload: groups,
 });
 
 export const loadSingleGroupAction = (group) => ({
@@ -51,6 +58,17 @@ export const fetchGroupsThunk = () => async (dispatch) => {
   if (res.ok) {
     const data = await res.json();
     dispatch(loadGroupsAction(data.Groups));
+  }
+};
+
+export const fetchCurrentGroupsThunk = () => async (dispatch) => {
+  const res = await csrfFetch("/api/groups/current");
+  if (res.ok) {
+    const data = await res.json();
+    dispatch(loadCurrentGroupsAction(data.Groups));
+  } else {
+    const errors = await res.json();
+    return errors;
   }
 };
 
@@ -154,8 +172,10 @@ export const deleteGroupThunk = (groupId) => async (dispatch) => {
   }
 };
 
+const initialState = { allGroups: {}, singleGroup: {}, currentGroups: {} };
+
 /** Groups Reducer: */
-const groupsReducer = (state = {}, action) => {
+const groupsReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOAD_GROUPS:
       const groupsState = {};
@@ -167,6 +187,12 @@ const groupsReducer = (state = {}, action) => {
         allGroups: { ...groupsState, optionalOrderedList: [] },
         singleGroup: {},
       };
+    case LOAD_CURRENT_GROUPS:
+      const groupsState1 = { ...state, currentGroups: {} };
+      action.payload.forEach(
+        (group) => (groupsState1.currentGroups[group.id] = group)
+      );
+      return groupsState1;
     case LOAD_SINGLE_GROUP:
       return { ...state, singleGroup: { ...action.group } };
     case CREATE_GROUP:

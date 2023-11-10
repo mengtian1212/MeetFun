@@ -16,7 +16,7 @@ function EventListCard({ event, cardMode }) {
   return (
     <>
       <div
-        className={`group-list-card cursor d ${cardClassName}`}
+        className={`group-list-card cursor d ${cardClassName} no-border`}
         onClick={handleClick}
       >
         <div className={`event-list-card ${cardClassName} ${cardMode && "aa"}`}>
@@ -25,7 +25,8 @@ function EventListCard({ event, cardMode }) {
               <img
                 src={
                   event.previewImage === `No preview image for this event`
-                    ? "https://i0.wp.com/orstx.org/wp-content/uploads/2019/10/no-photo-available-icon-12.jpg?fit=300%2C245&ssl=1"
+                    ? // ? "https://i0.wp.com/orstx.org/wp-content/uploads/2019/10/no-photo-available-icon-12.jpg?fit=300%2C245&ssl=1"
+                      "https://secure.meetupstatic.com/next/images/find/emptyResultsIcon.svg"
                     : event.previewImage
                 }
                 alt="No event preview"
@@ -35,17 +36,27 @@ function EventListCard({ event, cardMode }) {
               <div className={`group-name`}>
                 <h3 id={`event-date-time`}>
                   {replaceThirdCommaDot(formatDateTime(event.startDate))}
+                  &nbsp;&bull;&nbsp;
+                  {event.numAttending}{" "}
+                  {event.numAttending === 1 ? "Attendee" : "Attendees"}
                 </h3>
                 <h2 className={cardMode && "text-format-title"}>
                   {event.name}
                 </h2>
-                {event.Venue && (
-                  <h3>
-                    {event.Venue?.city.toUpperCase()}
-                    {",  "}
-                    {event.Venue?.state}
+                <div className="event-card-1">
+                  {/* <h3>
+                    {event.numAttending}{" "}
+                    {event.numAttending === 1 ? "Attendee" : "Attendees"}
                   </h3>
-                )}
+                  &nbsp;&bull;&nbsp; */}
+                  {event.Venue && (
+                    <h3>
+                      {event.Venue?.city.toUpperCase()}
+                      {",  "}
+                      {event.Venue?.state}
+                    </h3>
+                  )}
+                </div>
               </div>
             </div>
           </div>

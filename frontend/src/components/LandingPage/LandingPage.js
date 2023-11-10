@@ -15,7 +15,7 @@ function LandingPage() {
           <section className="sec1-container">
             <div className="sec1-left-container">
               <h1 className="sec1-left-title">
-                The people platform—Where interests become friendships
+                The people platform - Where interests become friendships
               </h1>
               <p className="sec1-left-text">
                 Whatever your interest, from hiking and reading to networking

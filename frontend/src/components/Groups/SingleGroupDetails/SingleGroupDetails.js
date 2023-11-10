@@ -1,27 +1,90 @@
 import "./SingleGroupDetails.css";
 import { useHistory, useParams, NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import LineBreakHelper from "../../../utils/LineBreakHelper";
 
 import { fetchSingleGroupThunk } from "../../../store/groups";
 import { fetchEventsByGroupIdThunk } from "../../../store/events";
 import EventListCard from "../../Events/EventsList/EventListCard";
-import { capitalizeFirstChar } from "../../../utils/helper-functions";
+import {
+  capitalizeFirstChar,
+  getRandomColor,
+} from "../../../utils/helper-functions";
 import OpenModalButton from "../../OpenModalButton/OpenModalButton";
 import DeleteGroupModal from "../DeleteGroupModal";
+import LoadingPage from "../../LoadingPage/LoadingPage";
+import {
+  addMembershipThunk,
+  deleteMembershipThunk,
+  fetchGroupMembersThunk,
+  fetchGroupMembershipsThunk,
+  fetchMyMembershipsThunk,
+} from "../../../store/memberships";
 
 function SingleGroupDetails() {
   const { groupId } = useParams();
+  const dispatch = useDispatch();
   const history = useHistory();
-  const sessionUser = useSelector((state) => state.session.user);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [showReadMoreBtn, setShowReadMoreBtn] = useState(true);
+  const contentRef = useRef(null);
+  const toggleDescription = () => {
+    setIsExpanded(!isExpanded);
+  };
 
-  const targetGroup = useSelector((state) =>
-    state.groups.singleGroup ? state.groups.singleGroup : {}
+  const sessionUser = useSelector((state) => state.session.user);
+  const targetGroup = useSelector((state) => state.groups?.singleGroup);
+
+  const allEvents = useSelector((state) => state.events?.allEvents);
+  const groupEvents = allEvents && Object.values(allEvents);
+
+  const members = useSelector((state) => state.memberships.groupMembers);
+  const groupMembers = members && Object.values(members);
+
+  const memberships = useSelector(
+    (state) => state.memberships.groupMemberships
   );
+  const groupMemberships = members && Object.values(memberships);
+  const myMembership =
+    sessionUser &&
+    groupMemberships?.find(
+      (membership) => sessionUser.id === membership.userId
+    );
+
+  console.log("myMembership", myMembership, groupMemberships);
+  const memberStatusOrder = {
+    Organizer: 0,
+    "co-host": 1,
+    member: 2,
+    pending: 3,
+  };
+
+  const groupMembersSorted = groupMembers.sort((a, b) => {
+    const statusA = a.Membership[0].status;
+    const statusB = b.Membership[0].status;
+
+    return memberStatusOrder[statusA] - memberStatusOrder[statusB];
+  });
+
+  groupMembersSorted?.forEach((member) => {
+    if (member.id === targetGroup.organizerId) {
+      member.Membership[0].status = "Organizer";
+    }
+  });
+
+  const groupImages = targetGroup?.GroupImages;
+  const groupImagesSorted = groupImages?.sort((a, b) => {
+    return b.preview - a.preview;
+  });
 
   const handleClickJoin = (e) => {
-    alert("Feature coming soon!");
+    return dispatch(addMembershipThunk(targetGroup.id));
+  };
+
+  const handleClickLeave = (e) => {
+    return dispatch(deleteMembershipThunk(myMembership));
   };
 
   const handleClickCreateEvent = (e) => {
@@ -32,25 +95,13 @@ function SingleGroupDetails() {
     history.push(`/groups/${groupId}/edit`);
   };
 
+  let organizerBtns = null;
   let joinGroupBtn = null;
   if (
-    sessionUser &&
-    targetGroup &&
-    Number(sessionUser.id) !== Number(targetGroup.organizerId)
-  ) {
-    joinGroupBtn = (
-      <div className="join-this-group-container">
-        <button onClick={handleClickJoin} className="join-this-group-btn">
-          Join this group
-        </button>
-      </div>
-    );
-  } // Might need to change to check if he is the organizer to check if he is already a member of group
-
-  let organizerBtns = null;
-  if (
-    sessionUser &&
-    Number(sessionUser.id) === Number(targetGroup.organizerId)
+    (sessionUser &&
+      targetGroup &&
+      Number(sessionUser.id) === Number(targetGroup.organizerId)) ||
+    myMembership?.status === "co-host"
   ) {
     organizerBtns = (
       <div className="organizerbtns-containers">
@@ -70,19 +121,50 @@ function SingleGroupDetails() {
     );
   }
 
-  const groupEvents = Object.values(
-    useSelector((state) =>
-      state.events.allEvents ? state.events.allEvents : {}
-    )
-  );
+  if (sessionUser && myMembership?.status === "pending") {
+    joinGroupBtn = (
+      <div className="join-this-group-container">
+        <div className="member-s3">
+          Your request to join this group is pending
+        </div>
+        <button onClick={handleClickLeave} className="join-this-group-btn1">
+          Withdraw request
+        </button>
+      </div>
+    );
+  } else if (
+    ((sessionUser && myMembership?.status === "member") ||
+      myMembership?.status === "co-host") &&
+    Number(sessionUser.id) !== Number(targetGroup.organizerId)
+  ) {
+    joinGroupBtn = (
+      <div className="join-this-group-container">
+        <div className="member-s3">You're a {myMembership?.status}</div>
+        <button
+          onClick={handleClickLeave}
+          className="join-this-group-btn1 leave-btn"
+        >
+          Leave this group
+        </button>
+      </div>
+    );
+  } else if (sessionUser && !myMembership) {
+    joinGroupBtn = (
+      <div className="join-this-group-container">
+        <button onClick={handleClickJoin} className="join-this-group-btn">
+          Join this group
+        </button>
+      </div>
+    );
+  }
 
-  const upcomingEventsArr = groupEvents.filter((event) => {
+  const upcomingEventsArr = groupEvents?.filter((event) => {
     const startDateTime = new Date(event.startDate).getTime();
     const currDateTime = new Date().getTime();
     return startDateTime > currDateTime;
   });
 
-  upcomingEventsArr.sort((a, b) => {
+  upcomingEventsArr?.sort((a, b) => {
     const dateA = a.startDate;
     const dateB = b.startDate;
     if (dateA < dateB) {
@@ -94,13 +176,13 @@ function SingleGroupDetails() {
     }
   });
 
-  const pastEventsArr = groupEvents.filter((event) => {
+  const pastEventsArr = groupEvents?.filter((event) => {
     const startDateTime = new Date(event.startDate).getTime();
     const currDateTime = new Date().getTime();
     return startDateTime <= currDateTime;
   });
 
-  pastEventsArr.sort((a, b) => {
+  pastEventsArr?.sort((a, b) => {
     const dateA = a.startDate;
     const dateB = b.startDate;
     if (dateA < dateB) {
@@ -112,27 +194,36 @@ function SingleGroupDetails() {
     }
   });
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
-    dispatch(fetchSingleGroupThunk(groupId));
-    dispatch(fetchEventsByGroupIdThunk(groupId));
-    // if (targetGroup && Object.values(targetGroup).length) return null;
-
+    dispatch(fetchSingleGroupThunk(groupId))
+      .then(() => dispatch(fetchEventsByGroupIdThunk(groupId)))
+      .then(() => dispatch(fetchGroupMembersThunk(groupId)))
+      .then(() => dispatch(fetchGroupMembershipsThunk(groupId)))
+      .then(() => {
+        if (sessionUser) dispatch(fetchMyMembershipsThunk());
+      })
+      .then(() => setIsLoading(false));
     window.scroll(0, 0);
   }, [dispatch, groupId]);
 
+  useEffect(() => {
+    if (
+      contentRef &&
+      contentRef?.current &&
+      contentRef.current.scrollHeight <= 100
+    ) {
+      console.log(contentRef.current.scrollHeight);
+      setIsExpanded(true);
+      setShowReadMoreBtn(false);
+    } else {
+      setShowReadMoreBtn(true);
+    }
+  }, [targetGroup, contentRef.current]);
+
+  if (isLoading) return <LoadingPage />;
+
   let imgUrl = `No preview image for this group`;
-  if (!targetGroup || (targetGroup && !Object.values(targetGroup).length)) {
-    return (
-      <div className="spinner">
-        <img
-          src="../../image/Spin-1s-118px.gif"
-          alt="Loading in progress"
-        ></img>
-      </div>
-    );
-  } else {
+  if (targetGroup && Object.values(targetGroup).length) {
     const previewImage = targetGroup.GroupImages?.find(
       (img) => img.preview === true
     );
@@ -140,16 +231,6 @@ function SingleGroupDetails() {
       imgUrl = previewImage.url;
     }
   }
-
-  if (!Object.keys(targetGroup))
-    return (
-      <div className="spinner">
-        <img
-          src="../../image/Spin-1s-118px.gif"
-          alt="Loading in progress"
-        ></img>
-      </div>
-    );
 
   return (
     <>
@@ -166,7 +247,8 @@ function SingleGroupDetails() {
               <img
                 src={
                   imgUrl === `No preview image for this group`
-                    ? "https://i0.wp.com/orstx.org/wp-content/uploads/2019/10/no-photo-available-icon-12.jpg?fit=300%2C245&ssl=1"
+                    ? // ? "https://i0.wp.com/orstx.org/wp-content/uploads/2019/10/no-photo-available-icon-12.jpg?fit=300%2C245&ssl=1"
+                      "https://secure.meetupstatic.com/photos/event/1/4/3/e/600_516605182.webp"
                     : imgUrl
                 }
                 alt="No preview for this group"
@@ -220,51 +302,112 @@ function SingleGroupDetails() {
         </div>
         <div className="group-detail-bottom">
           <div className="bottom-inner">
-            <div className="bottom1-organizer">
-              <h2>Organizer</h2>
-              <h3>
-                {targetGroup?.Organizer?.firstName}{" "}
-                {targetGroup?.Organizer?.lastName}
-              </h3>
-            </div>
-            <div className="bottom2-what-we-are-about">
-              <h2>What we're about</h2>
-              <div className="paragraphs">
-                <LineBreakHelper text={targetGroup.about} />
+            <div className="bottom-inner-left">
+              <div className="bottom2-what-we-are-about">
+                <h2>What we're about</h2>
+                <div
+                  className={`paragraphs ${isExpanded ? "expanded" : ""}`}
+                  ref={contentRef}
+                >
+                  <LineBreakHelper text={targetGroup?.about} />
+                </div>
+                {showReadMoreBtn && (
+                  <button onClick={toggleDescription} className="read-more">
+                    {isExpanded ? "Read Less" : "Read More"}
+                  </button>
+                )}
+              </div>
+              <div className="group-events-container">
+                {(!groupEvents?.length ||
+                  (groupEvents?.length && !upcomingEventsArr?.length)) && (
+                  <h2>No Upcoming Events</h2>
+                )}
+                {upcomingEventsArr?.length > 0 && (
+                  <h2>Upcoming events ({upcomingEventsArr?.length})</h2>
+                )}
+                <div className="list-item">
+                  {upcomingEventsArr?.length > 0 &&
+                    upcomingEventsArr?.map((event) => (
+                      <EventListCard
+                        key={event.id}
+                        event={event}
+                        cardMode={true}
+                      />
+                    ))}
+                </div>
+              </div>
+              {pastEventsArr?.length > 0 && (
+                <div className="group-events-container">
+                  <h2>Past events ({pastEventsArr?.length})</h2>
+                  <div className="list-item">
+                    {pastEventsArr?.length > 0 &&
+                      pastEventsArr?.map((event) => (
+                        <EventListCard
+                          key={event.id}
+                          event={event}
+                          cardMode={true}
+                        />
+                      ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="group-events-container">
+                {groupImagesSorted?.length > 0 && (
+                  <h2>Photos ({groupImagesSorted?.length})</h2>
+                )}
+                <div className="group-img-container">
+                  {groupImagesSorted?.length > 0 &&
+                    groupImagesSorted?.map((image) => (
+                      <img
+                        key={image.id}
+                        className="group-img-c"
+                        src={image.url}
+                        alt={image.id}
+                      />
+                    ))}
+                </div>
               </div>
             </div>
-            <div className="group-events-container">
-              {(!groupEvents.length ||
-                (groupEvents.length && !upcomingEventsArr.length)) && (
-                <h2>No Upcoming Events</h2>
-              )}
-              {upcomingEventsArr.length > 0 && (
-                <h2>Upcoming events ({upcomingEventsArr.length})</h2>
-              )}
-              <div className="list-item">
-                {upcomingEventsArr.length > 0 &&
-                  upcomingEventsArr.map((event) => (
-                    <EventListCard
-                      key={event.id}
-                      event={event}
-                      cardMode={true}
-                    />
-                  ))}
+
+            <div className="bottom-inner-right">
+              <div className="bottom1-organizer">
+                <h2>Organizer</h2>
+                <h3>
+                  {targetGroup?.Organizer?.firstName}{" "}
+                  {targetGroup?.Organizer?.lastName}
+                </h3>
               </div>
-            </div>
-            <div className="group-events-container">
-              {pastEventsArr.length > 0 && (
-                <h2>Past events ({pastEventsArr.length})</h2>
-              )}
-              <div className="list-item">
-                {pastEventsArr.length > 0 &&
-                  pastEventsArr.map((event) => (
-                    <EventListCard
-                      key={event.id}
-                      event={event}
-                      cardMode={true}
-                    />
-                  ))}
+              <div className="group-events-container">
+                {groupMembersSorted?.length > 0 && <h2>Members</h2>}
+                <div className="group-list-card show-as-white-card1">
+                  {groupMembersSorted?.length > 0 &&
+                    groupMembersSorted?.map((member) => (
+                      <div key={member.id} className="member-s">
+                        <div
+                          className="member-image"
+                          style={{
+                            backgroundColor: getRandomColor(),
+                          }}
+                        >
+                          <span>
+                            {member.firstName[0]}
+                            {member.lastName[0]}
+                          </span>
+                        </div>
+                        <div className="member-s1">
+                          <div>
+                            {member.firstName}&nbsp;
+                            {member.lastName}
+                          </div>
+                          <div className="member-s2">
+                            {member.Membership[0].status[0].toUpperCase()}
+                            {member.Membership[0].status.slice(1)}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                </div>
               </div>
             </div>
           </div>

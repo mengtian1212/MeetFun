@@ -109,7 +109,9 @@ router.get("/", queryValidationCheck, async (req, res, next) => {
     eventData.numAttending = await Attendance.count({
       where: {
         eventId: event.id,
-        status: "attending",
+        status: {
+          [Op.in]: ["organizer", "attending"],
+        },
       },
     });
 
@@ -130,6 +132,18 @@ router.get("/", queryValidationCheck, async (req, res, next) => {
     payload.push(eventData);
   }
   return res.json({ Events: payload });
+});
+
+router.get("/current", requireAuth, async (req, res) => {
+  const userId = req.user.id;
+  const events = await Event.findAll({
+    include: {
+      model: Attendance,
+      where: { userId: userId },
+      attributes: [],
+    },
+  });
+  return res.json({ Events: events });
 });
 
 // 13. Get details of an Event specified by its id
@@ -173,7 +187,9 @@ router.get("/:eventId", async (req, res, next) => {
     eventData.numAttending = await Attendance.count({
       where: {
         eventId: event.id,
-        status: "attending",
+        status: {
+          [Op.in]: ["organizer", "attending"],
+        },
       },
     });
     return res.json(eventData);
@@ -291,7 +307,7 @@ router.get("/:eventId/attendees", async (req, res, next) => {
     if (req.user.id === group.organizerId || cohostFound.length !== 0)
       isOrganizerCoHost = true;
   }
-
+  console.log("isOrganizerCoHost", isOrganizerCoHost);
   let attendees = [];
   if (isOrganizerCoHost) {
     attendees = await User.findAll({
@@ -302,7 +318,7 @@ router.get("/:eventId/attendees", async (req, res, next) => {
           where: {
             eventId: event.id,
           },
-          attributes: ["status"],
+          attributes: ["id", "status", "updatedAt"],
         },
       ],
       order: [["id"]],
@@ -318,7 +334,7 @@ router.get("/:eventId/attendees", async (req, res, next) => {
             [Op.ne]: "pending",
           },
         },
-        attributes: ["status"],
+        attributes: ["id", "status", "updatedAt"],
       },
     });
   }
@@ -333,6 +349,18 @@ router.get("/:eventId/attendees", async (req, res, next) => {
 
   payload.sort((a, b) => a.id - b.id);
   return res.json({ Attendees: payload });
+});
+
+// additional. Get all attendances of a Event specified by its id
+router.get("/:eventId/attendances", async (req, res, next) => {
+  const event = await Event.findByPk(req.params.eventId);
+  if (!event)
+    return res.status(404).json({ message: "Event couldn't be found" });
+
+  const attendances = await event.getAttendances();
+  return res.json({
+    Attendances: attendances,
+  });
 });
 
 // 23. Request to Attend an Event based on the Event's id
@@ -352,8 +380,10 @@ router.post("/:eventId/attendance", requireAuth, async (req, res, next) => {
       },
     },
   });
-  if (membership.length === 0)
-    return res.status(403).json({ message: "Forbidden" });
+
+  // Here, no need to join the group to attend event
+  // if (membership.length === 0)
+  //   return res.status(403).json({ message: "Forbidden" });
 
   const targetAttendee = await Attendance.findOne({
     where: {
@@ -380,12 +410,13 @@ router.post("/:eventId/attendance", requireAuth, async (req, res, next) => {
       userId: req.user.id,
       status: "pending",
     });
+    return res.json({
+      id: newAttendee.id,
+      userId: req.user.id,
+      eventId: newAttendee.eventId,
+      status: "pending",
+    });
   }
-
-  return res.json({
-    userId: req.user.id,
-    status: "pending",
-  });
 });
 
 // 24. Change the status of an attendance for an event specified by id
@@ -413,9 +444,9 @@ router.put(
     ) {
       errors.userId = "userId is invalid";
     }
-    const sta = ["attending", "waitlist"];
+    const sta = ["organizer", "attending"];
     if (!sta.includes(status)) {
-      errors.status = "Attendance status must be 'attending' or 'waitlist'.";
+      errors.status = "Attendance status must be 'organizer' or 'attending'.";
     }
 
     if (Object.keys(errors).length !== 0) {

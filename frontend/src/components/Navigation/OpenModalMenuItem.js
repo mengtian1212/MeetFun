@@ -15,7 +15,17 @@ function OpenModalMenuItem({
     if (onItemClick) onItemClick();
   };
 
-  const btnClassName = itemText === "Log In" ? "login" : "signup";
+  // const btnClassName = itemText === "Log In" ? "login" : "signup";
+  let btnClassName;
+  if (itemText === "Log In") {
+    btnClassName = "login";
+  } else if (itemText === "Get Started") {
+    btnClassName = "start-group";
+  } else if (itemText === "Sign Up") {
+    btnClassName = "signup";
+  } else {
+    btnClassName = "";
+  }
   return (
     <li onClick={onClick} className={btnClassName}>
       {itemText}

@@ -1,0 +1,32 @@
+.react-calendar__navigation__label__labelText--from {
+  color: #00798a;
+  font-weight: 500;
+  font-size: 1.15em;
+  text-align: center;
+}
+
+.react-calendar__tile--active:enabled,
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+  background: #00798a;
+}
+
+.react-calendar__tile--now {
+  background: #ededed;
+}
+
+.react-calendar__navigation__arrow {
+  color: #00798a;
+  font-weight: 700;
+  font-size: 1.15em;
+  text-align: center;
+}
+
+.react-calendar__tile--hasActive {
+  background: #00798a;
+  color: white;
+}
+
+.react-calendar__navigation {
+  margin-bottom: 0;
+}

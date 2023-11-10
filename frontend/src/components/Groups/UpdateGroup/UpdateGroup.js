@@ -1,6 +1,6 @@
 import "../CreateGroup/CreateGroup.css";
 import "./UpdateGroup.css";
-import { useParams, useHistory, NavLink } from "react-router-dom";
+import { useParams, useHistory, NavLink, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { USSTATES } from "../../../utils/helper-functions";
@@ -13,16 +13,27 @@ import {
   addGroupImagesThunk,
   deleteGroupImageThunk,
 } from "../../../store/groups";
+import { fetchMyMembershipsThunk } from "../../../store/memberships";
+import LoadingPage from "../../LoadingPage/LoadingPage";
 
 function UpdateGroup() {
   const history = useHistory();
   const dispatch = useDispatch();
+  const location = useLocation();
+  const [isLoading, setIsLoading] = useState(true);
   const sessionUser = useSelector((state) => state.session.user);
 
   const { groupId } = useParams();
   const group = useSelector((state) =>
     state.groups.singleGroup ? state.groups.singleGroup : null
   );
+  const myMemberships = useSelector((state) => state.memberships.myMemberships);
+  const myMembership =
+    sessionUser &&
+    myMemberships &&
+    Object.values(myMemberships).find(
+      (membership) => sessionUser.id === membership.userId
+    );
 
   let oldPreviewImgUrl = "";
   let oldPreviewImgId;
@@ -44,7 +55,11 @@ function UpdateGroup() {
   const [validationErrors, setValidationErrors] = useState({});
 
   useEffect(() => {
-    dispatch(fetchSingleGroupThunk(Number(groupId)));
+    dispatch(fetchSingleGroupThunk(Number(groupId)))
+      .then(() => {
+        if (sessionUser) dispatch(fetchMyMembershipsThunk());
+      })
+      .then(() => setIsLoading(false));
   }, [dispatch, groupId]);
 
   // const resetForm = () => {
@@ -144,12 +159,11 @@ function UpdateGroup() {
     );
   }
 
-  if (!group || !Object.keys(group).length) return null;
-
   if (
     group &&
     Object.keys(group).length &&
-    group?.organizerId !== sessionUser.id
+    group?.organizerId !== sessionUser.id &&
+    myMembership?.status !== "co-host"
   ) {
     setTimeout(() => history.push(`/`), 3000);
     window.scroll(0, 0);
@@ -160,161 +174,169 @@ function UpdateGroup() {
       </div>
     );
   }
+  if (isLoading) return <LoadingPage />;
 
   return (
-    <form onSubmit={handleSubmit} className="group-form-container">
-      <div className="main-container">
-        <NavLink
-          exact
-          to={`/groups/${groupId}`}
-          className="back-to-groups-container"
-        >
-          <i className={`fa-solid fa-chevron-left arrow`}></i>{" "}
-          <span className="event-or-group selected">Back to my group</span>
-        </NavLink>
-
-        <div className="title-container">
-          <h2 className="biggest-green">UPDATE YOUR GROUP'S INFORMATION</h2>
-          <h3 className="biggest">
-            We'll walk you through a few steps to update your group's
-            information
-          </h3>
-        </div>
-        <div className="title-container">
-          <h2 className="biggest">First, set your group's location.</h2>
-          <p className="form-description">
-            Meetup groups meet locally, in person and online. We'll connect you
-            with people in your area, and more can join you online.
-          </p>
-          <div className="city-state-input-container">
-            <input
-              placeholder="City"
-              type="text"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-            />
-            <select
-              // placeholder="(select one)"
-              value={state}
-              onChange={(e) => setState(e.target.value)}
-              className={state === "" ? "first-option" : ""}
+    group &&
+    Object.keys(group).length &&
+    (group?.organizerId === sessionUser.id ||
+      myMembership?.status === "co-host") && (
+      <form onSubmit={handleSubmit} className="group-form-container">
+        <div className="main-container">
+          {location.pathname.includes("/edit") && (
+            <NavLink
+              exact
+              to={`/groups/${groupId}`}
+              className="back-to-groups-container"
             >
-              <option value="">-- Select State --</option>
-              {USSTATES.map((state) => (
-                <option key={state}>{state}</option>
-              ))}
-            </select>
+              <i className={`fa-solid fa-chevron-left arrow`}></i>{" "}
+              <span className="event-or-group selected">Back to my group</span>
+            </NavLink>
+          )}
+          <div className="title-container">
+            <h2 className="biggest-green">UPDATE YOUR GROUP'S INFORMATION</h2>
+            <h3 className="biggest">
+              We'll walk you through a few steps to update your group's
+              information
+            </h3>
           </div>
-          {validationErrors.city && (
-            <div className="errors">{validationErrors.city}</div>
-          )}
-          {validationErrors.state && (
-            <div className="errors">{validationErrors.state}</div>
-          )}
-        </div>
-
-        <div className="title-container">
-          <h2 className="biggest">What is the name of your group?</h2>
-          <p className="form-description">
-            Choose a name that will give people a clear idea of what the group
-            is about. Feel free to get creative!
-          </p>
-          <input
-            placeholder="What is your group name?"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="input-box1"
-          />
-          {validationErrors.name && (
-            <div className="errors">{validationErrors.name}</div>
-          )}
-        </div>
-        <div className="title-container">
-          <h2 className="biggest">
-            Now describe what your group will be about
-          </h2>
-          <p className="form-description">
-            People will see this when we promote your group.
-          </p>
-          <div>
-            <p className="form-description1">
-              1. What's the purpose of the group?
-            </p>
-            <p className="form-description1">2. Who should join?</p>
-            <p className="form-description1">
-              3. What will you do at your events?
-            </p>
-          </div>
-          <textarea
-            placeholder="Please write at least 30 characters"
-            type="textarea"
-            value={about}
-            onChange={(e) => setAbout(e.target.value)}
-          />
-          {validationErrors.about && (
-            <div className="errors">{validationErrors.about}</div>
-          )}
-        </div>
-        <div className="title-container">
-          <h2 className="biggest">Final steps...</h2>
-          <div className="final-step-questions">
+          <div className="title-container">
+            <h2 className="biggest">First, set your group's location.</h2>
             <p className="form-description">
-              Is this an in person or online group?
+              Meetup groups meet locally, in person and online. We'll connect
+              you with people in your area, and more can join you online.
             </p>
-            <select
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              className={type === "" ? "first-option" : ""}
-            >
-              <option value="">-- Select group type --</option>
-              <option value="In person">In person</option>
-              <option value="Online">Online</option>
-            </select>
-            {validationErrors.type && (
-              <div className="errors">{validationErrors.type}</div>
+            <div className="city-state-input-container">
+              <input
+                placeholder="City"
+                type="text"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+              />
+              <select
+                // placeholder="(select one)"
+                value={state}
+                onChange={(e) => setState(e.target.value)}
+                className={state === "" ? "first-option" : ""}
+              >
+                <option value="">-- Select State --</option>
+                {USSTATES.map((state) => (
+                  <option key={state}>{state}</option>
+                ))}
+              </select>
+            </div>
+            {validationErrors.city && (
+              <div className="errors">{validationErrors.city}</div>
+            )}
+            {validationErrors.state && (
+              <div className="errors">{validationErrors.state}</div>
             )}
           </div>
-          <div className="final-step-questions">
-            <p className="form-description">Is this group private or public?</p>
-            <select
-              value={privateStatus}
-              onChange={(e) => setPrivateStatus(e.target.value)}
-              className={privateStatus === "" ? "first-option" : ""}
-            >
-              <option value="">-- Select visibility type --</option>
-              <option value="private">Private</option>
-              <option value="public">Public</option>
-            </select>
-            {validationErrors.privateStatus && (
-              <div className="errors">{validationErrors.privateStatus}</div>
+
+          <div className="title-container">
+            <h2 className="biggest">What is the name of your group?</h2>
+            <p className="form-description">
+              Choose a name that will give people a clear idea of what the group
+              is about. Feel free to get creative!
+            </p>
+            <input
+              placeholder="What is your group name?"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="input-box1"
+            />
+            {validationErrors.name && (
+              <div className="errors">{validationErrors.name}</div>
             )}
           </div>
-          <div className="final-step-questions">
+          <div className="title-container">
+            <h2 className="biggest">
+              Now describe what your group will be about
+            </h2>
+            <p className="form-description">
+              People will see this when we promote your group.
+            </p>
             <div>
-              <p className="form-description">
-                Please add in image url as the preview image for your group
-                below:
-              </p>
               <p className="form-description1">
-                Optional if you would like to decide later. You might change
-                another preview page by putting a new image url or delete the
-                current url to reset the preview image.
+                1. What's the purpose of the group?
+              </p>
+              <p className="form-description1">2. Who should join?</p>
+              <p className="form-description1">
+                3. What will you do at your events?
               </p>
             </div>
-
-            <input
-              placeholder="Preview image URL"
-              type="text"
-              value={previewImgUrl}
-              onChange={(e) => setPreviewImgUrl(e.target.value)}
-              className="input-box2"
+            <textarea
+              placeholder="Please write at least 30 characters"
+              type="textarea"
+              value={about}
+              onChange={(e) => setAbout(e.target.value)}
             />
-            {validationErrors.previewImgUrl && (
-              <div className="errors">{validationErrors.previewImgUrl}</div>
+            {validationErrors.about && (
+              <div className="errors">{validationErrors.about}</div>
             )}
           </div>
-          {/* <p>Set as preview image?</p>
+          <div className="title-container">
+            <h2 className="biggest">Final steps...</h2>
+            <div className="final-step-questions">
+              <p className="form-description">
+                Is this an in person or online group?
+              </p>
+              <select
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+                className={type === "" ? "first-option" : ""}
+              >
+                <option value="">-- Select group type --</option>
+                <option value="In person">In person</option>
+                <option value="Online">Online</option>
+              </select>
+              {validationErrors.type && (
+                <div className="errors">{validationErrors.type}</div>
+              )}
+            </div>
+            <div className="final-step-questions">
+              <p className="form-description">
+                Is this group private or public?
+              </p>
+              <select
+                value={privateStatus}
+                onChange={(e) => setPrivateStatus(e.target.value)}
+                className={privateStatus === "" ? "first-option" : ""}
+              >
+                <option value="">-- Select visibility type --</option>
+                <option value="private">Private</option>
+                <option value="public">Public</option>
+              </select>
+              {validationErrors.privateStatus && (
+                <div className="errors">{validationErrors.privateStatus}</div>
+              )}
+            </div>
+            <div className="final-step-questions">
+              <div>
+                <p className="form-description">
+                  Please add in image url as the preview image for your group
+                  below:
+                </p>
+                <p className="form-description1">
+                  Optional if you would like to decide later. You might change
+                  another preview page by putting a new image url or delete the
+                  current url to reset the preview image.
+                </p>
+              </div>
+
+              <input
+                placeholder="Preview image URL"
+                type="text"
+                value={previewImgUrl}
+                onChange={(e) => setPreviewImgUrl(e.target.value)}
+                className="input-box2"
+              />
+              {validationErrors.previewImgUrl && (
+                <div className="errors">{validationErrors.previewImgUrl}</div>
+              )}
+            </div>
+            {/* <p>Set as preview image?</p>
         <input
           type="checkbox"
           checked={previewStatus}
@@ -323,14 +345,15 @@ function UpdateGroup() {
         {!validationErrors.previewStatus && (
           <div className="errors">{validationErrors.previewStatus}</div>
         )} */}
+          </div>
+          <div className="btns-container">
+            <button type="submit" className="yes-delete1 cursor">
+              Update My Group
+            </button>
+          </div>
         </div>
-        <div className="btns-container">
-          <button type="submit" className="yes-delete1 cursor">
-            Update My Group
-          </button>
-        </div>
-      </div>
-    </form>
+      </form>
+    )
   );
 }
 

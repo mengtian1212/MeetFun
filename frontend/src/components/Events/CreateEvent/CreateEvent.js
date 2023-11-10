@@ -1,6 +1,6 @@
 import "./CreateEvent.css";
 import { useState, useEffect } from "react";
-import { useHistory, NavLink, useParams } from "react-router-dom";
+import { useHistory, NavLink, useParams, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   capitalizeFirstChar,
@@ -8,14 +8,26 @@ import {
 } from "../../../utils/helper-functions";
 import { fetchSingleGroupThunk } from "../../../store/groups";
 import { createEventThunk, addEventImagesThunk } from "../../../store/events";
+import { fetchMyMembershipsThunk } from "../../../store/memberships";
+import LoadingPage from "../../LoadingPage";
 
 function CreateEvent() {
   const history = useHistory();
   const dispatch = useDispatch();
+  const location = useLocation();
+  const [isLoading, setIsLoading] = useState(true);
   const sessionUser = useSelector((state) => state.session.user);
 
   const { groupId } = useParams();
   const group = useSelector((state) => state.groups?.singleGroup);
+  const myMemberships = useSelector((state) => state.memberships.myMemberships);
+  const myMembership =
+    sessionUser &&
+    myMemberships &&
+    Object.values(myMemberships).find(
+      (membership) => sessionUser.id === membership.userId
+    );
+  console.log("myMemberships", myMemberships, myMembership);
 
   const [name, setName] = useState("");
   const [type, setType] = useState("");
@@ -136,7 +148,11 @@ function CreateEvent() {
   };
 
   useEffect(() => {
-    dispatch(fetchSingleGroupThunk(Number(groupId)));
+    dispatch(fetchSingleGroupThunk(Number(groupId)))
+      .then(() => {
+        if (sessionUser) dispatch(fetchMyMembershipsThunk());
+      })
+      .then(() => setIsLoading(false));
   }, [dispatch, groupId]);
 
   if (!sessionUser) {
@@ -153,7 +169,8 @@ function CreateEvent() {
   if (
     group &&
     Object.keys(group).length &&
-    group?.organizerId !== sessionUser.id
+    group?.organizerId !== sessionUser.id &&
+    myMembership?.status !== "co-host"
   ) {
     setTimeout(() => history.push(`/groups/${group?.id}`), 3000);
     window.scroll(0, 0);
@@ -165,20 +182,25 @@ function CreateEvent() {
     );
   }
 
+  if (isLoading) return <LoadingPage />;
+
   return (
     group &&
     Object.keys(group).length &&
-    group?.organizerId === sessionUser.id && (
+    (group?.organizerId === sessionUser.id ||
+      myMembership?.status === "co-host") && (
       <form onSubmit={handleSubmit} className="group-form-container">
         <div className="main-container">
-          <NavLink
-            exact
-            to={`/groups/${group.id}`}
-            className="back-to-groups-container"
-          >
-            <i className={`fa-solid fa-chevron-left arrow`}></i>{" "}
-            <span className="event-or-group selected">Back to my group</span>
-          </NavLink>
+          {location.pathname.includes("/events/new") && (
+            <NavLink
+              exact
+              to={`/groups/${group.id}`}
+              className="back-to-groups-container"
+            >
+              <i className={`fa-solid fa-chevron-left arrow`}></i>{" "}
+              <span className="event-or-group selected">Back to my group</span>
+            </NavLink>
+          )}
 
           <div className="title-container">
             <h3 className="biggest">Create an event for {group?.name}</h3>

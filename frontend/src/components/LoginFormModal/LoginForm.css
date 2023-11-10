@@ -56,12 +56,25 @@
 
 /* not a member sign up button  */
 .signup-text .signup {
-  color: var(--meetup-green);
+  cursor: pointer;
+  color: var(--meetup-green) !important;
   background-color: white;
-  padding-left: 8px;
+  padding-left: 8px !important;
 }
 
 .signup-text .signup:hover {
+  background-color: white;
+  color: var(--meetup-green);
+}
+
+.signup-text .login {
+  cursor: pointer;
+  color: var(--meetup-green) !important;
+  background-color: white;
+  padding-left: 8px !important;
+}
+
+.signup-text .login:hover {
   background-color: white;
   color: var(--meetup-green);
 }

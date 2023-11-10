@@ -60,6 +60,12 @@ function ProfileButton({ user }) {
     window.scrollTo(0, 0);
   };
 
+  const handleClickDashboard = () => {
+    history.push("/dashboard");
+    closeMenu();
+    window.scrollTo(0, 0);
+  };
+
   return (
     <>
       {user ? (
@@ -67,12 +73,18 @@ function ProfileButton({ user }) {
           <div className="start-new-group cursor" onClick={handleClick}>
             Start a new group
           </div>
-          <button onClick={openMenu} className="user-icon-container cursor">
-            <i className="fas fa-user-circle" />
+          <div className="user-icon-container cursor">
+            <button
+              onClick={handleClickDashboard}
+              className="user-icon-container cursor"
+            >
+              <i className="fas fa-user-circle" />
+            </button>
             <i
-              className={`fa-solid fa-chevron-${profileArrowDirection} arrow`}
+              onClick={openMenu}
+              className={` fa-solid fa-chevron-${profileArrowDirection} arrow arrow1`}
             ></i>
-          </button>
+          </div>
           <ul className={ulClassName} ref={ulRef}>
             <li>
               Hello, {user.firstName} {user.lastName}!

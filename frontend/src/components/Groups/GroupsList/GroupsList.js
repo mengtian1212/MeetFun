@@ -1,11 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchGroupsThunk } from "../../../store/groups";
 import "./GroupsList.css";
 
 import GroupListCard from "./GroupListCard";
+import LoadingPage from "../../LoadingPage/LoadingPage";
 
 function GroupsList() {
+  const [isLoading, setIsLoading] = useState(true);
   const groups = Object.values(
     useSelector((state) =>
       state.groups.allGroups ? state.groups.allGroups : {}
@@ -14,19 +16,11 @@ function GroupsList() {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchGroupsThunk());
+    dispatch(fetchGroupsThunk()).then(() => setIsLoading(false));
     window.scroll(0, 0);
   }, [dispatch]);
 
-  if (groups.length === 0)
-    return (
-      <div className="spinner">
-        <img
-          src="../../image/Spin-1s-118px.gif"
-          alt="Loading in progress"
-        ></img>
-      </div>
-    );
+  if (isLoading) return <LoadingPage />;
 
   return (
     <>

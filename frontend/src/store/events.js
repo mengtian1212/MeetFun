@@ -3,6 +3,7 @@ import { csrfFetch } from "./csrf";
 /** Action Type Constants: */
 export const LOAD_EVENTS = "events/LOAD_EVENTS";
 export const LOAD_SINGLE_EVENT = "events/LOAD_SINGLE_EVENT";
+export const LOAD_CURRENT_EVENTS = "events/LOAD_CURRENT_EVENTS";
 export const CREATE_EVENT = "events/CREATE_EVENT";
 export const ADD_EVENT_IMAGES_BY_EVENTID = "events/ADD_EVENT_IMAGES_BY_EVENTID";
 export const DELETE_EVENT = "events/DELETE_EVENT";
@@ -12,6 +13,11 @@ export const DELETE_EVENTIMAGE = "events/DELETE_EVENTIMAGE";
 export const loadEventsAction = (events) => ({
   type: LOAD_EVENTS,
   events,
+});
+
+export const loadCurrentEventsAction = (events) => ({
+  type: LOAD_CURRENT_EVENTS,
+  payload: events,
 });
 
 export const loadSingleEventAction = (event) => ({
@@ -45,6 +51,17 @@ export const fetchEventsThunk = () => async (dispatch) => {
   if (res.ok) {
     const data = await res.json();
     dispatch(loadEventsAction(data.Events));
+  }
+};
+
+export const fetchCurrentEventsThunk = () => async (dispatch) => {
+  const res = await csrfFetch("/api/events/current");
+  if (res.ok) {
+    const data = await res.json();
+    dispatch(loadCurrentEventsAction(data.Events));
+  } else {
+    const errors = await res.json();
+    return errors;
   }
 };
 
