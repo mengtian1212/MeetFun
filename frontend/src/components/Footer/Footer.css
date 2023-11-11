@@ -1,0 +1,119 @@
+.footer-container {
+  background-color: rgb(33, 33, 33);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-container-main {
+  max-width: 984px;
+  width: 100%;
+  padding: 2rem 0;
+}
+
+.footer-container-main > * {
+  color: rgb(246 247 248);
+}
+
+.footer-start-container {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgb(112, 112, 112);
+  display: flex;
+  align-items: center;
+}
+
+.footer-start-create {
+  font-weight: 600;
+}
+
+.start-group {
+  font-weight: 600;
+  margin-left: 1rem;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #fff;
+  fill: #fff;
+  background-color: transparent;
+  border: 3px solid #e6e6e6;
+  border-radius: 0.375rem;
+  text-decoration: none;
+}
+
+.start-group:hover {
+  color: rgb(33, 33, 33);
+  background-color: rgb(255, 255, 255);
+  border: 3px solid rgb(255, 255, 255);
+}
+
+.footer-middle-container {
+  display: flex;
+  width: 100%;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgb(112, 112, 112);
+}
+
+.footer-middle-container1 {
+  flex: 1;
+}
+
+.footer-middle-container2 {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-tab {
+  cursor: pointer;
+  margin: 0.25rem 0 !important;
+  color: #c5c4c4 !important;
+  font-size: 0.875rem !important;
+  line-height: 20px;
+  text-decoration: none !important;
+  background-color: transparent !important;
+  border: none !important;
+  width: fit-content !important;
+}
+
+.footer-tab > * {
+  font-size: 0.875rem !important;
+}
+
+.footer-tab:hover {
+  /* color: #f6f7f8 !important; */
+  color: var(--meetup-red) !important;
+}
+
+.footer-discover {
+  color: #f6f7f8;
+  margin-bottom: 0.25rem !important;
+}
+
+.footer-developer-container {
+  padding-top: 1rem !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-developer {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.footer-developer1 {
+  color: #f6f7f8;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: none;
+}
+
+.footer-developer1:hover {
+  padding: 6px 10px;
+  border: none;
+  background-color: var(--meetup-red);
+  border-radius: 24px;
+}

@@ -17,6 +17,7 @@ function DeleteGroupModal({ groupId }) {
     } else {
       alert(res.message);
     }
+    return history.push("/groups");
   };
 
   return (

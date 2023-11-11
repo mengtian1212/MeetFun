@@ -27,7 +27,7 @@
   color: var(--meetup-green);
   font-size: 16pt;
   font-weight: 550;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
   margin-bottom: 0.25rem;
 }
 

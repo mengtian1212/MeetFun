@@ -1,0 +1,50 @@
+.manage-group-title {
+  font-weight: 700;
+  font-size: 32px;
+  color: #212121;
+  stroke: transparent;
+  fill: #2e3e48;
+  line-height: 1.25;
+}
+
+.manage-delete-group {
+  background-color: transparent;
+  color: #2e3e48;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.delete-btn {
+  background-color: transparent;
+  color: #2e3e48;
+  border: none;
+  box-shadow: none;
+  margin-top: 0;
+  width: 100%;
+  font-size: inherit;
+  padding: 0;
+}
+
+.delete-btn:hover {
+  background-color: transparent;
+}
+
+.bottom-inner2 {
+  margin-top: 1rem;
+  max-width: 984px;
+  width: 100%;
+  /* margin: 0 20px; */
+  display: flex;
+  flex-direction: row;
+  gap: 48px;
+}
+
+.bottom-inner3 {
+  margin-top: 1rem;
+  max-width: 984px;
+  width: 100%;
+  /* margin: 0 20px; */
+  display: flex;
+  flex-direction: column;
+}

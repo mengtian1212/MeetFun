@@ -19,7 +19,7 @@ export const replaceThirdCommaDot = (string) => {
     if (string[i] === ",") {
       commaCount++;
       if (commaCount === 3) {
-        newString += " ·";
+        newString += `  •`;
         continue;
       }
     }
@@ -29,6 +29,7 @@ export const replaceThirdCommaDot = (string) => {
 };
 
 export const capitalizeFirstChar = (words) => {
+  if (!words) return;
   let processedWord = words.trim().replace(/\s+/g, " ");
   const wordArr = processedWord.split(" ");
   const resArr = [];
@@ -91,3 +92,21 @@ export const USSTATES = [
   "WI",
   "WY",
 ];
+
+export const getRandomColor = () => {
+  var letters = "ABCDEF0123456789";
+  var color = "#";
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+};
+
+export const formatDateString = (dateString) => {
+  const options = { year: "numeric", month: "short", day: "numeric" };
+  const formattedDate = new Date(dateString).toLocaleDateString(
+    "en-US",
+    options
+  );
+  return formattedDate;
+};

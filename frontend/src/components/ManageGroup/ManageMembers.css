@@ -1,0 +1,103 @@
+.manage-member-out {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  width: 100%;
+}
+
+.member-title {
+  padding-bottom: 20px;
+  font-size: 16pt;
+}
+
+.manage-member-single {
+  max-width: 993px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  background-color: white !important;
+  border: none;
+  border-radius: 8px;
+  padding: 20px;
+
+  line-height: 1.25rem;
+}
+
+.manage-member-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #ededed;
+  border-radius: 8px;
+  padding: 16px 16px 16px 0;
+}
+
+.manage-member-left {
+  display: flex;
+  align-items: center;
+}
+
+.member-name {
+  font-weight: 500 !important;
+}
+
+.member-btns {
+  display: flex;
+  gap: 16px;
+}
+
+.remove-btn {
+  border: 1px solid #999999;
+  background-color: transparent;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: #999999;
+  cursor: pointer;
+  outline: none;
+}
+
+.remove-btn:hover {
+  color: black;
+  border: 1px solid black;
+}
+
+.remove-btn1 {
+  outline: none;
+  border: 1px solid var(--meetup-red);
+  background-color: transparent;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: var(--meetup-red);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.remove-btn1:hover {
+  border: 1px solid #e32359;
+  background-color: #e32359;
+  color: white;
+}
+
+.remove-btn2 {
+  border: 1px solid var(--meetup-green);
+  background-color: transparent;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: var(--meetup-green);
+  cursor: pointer;
+}
+
+.remove-btn2:hover {
+  border: 1px solid var(--btn-hover);
+  background-color: var(--btn-hover);
+  color: white;
+}
+
+.youu {
+  font-weight: 600;
+  font-style: italic;
+}

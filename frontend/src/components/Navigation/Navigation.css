@@ -90,8 +90,32 @@
   font-size: 2rem;
 }
 
+.fas.fa-user-circle:hover {
+  color: rgb(122 29 71);
+}
+
 .arrow {
+  margin-left: -4px;
   color: rgb(112 112 112/1);
+  width: 36px;
+  height: 36px;
+  text-align: center;
+}
+
+.arrow1 {
+  margin-left: -4px;
+  color: rgb(112 112 112/1);
+  width: 36px;
+  height: 36px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrow1:hover {
+  background-color: #ededed !important;
+  border-radius: 500px;
 }
 
 /* User Menu */

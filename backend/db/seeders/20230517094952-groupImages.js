@@ -37,8 +37,13 @@ module.exports = {
           preview: false,
         },
         {
-          groupId: 2,
-          url: "https://img.freepik.com/free-photo/wall-street-sign-new-york-with-new-york-stock-exchange-background_268835-669.jpg",
+          groupId: 1,
+          url: "https://img.freepik.com/free-photo/joyful-wonderful-woman-with-short-purple-haircut-triangular-sunglasses-round-earrings-having-fun-pink_197531-19247.jpg",
+          preview: false,
+        },
+        {
+          groupId: 1,
+          url: "https://img.freepik.com/free-vector/back-90s-banner-template_1308-128898.jpg",
           preview: false,
         },
         {
@@ -47,9 +52,19 @@ module.exports = {
           preview: true,
         },
         {
+          groupId: 2,
+          url: "https://img.freepik.com/free-photo/wall-street-sign-new-york-with-new-york-stock-exchange-background_268835-669.jpg",
+          preview: false,
+        },
+        {
           groupId: 3,
           url: "https://as2.ftcdn.net/v2/jpg/02/30/44/19/1000_F_230441943_oV0LSRsvbMPOhQioB7zgNs1uDs27BaOp.jpg",
           preview: true,
+        },
+        {
+          groupId: 3,
+          url: "https://images.squarespace-cdn.com/content/v1/5206b718e4b0bdc26006bae2/1430745522663-6CWS092FEWXX2DCSZAZD/image-asset.jpeg",
+          preview: false,
         },
         {
           groupId: 4,
@@ -59,6 +74,11 @@ module.exports = {
         {
           groupId: 4,
           url: "https://as2.ftcdn.net/v2/jpg/01/91/05/77/1000_F_191057762_4xsRetUOOw5Ld1Nlq0uB055CLpRxGVlB.jpg",
+          preview: false,
+        },
+        {
+          groupId: 4,
+          url: "https://img.freepik.com/free-vector/vintage-geometric-ramen-soup-background_52683-45970.jpg",
           preview: false,
         },
         {

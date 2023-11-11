@@ -31,7 +31,12 @@ module.exports = {
           {
             userId: 2,
             groupId: 1,
-            status: "member",
+            status: "co-host",
+          },
+          {
+            userId: 8,
+            groupId: 1,
+            status: "co-host",
           },
           {
             userId: 5,
@@ -39,7 +44,27 @@ module.exports = {
             status: "member",
           },
           {
+            userId: 6,
+            groupId: 1,
+            status: "member",
+          },
+          {
+            userId: 9,
+            groupId: 1,
+            status: "member",
+          },
+          {
+            userId: 10,
+            groupId: 1,
+            status: "member",
+          },
+          {
             userId: 3,
+            groupId: 1,
+            status: "pending",
+          },
+          {
+            userId: 12,
             groupId: 1,
             status: "pending",
           },
@@ -61,7 +86,7 @@ module.exports = {
           {
             userId: 1,
             groupId: 3,
-            status: "pending",
+            status: "member",
           },
           {
             userId: 3,
@@ -79,12 +104,27 @@ module.exports = {
             status: "co-host",
           },
           {
+            userId: 1,
+            groupId: 4,
+            status: "co-host",
+          },
+          {
+            userId: 7,
+            groupId: 4,
+            status: "co-host",
+          },
+          {
             userId: 3,
             groupId: 4,
             status: "member",
           },
           {
-            userId: 1,
+            userId: 11,
+            groupId: 4,
+            status: "member",
+          },
+          {
+            userId: 10,
             groupId: 4,
             status: "pending",
           },
