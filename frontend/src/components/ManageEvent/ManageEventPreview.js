@@ -185,17 +185,34 @@ function ManageEventPreview() {
                   key={attendee.id}
                   className="event-metadata-container member-s"
                 >
-                  <div
-                    className="member-image"
-                    style={{
-                      backgroundColor: getRandomColor(),
-                    }}
-                  >
-                    <span>
-                      {attendee.firstName[0]}
-                      {attendee.lastName[0]}
-                    </span>
-                  </div>
+                  {attendee.picture ? (
+                    <div className="member-image">
+                      <img
+                        src={attendee.picture}
+                        alt=""
+                        className="member-image"
+                      ></img>
+                      {attendee?.Attendance[0].status === "organizer" && (
+                        <div className="organ-c"></div>
+                      )}
+                    </div>
+                  ) : (
+                    <div
+                      className="member-image"
+                      style={{
+                        backgroundColor: getRandomColor(),
+                      }}
+                    >
+                      {attendee?.Attendance[0].status === "organizer" && (
+                        <div className="organ-c"></div>
+                      )}
+                      <span>
+                        {attendee.firstName[0]}
+                        {attendee.lastName[0]}
+                      </span>
+                    </div>
+                  )}
+
                   <div className="member-s1">
                     <div>
                       {attendee.firstName}&nbsp;

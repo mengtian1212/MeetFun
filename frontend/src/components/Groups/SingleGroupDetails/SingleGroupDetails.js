@@ -384,17 +384,25 @@ function SingleGroupDetails() {
                   {groupMembersSorted?.length > 0 &&
                     groupMembersSorted?.map((member) => (
                       <div key={member.id} className="member-s">
-                        <div
-                          className="member-image"
-                          style={{
-                            backgroundColor: getRandomColor(),
-                          }}
-                        >
-                          <span>
-                            {member.firstName[0]}
-                            {member.lastName[0]}
-                          </span>
-                        </div>
+                        {member.picture ? (
+                          <img
+                            src={member.picture}
+                            alt=""
+                            className="member-image"
+                          />
+                        ) : (
+                          <div
+                            className="member-image"
+                            style={{
+                              backgroundColor: getRandomColor(),
+                            }}
+                          >
+                            <span>
+                              {member.firstName[0]}
+                              {member.lastName[0]}
+                            </span>
+                          </div>
+                        )}
                         <div className="member-s1">
                           <div>
                             {member.firstName}&nbsp;

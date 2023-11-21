@@ -6,7 +6,6 @@ import {
 } from "../../store/memberships";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useHistory } from "react-router-dom";
-import { formatDateString, getRandomColor } from "../../utils/helper-functions";
 import "./ManageMembers.css";
 import ManageMemberCard from "./ManageMemberCard";
 

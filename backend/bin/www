@@ -2,23 +2,96 @@
 // backend/bin/www
 
 // Import environment variables
-require('dotenv').config();
+require("dotenv").config();
 
-const { port } = require('../config');
+const { port } = require("../config");
 
-const app = require('../app');
-const db = require('../db/models');
+const app = require("../app");
+const db = require("../db/models");
+const http = require("http"); // Import the http module
+const { Server } = require("socket.io");
+const {
+  User,
+  Group,
+  GroupImage,
+  Event,
+  EventImage,
+  Membership,
+  Venue,
+  Attendance,
+  DirectChat,
+  sequelize,
+  DirectMessage,
+} = require("../db/models");
 
 // Check the database connection before starting the app
 db.sequelize
   .authenticate()
   .then(() => {
-    console.log('Database connection success! Sequelize is ready to use...');
+    console.log("Database connection success! Sequelize is ready to use...");
+    // Explicitly create an HTTP server
+    const server = http.createServer(app);
 
-    // Start listening for connections
-    app.listen(port, () => console.log(`Listening on port ${port}...`));
+    const io = new Server(server, {
+      cors: {
+        origin: "http://localhost:3000",
+      },
+    });
+    // const io = new Server(server);
+
+    io.on("connection", (socket) => {
+      console.log("A user connected!");
+
+      socket.on("join", ({ room }) => {
+        socket.join(room);
+        console.log(`Socket joined room: ${room}`);
+      });
+
+      socket.on("chat_message", async (data) => {
+        const room = data.room;
+        if (data.deleted) {
+          // handle deleted message logic
+        } else if (data.wasEdited) {
+          // handle edited message logic
+        } else {
+          // handle new message logic
+          const resDM = await DirectMessage.create({
+            directChatId: data.room,
+            content: data.content,
+            senderId: data.sessionUser.id,
+          });
+
+          const sender = await User.findByPk(resDM.senderId);
+          const dct = {
+            id: resDM.id,
+            senderId: resDM.senderId,
+            directChatId: resDM.directChatId,
+            content: resDM.content,
+            wasEdited: false,
+            createdAt: resDM.createdAt,
+            updatedAt: resDM.updatedAt,
+            senderFirstName: sender.firstName,
+            senderLastName: sender.lastName,
+            senderPicture: sender.picture,
+          };
+
+          console.log("resDM7777777777", dct, room);
+          io.to(room).emit("chat_message", dct);
+          // io.emit("chat_message", dct);
+
+          console.log("after emit");
+        }
+      });
+
+      socket.on("disconnect", () => {
+        console.log("User disconnected.");
+      });
+    });
+
+    // Start listening for connections on the specified port
+    server.listen(port, () => console.log(`Listening on port ${port}...`));
   })
   .catch((err) => {
-    console.log('Database connection failure.');
+    console.log("Database connection failure.");
     console.error(err);
   });

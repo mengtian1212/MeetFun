@@ -321,17 +321,25 @@ function SingleEventDetails() {
                         key={attendee.id}
                         className="event-metadata-container member-s"
                       >
-                        <div
-                          className="member-image"
-                          style={{
-                            backgroundColor: getRandomColor(),
-                          }}
-                        >
-                          <span>
-                            {attendee.firstName[0]}
-                            {attendee.lastName[0]}
-                          </span>
-                        </div>
+                        {attendee.picture ? (
+                          <img
+                            src={attendee.picture}
+                            alt=""
+                            className="member-image"
+                          />
+                        ) : (
+                          <div
+                            className="member-image"
+                            style={{
+                              backgroundColor: getRandomColor(),
+                            }}
+                          >
+                            <span>
+                              {attendee.firstName[0]}
+                              {attendee.lastName[0]}
+                            </span>
+                          </div>
+                        )}
                         <div className="member-s1">
                           <div>
                             {attendee.firstName}&nbsp;

@@ -1,0 +1,19 @@
+.messages-outer {
+  height: 85vh;
+  display: grid;
+  grid-template-columns: 300px 300px 1fr;
+  gap: 12px;
+  padding-bottom: 1.25em;
+  padding-left: 3rem;
+  padding-right: 30px;
+}
+
+.dm-messages-outer {
+  height: 75vh;
+  overflow-y: scroll;
+}
+
+.messages-outer-top {
+  display: flex;
+  flex-direction: column;
+}

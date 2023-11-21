@@ -41,23 +41,36 @@ function ManageMemberCard({ member, organizerId }) {
   return (
     <div className={`manage-member-container`}>
       <div className="manage-member-left">
-        <div
-          className={`member-image`}
-          style={{
-            backgroundColor: getRandomColor(),
-          }}
-        >
-          {member.Membership[0].status === "Organizer" && (
-            <div className="organ-c"></div>
-          )}
-          {member.Membership[0].status === "co-host" && (
-            <div className="host-c"></div>
-          )}
-          <span>
-            {member.firstName[0]}
-            {member.lastName[0]}
-          </span>
-        </div>
+        {member.picture ? (
+          <div className="member-image">
+            <img src={member.picture} alt="" className="member-image"></img>
+            {member?.Membership[0].status === "Organizer" && (
+              <div className="organ-c"></div>
+            )}
+            {member.Membership[0].status === "co-host" && (
+              <div className="host-c"></div>
+            )}
+          </div>
+        ) : (
+          <div
+            className="member-image"
+            style={{
+              backgroundColor: getRandomColor(),
+            }}
+          >
+            {member?.Membership[0].status === "Organizer" && (
+              <div className="organ-c"></div>
+            )}
+            {member.Membership[0].status === "co-host" && (
+              <div className="host-c"></div>
+            )}
+            <span>
+              {member.firstName[0]}
+              {member.lastName[0]}
+            </span>
+          </div>
+        )}
+
         <div className="">
           <div className="member-name">
             {member.firstName}&nbsp;

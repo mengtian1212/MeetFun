@@ -14,6 +14,7 @@ import Footer from "./components/Footer";
 import Dashboard from "./components/Dashboard";
 import ManageGroup from "./components/ManageGroup";
 import ManageEvent from "./components/ManageEvent";
+import DirectChats from "./components/DirectChats";
 
 function App() {
   const dispatch = useDispatch();
@@ -61,6 +62,9 @@ function App() {
             </Route>
             <Route exact path="/manage-events/:eventId">
               <ManageEvent />
+            </Route>
+            <Route exact path={["/messages/:messageId", "/messages"]}>
+              <DirectChats />
             </Route>
           </Switch>
         )}

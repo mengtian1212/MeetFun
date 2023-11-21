@@ -40,20 +40,29 @@ function ManageAttendeeCard({ attendee, eventOrganizerId }) {
   return (
     <div className={`manage-member-container`}>
       <div className="manage-member-left">
-        <div
-          className={`member-image`}
-          style={{
-            backgroundColor: getRandomColor(),
-          }}
-        >
-          {attendee?.Attendance[0].status === "organizer" && (
-            <div className="organ-c"></div>
-          )}
-          <span>
-            {attendee?.firstName[0]}
-            {attendee?.lastName[0]}
-          </span>
-        </div>
+        {attendee.picture ? (
+          <div className="member-image">
+            <img src={attendee.picture} alt="" className="member-image"></img>
+            {attendee?.Attendance[0].status === "organizer" && (
+              <div className="organ-c"></div>
+            )}
+          </div>
+        ) : (
+          <div
+            className="member-image"
+            style={{
+              backgroundColor: getRandomColor(),
+            }}
+          >
+            {attendee?.Attendance[0].status === "organizer" && (
+              <div className="organ-c"></div>
+            )}
+            <span>
+              {attendee.firstName[0]}
+              {attendee.lastName[0]}
+            </span>
+          </div>
+        )}
 
         <div className="">
           <div className="member-name">

@@ -66,6 +66,12 @@ function ProfileButton({ user }) {
     window.scrollTo(0, 0);
   };
 
+  const handleMessage = () => {
+    history.push("/messages");
+    closeMenu();
+    window.scrollTo(0, 0);
+  };
+
   return (
     <>
       {user ? (
@@ -73,12 +79,24 @@ function ProfileButton({ user }) {
           <div className="start-new-group cursor" onClick={handleClick}>
             Start a new group
           </div>
+          <div className="user-icon-container1 cursor" onClick={handleMessage}>
+            <i className="fa-regular fa-message"></i>
+            Messages
+          </div>
           <div className="user-icon-container cursor">
             <button
               onClick={handleClickDashboard}
               className="user-icon-container cursor"
             >
-              <i className="fas fa-user-circle" />
+              {user?.picture ? (
+                <img
+                  src={user.picture}
+                  alt=""
+                  className="user-profile-image"
+                ></img>
+              ) : (
+                <i className="fas fa-user-circle" />
+              )}
             </button>
             <i
               onClick={openMenu}
@@ -90,6 +108,11 @@ function ProfileButton({ user }) {
               Hello, {user.firstName} {user.lastName}!
             </li>
             <li>{user.email}</li>
+            <li className="logout-in-menu">
+              <button onClick={() => history.push("/dashboard")}>
+                My dashboard
+              </button>
+            </li>
             <li className="logout-in-menu">
               <button onClick={handleViewGroups}>View groups</button>
             </li>

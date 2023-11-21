@@ -481,7 +481,7 @@ router.get("/:groupId/members", async (req, res, next) => {
   let members = [];
   if (isOrganizerCoHost) {
     members = await User.findAll({
-      attributes: ["id", "firstName", "lastName"],
+      attributes: ["id", "firstName", "lastName", "picture"],
       include: {
         model: Membership,
         where: {
@@ -492,7 +492,7 @@ router.get("/:groupId/members", async (req, res, next) => {
     });
   } else {
     members = await User.findAll({
-      attributes: ["id", "firstName", "lastName"],
+      attributes: ["id", "firstName", "lastName", "picture"],
       include: {
         model: Membership,
         where: {
