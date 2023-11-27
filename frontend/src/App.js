@@ -65,7 +65,7 @@ function App() {
             </Route>
             <Route
               exact
-              path={["/messages/new", "/messages/:messageId", "/messages"]}
+              path={["/messages/:messageId", "/messages"]}
             >
               <DirectChats />
             </Route>

@@ -21,6 +21,7 @@ function DirectChats() {
   const { targetUser } = location.state || {};
 
   const dispatch = useDispatch();
+  const history = useHistory();
   const { messageId } = useParams();
   const sessionUser = useSelector((state) => state.session.user);
   const directChats = useSelector((state) => state.directChats.allDirectChats);
@@ -35,6 +36,11 @@ function DirectChats() {
     setModalContent(<NewDMModal />);
   };
 
+  const handleClickDM = () => {
+    history.push(`/messages`);
+    window.scroll(0, 0);
+  };
+
   if (!sessionUser) return <Redirect to="/" />;
   if (isLoading) return <LoadingPage />;
 
@@ -43,7 +49,10 @@ function DirectChats() {
       <div className="messages-outer">
         <div className="messages-outer-side1">
           <div className="messages-outer-side1-messages">Messages</div>
-          <div className="messages-outer-side1-dm bar-focus">
+          <div
+            className="messages-outer-side1-dm bar-focus"
+            onClick={handleClickDM}
+          >
             Direct Messages
           </div>
           <div className="messages-outer-side1-dm">Event Chats</div>
@@ -57,40 +66,41 @@ function DirectChats() {
               </button>
             </div>
             <section className="messengers-box">
-              {Object.values(directChats).map((directChat) => {
-                return (
-                  <NavLink
-                    to={`/messages/${directChat.id}`}
-                    key={directChat.id}
-                    className="direct-messenger"
-                  >
-                    {directChat.picture ? (
-                      <img
-                        src={directChat.picture}
-                        alt=""
-                        className="member-thumb"
-                      />
-                    ) : (
-                      <div
-                        className="member-thumb"
-                        style={{
-                          backgroundColor: getRandomColor(),
-                        }}
-                      >
-                        <span>
-                          {directChat.firstName[0]}
-                          {directChat.lastName[0]}
-                        </span>
-                      </div>
-                    )}
+              {directChats &&
+                Object.values(directChats).map((directChat) => {
+                  return (
+                    <NavLink
+                      to={`/messages/${directChat?.id}`}
+                      key={directChat?.id}
+                      className="direct-messenger"
+                    >
+                      {directChat?.picture ? (
+                        <img
+                          src={directChat?.picture}
+                          alt=""
+                          className="member-thumb"
+                        />
+                      ) : (
+                        <div
+                          className="member-thumb"
+                          style={{
+                            backgroundColor: getRandomColor(),
+                          }}
+                        >
+                          <span>
+                            {directChat?.firstName[0]}
+                            {directChat?.lastName[0]}
+                          </span>
+                        </div>
+                      )}
 
-                    <div className="messenger-name">
-                      {directChat.firstName}&nbsp;
-                      {directChat.lastName}
-                    </div>
-                  </NavLink>
-                );
-              })}
+                      <div className="messenger-name">
+                        {directChat?.firstName}&nbsp;
+                        {directChat?.lastName}
+                      </div>
+                    </NavLink>
+                  );
+                })}
             </section>
           </div>
 
@@ -106,7 +116,7 @@ function DirectChats() {
             <div className="DM-page">
               <div className="DM-page1">
                 <i className="fa-regular fa-comment-dots comment-dot"></i>
-                <div className="DM-page-click">Click a Chat</div>
+                <div className="DM-page-click">Click a Direct Message</div>
               </div>
             </div>
           )}

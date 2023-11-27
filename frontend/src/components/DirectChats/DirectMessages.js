@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Redirect, useHistory } from "react-router-dom";
-import { fetchSingleDirectChatThunk } from "../../store/directChats";
+import {
+  fetchAllDirectChatsThunk,
+  fetchSingleDirectChatThunk,
+} from "../../store/directChats";
 import MessageCard from "./MessageCard";
 import "./DirectChats.css";
 
@@ -18,11 +21,12 @@ function DirectMessages() {
   const sessionUser = useSelector((state) => state.session.user);
   const messageContainerRef = useRef(null);
 
-  const otherUser = useSelector(
-    (state) => state.directChats.allDirectChats[messageId]
+  const otherUser = useSelector((state) =>
+    !isLoading ? state.directChats?.allDirectChats[messageId] : null
   );
+  console.log("otherUser~~~~~~~~~~~", otherUser);
   const messages = useSelector((state) =>
-    Object.values(state.directChats.singleDirectChat.messages)
+    Object.values(state.directChats?.singleDirectChat?.messages)
   );
 
   const [chatMessages, setChatMessages] = useState(messages);
@@ -36,7 +40,7 @@ function DirectMessages() {
 
   useEffect(() => {
     // Scroll to the bottom when chatMessages change
-    if (messageContainerRef.current) {
+    if (messageContainerRef && messageContainerRef.current) {
       messageContainerRef.current.scrollTop =
         messageContainerRef.current.scrollHeight;
     }
@@ -44,6 +48,7 @@ function DirectMessages() {
 
   useEffect(() => {
     (async () => {
+      await dispatch(fetchAllDirectChatsThunk());
       const res = await dispatch(fetchSingleDirectChatThunk(messageId));
       setChatMessages(Object.values(res.payload.messages));
       setIsLoading(false);

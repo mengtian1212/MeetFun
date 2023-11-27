@@ -42,14 +42,18 @@ function NewDMModal() {
   }, [userSearch]);
 
   const handleCreateNewDM = async () => {
+    console.log("#############");
     const directChatId = await dispatch(createNewDMThunk(selectedUser));
+    console.log("#############wwwwww");
+
+    console.log("directChatId", directChatId);
     closeModal();
     history.push(`/messages/${directChatId}`);
   };
 
   return (
     <div className="new-dm-form__div">
-      <div>Select a user to direct message</div>
+      <div className="new-dm-form__title">Select a user to direct message</div>
       <input
         placeholder="Search for user"
         value={userSearch}
@@ -68,7 +72,7 @@ function NewDMModal() {
                 user.id === selectedUser ? "selected" : ""
               }`}
             >
-              <img src={user.picture} alt="" className="member-thumb" />
+              <img src={user.picture} alt="" className="member-thumb1" />
               {user.firstName}&nbsp;
               {user.lastName}
             </div>
