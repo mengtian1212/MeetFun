@@ -1,0 +1,5 @@
+.new-dm-form__user-list {
+  height: 40vh;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+}

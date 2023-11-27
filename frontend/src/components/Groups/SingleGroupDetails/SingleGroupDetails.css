@@ -317,6 +317,7 @@
   height: 60px;
   text-align: center;
   position: relative;
+  object-fit: cover;
 }
 
 .organ-c {

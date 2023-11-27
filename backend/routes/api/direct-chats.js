@@ -74,6 +74,32 @@ router.get("/current", async (req, res, next) => {
   return res.json({ directChats: result });
 });
 
+router.get("/users", async (req, res, next) => {
+  console.log("herererer");
+  const allUsers = await User.findAll({
+    where: {
+      id: {
+        [Op.ne]: req.user.id,
+      },
+    },
+  });
+
+  const usersData = [];
+  for (const user of allUsers) {
+    const dct = {
+      id: user.id,
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      picture: user.picture,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
+    usersData.push(dct);
+  }
+  return res.json({ users: usersData });
+});
+
 router.get("/:messageId", async (req, res, next) => {
   const directChat_query = await DirectChat.findByPk(req.params.messageId);
   if (!directChat_query) {
@@ -120,6 +146,30 @@ router.get("/:messageId", async (req, res, next) => {
   }
 
   return res.json({ messages: result, directChat: directChat });
+});
+
+router.get("/new/:otherUserId", async (req, res, next) => {
+  const otherUserId = req.params.otherUserId;
+  const chatExists = await DirectChat.findOne({
+    where: {
+      [Op.or]: [
+        {
+          [Op.and]: [{ user1Id: otherUserId }, { user2Id: req.user.id }],
+        },
+        { [Op.and]: [{ user1Id: req.user.id }, { user2Id: otherUserId }] },
+      ],
+    },
+  });
+
+  if (!chatExists) {
+    const newDirectChat = await DirectChat.create({
+      user1Id: req.user.id,
+      user2Id: otherUserId,
+    });
+    return res.json({ id: newDirectChat.id });
+  }
+
+  return res.json({ id: chatExists.id });
 });
 
 module.exports = router;

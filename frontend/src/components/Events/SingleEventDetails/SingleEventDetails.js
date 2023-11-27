@@ -8,6 +8,7 @@ import {
   replaceThirdCommaDot,
   capitalizeFirstChar,
   getRandomColor,
+  isClickMemberMatchingOtherUserInDM,
 } from "../../../utils/helper-functions";
 
 import { fetchSingleEventThunk } from "../../../store/events";
@@ -22,6 +23,7 @@ import {
   fetchEventAttendeesThunk,
   fetchMyAttendancesThunk,
 } from "../../../store/attendances";
+import { fetchAllDirectChatsThunk } from "../../../store/directChats";
 
 function SingleEventDetails() {
   const { eventId } = useParams();
@@ -78,6 +80,27 @@ function SingleEventDetails() {
   const handleClickLeave = (e) => {
     console.log("my attendance 33333", myAttendance);
     return dispatch(deleteAttendanceThunk(myAttendance));
+  };
+
+  const handleClickDM = async (attendee) => {
+    const directChats = await dispatch(fetchAllDirectChatsThunk());
+    console.log("directChats", directChats, attendee.id);
+    // if current user already has a dm with this member, then redirect to dm
+    const matchedDM = isClickMemberMatchingOtherUserInDM(
+      parseInt(attendee.id),
+      directChats
+    );
+    if (attendee.id === sessionUser.id) return;
+
+    if (matchedDM) {
+      window.scroll(0, 0);
+      history.push(`/messages/${matchedDM}`);
+    } else {
+      // otherwise redirect to a new dm page
+      console.log("attendee", attendee);
+      window.scroll(0, 0);
+      history.push(`/messages/new`, { targetUser: attendee });
+    }
   };
 
   useEffect(() => {
@@ -319,7 +342,8 @@ function SingleEventDetails() {
                     {eventAttendeesSorted?.map((attendee) => (
                       <div
                         key={attendee.id}
-                        className="event-metadata-container member-s"
+                        className="event-metadata-container member-s cursor"
+                        onClick={() => handleClickDM(attendee)}
                       >
                         {attendee.picture ? (
                           <img
@@ -348,6 +372,9 @@ function SingleEventDetails() {
                           <div className="member-s2">
                             {attendee.Attendance[0].status[0].toUpperCase()}
                             {attendee.Attendance[0].status.slice(1)}
+                            {sessionUser.id !== attendee.id && (
+                              <i className="fa-regular fa-envelope"></i>
+                            )}
                           </div>
                         </div>
                       </div>

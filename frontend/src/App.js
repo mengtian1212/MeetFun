@@ -63,7 +63,10 @@ function App() {
             <Route exact path="/manage-events/:eventId">
               <ManageEvent />
             </Route>
-            <Route exact path={["/messages/:messageId", "/messages"]}>
+            <Route
+              exact
+              path={["/messages/new", "/messages/:messageId", "/messages"]}
+            >
               <DirectChats />
             </Route>
           </Switch>

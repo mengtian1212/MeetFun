@@ -145,6 +145,8 @@
   color: rgb(112 112 112/1);
   padding-top: 4px;
   font-size: 15px;
+  display: flex;
+  gap: 6px;
 }
 
 .member-s3 {

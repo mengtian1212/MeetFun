@@ -10,12 +10,12 @@ function MessageCard({ message }) {
     hour12: true,
   });
   return (
-    <div>
+    <div className="message-card-outer">
       {message.senderPicture ? (
-        <img src={message.senderPicture} alt="" className="member-image" />
+        <img src={message.senderPicture} alt="" className="member-thumb1" />
       ) : (
         <div
-          className="member-image"
+          className="member-thumb1"
           style={{
             backgroundColor: getRandomColor(),
           }}
@@ -27,16 +27,18 @@ function MessageCard({ message }) {
         </div>
       )}
 
-      <div>
-        <div>
+      <div className="message-card-line">
+        <div className="message-card-title">
           <div>
-            {message.senderFirstName}&nbsp;
-            {message.senderLastName}
+            <div className="message-card-name">
+              {message.senderFirstName}&nbsp;
+              {message.senderLastName}
+            </div>
           </div>
+          <div className="message-card-name1">{formattedDate}</div>
         </div>
-        <div>{formattedDate}</div>
+        <div className="message-content">{message.content}</div>
       </div>
-      <div>{message.content}</div>
     </div>
   );
 }

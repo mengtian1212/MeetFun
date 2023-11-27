@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Redirect, useHistory } from "react-router-dom";
 import { fetchSingleDirectChatThunk } from "../../store/directChats";
@@ -11,11 +11,13 @@ let socket;
 
 function DirectMessages() {
   // const socket = io("http://localhost:8000"); // check for production vs development
-
+  const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
   const history = useHistory();
   const { messageId } = useParams();
   const sessionUser = useSelector((state) => state.session.user);
+  const messageContainerRef = useRef(null);
+
   const otherUser = useSelector(
     (state) => state.directChats.allDirectChats[messageId]
   );
@@ -33,14 +35,24 @@ function DirectMessages() {
   });
 
   useEffect(() => {
+    // Scroll to the bottom when chatMessages change
+    if (messageContainerRef.current) {
+      messageContainerRef.current.scrollTop =
+        messageContainerRef.current.scrollHeight;
+    }
+  }, [chatMessages]);
+
+  useEffect(() => {
     (async () => {
       const res = await dispatch(fetchSingleDirectChatThunk(messageId));
       setChatMessages(Object.values(res.payload.messages));
+      setIsLoading(false);
+      window.scroll(0, 0);
       if (res.payload.directChat.id === undefined) {
         history.push("/messages");
       }
     })();
-  }, [dispatch, history, messageId]);
+  }, [dispatch, messageId]);
 
   useEffect(() => {
     socket = io();
@@ -74,6 +86,7 @@ function DirectMessages() {
   };
 
   if (!sessionUser) return <Redirect to="/" />;
+  if (isLoading) return null;
 
   return (
     <>
@@ -83,32 +96,38 @@ function DirectMessages() {
           {otherUser?.lastName}
         </section>
 
-        <section className="dm-messages-outer">
+        <section className="dm-messages-outer" ref={messageContainerRef}>
           {chatMessages.map((message) => {
             return <MessageCard key={message.id} message={message} />;
           })}
         </section>
       </div>
 
-      <section className="dm-send-outer">
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Say something nice..."
-            value={currentMessage}
-            onChange={(e) => setCurrentMessage(e.target.value)}
-            maxLength={500}
-          />
-          <div>{currentMessage.trim().length}/500</div>
-          <button type="submit" disabled={currentMessage.trim().length === 0}>
+      <form onSubmit={handleSubmit} className="dm-send-outer">
+        <input
+          type="text"
+          placeholder="Say something nice..."
+          value={currentMessage}
+          onChange={(e) => setCurrentMessage(e.target.value)}
+          maxLength={500}
+          className="dm-send-box"
+        />
+        <div className="dm-send-button-box">
+          <button
+            type="submit"
+            disabled={currentMessage.trim().length === 0}
+            className="dm-send-button"
+          >
             Send
-            <i className="fa-solid fa-paper-plane"></i>
           </button>
-        </form>
-        {currentMessage.trim().length >= 500 && (
-          <span>Max message length of 500 has been reached</span>
-        )}
-      </section>
+          <div className="dm-send-button-box-c">
+            {currentMessage.trim().length}/500
+          </div>
+        </div>
+      </form>
+      {currentMessage.trim().length >= 500 && (
+        <span>Max message length of 500 has been reached</span>
+      )}
     </>
   );
 }
