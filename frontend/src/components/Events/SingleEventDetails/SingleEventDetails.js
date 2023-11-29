@@ -23,7 +23,10 @@ import {
   fetchEventAttendeesThunk,
   fetchMyAttendancesThunk,
 } from "../../../store/attendances";
-import { fetchAllDirectChatsThunk } from "../../../store/directChats";
+import {
+  createNewDMThunk,
+  fetchAllDirectChatsThunk,
+} from "../../../store/directChats";
 
 function SingleEventDetails() {
   const { eventId } = useParams();
@@ -98,8 +101,9 @@ function SingleEventDetails() {
     } else {
       // otherwise redirect to a new dm page
       console.log("attendee", attendee);
+      const directChatId = await dispatch(createNewDMThunk(attendee.id));
       window.scroll(0, 0);
-      history.push(`/messages/new`, { targetUser: attendee });
+      history.push(`/messages/${directChatId}`);
     }
   };
 
@@ -342,7 +346,7 @@ function SingleEventDetails() {
                     {eventAttendeesSorted?.map((attendee) => (
                       <div
                         key={attendee.id}
-                        className="event-metadata-container member-s cursor"
+                        className="event-metadata-container member-s"
                         onClick={() => handleClickDM(attendee)}
                       >
                         {attendee.picture ? (
@@ -377,6 +381,11 @@ function SingleEventDetails() {
                             )}
                           </div>
                         </div>
+                        {sessionUser.id !== attendee.id && (
+                          <div className="chat-mask cursor">
+                            <div className="join-this-group-btn5">Chat</div>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>

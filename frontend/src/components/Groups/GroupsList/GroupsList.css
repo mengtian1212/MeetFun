@@ -129,9 +129,59 @@
 .member-s {
   display: flex;
   flex-direction: column;
-  gap: 16px;
   align-items: center;
   justify-content: center;
+  gap: 16px;
+  position: relative;
+}
+
+.chat-mask {
+  opacity: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: rgb(246, 247, 248);
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.member-s:hover .chat-mask {
+  opacity: 0.75;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.member-s:hover .join-this-group-btn5 {
+  opacity: 1;
+  z-index: 10 !important;
+}
+
+.join-this-group-btn5 {
+  z-index: 50 !important;
+  opacity: 1 !important;
+  font-weight: 500;
+  font-size: 14pt;
+  color: white;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  background-color: var(--meetup-red);
+  border: white;
+  box-shadow: 2px 2px 2px #707070;
+  border-radius: 8px;
+  cursor: pointer;
+  justify-content: center;
+  align-content: center;
+}
+
+.join-this-group-btn5:hover {
+  background-color: #e32359;
 }
 
 .member-s1 {

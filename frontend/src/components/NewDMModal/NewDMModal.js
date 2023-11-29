@@ -42,11 +42,7 @@ function NewDMModal() {
   }, [userSearch]);
 
   const handleCreateNewDM = async () => {
-    console.log("#############");
     const directChatId = await dispatch(createNewDMThunk(selectedUser));
-    console.log("#############wwwwww");
-
-    console.log("directChatId", directChatId);
     closeModal();
     history.push(`/messages/${directChatId}`);
   };

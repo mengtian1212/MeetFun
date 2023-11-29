@@ -10,10 +10,15 @@ import {
   capitalizeFirstChar,
   formatDateTime,
   getRandomColor,
+  isClickMemberMatchingOtherUserInDM,
   replaceThirdCommaDot,
 } from "../../utils/helper-functions";
 import LineBreakHelper from "../../utils/LineBreakHelper";
 import { fetchSingleGroupThunk } from "../../store/groups";
+import {
+  createNewDMThunk,
+  fetchAllDirectChatsThunk,
+} from "../../store/directChats";
 
 function ManageEventPreview() {
   const { eventId } = useParams();
@@ -75,6 +80,28 @@ function ManageEventPreview() {
   }
 
   if (isLoading) return null;
+
+  const handleClickDM = async (attendee) => {
+    const directChats = await dispatch(fetchAllDirectChatsThunk());
+    console.log("directChats", directChats, attendee.id);
+    // if current user already has a dm with this member, then redirect to dm
+    const matchedDM = isClickMemberMatchingOtherUserInDM(
+      parseInt(attendee.id),
+      directChats
+    );
+    if (attendee.id === sessionUser.id) return;
+
+    if (matchedDM) {
+      window.scroll(0, 0);
+      history.push(`/messages/${matchedDM}`);
+    } else {
+      // otherwise redirect to a new dm page
+      console.log("attendee", attendee);
+      const directChatId = await dispatch(createNewDMThunk(attendee.id));
+      window.scroll(0, 0);
+      history.push(`/messages/${directChatId}`);
+    }
+  };
 
   return (
     <div className="bottom-inner3">
@@ -184,6 +211,7 @@ function ManageEventPreview() {
                 <div
                   key={attendee.id}
                   className="event-metadata-container member-s"
+                  onClick={() => handleClickDM(attendee)}
                 >
                   {attendee.picture ? (
                     <div className="member-image">
@@ -223,6 +251,12 @@ function ManageEventPreview() {
                       {attendee.Attendance[0].status.slice(1)}
                     </div>
                   </div>
+
+                  {sessionUser.id !== attendee.id && (
+                    <div className="chat-mask cursor">
+                      <div className="join-this-group-btn5">Chat</div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

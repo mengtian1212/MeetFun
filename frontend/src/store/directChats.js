@@ -75,14 +75,15 @@ export const fetchAllUsersThunk = () => async (dispatch) => {
 export const createNewDMThunk = (otherUserId) => async (dispatch) => {
   const res = await csrfFetch(`/api/direct-chats/new/${otherUserId}`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
   });
   console.log("in thunk!!!!!");
   console.log("in thunk!!!!!eeeee");
   if (res.ok) {
-    await dispatch(loadAllDirectChats());
+    console.log("in thunk!!!!!before load all chats");
+
+    await dispatch(fetchAllUsersThunk());
     const chatId = await res.json();
-    console.log("in thunk!!!!!", chatId);
+    console.log("in thunk!!!!!ok", chatId);
 
     return chatId.id;
   }
