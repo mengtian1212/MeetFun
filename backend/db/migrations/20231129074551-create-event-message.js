@@ -9,7 +9,7 @@ if (process.env.NODE_ENV === "production") {
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable(
-      "DirectMessages",
+      "EventMessages",
       {
         id: {
           allowNull: false,
@@ -23,10 +23,10 @@ module.exports = {
           references: { model: "Users", key: "id" },
           onDelete: "cascade",
         },
-        directChatId: {
+        eventChatId: {
           allowNull: false,
           type: Sequelize.INTEGER,
-          references: { model: "DirectChats", key: "id" },
+          references: { model: "EventChats", key: "id" },
           onDelete: "cascade",
         },
         content: {
@@ -53,7 +53,7 @@ module.exports = {
     );
   },
   async down(queryInterface, Sequelize) {
-    options.tableName = "DirectMessages";
+    options.tableName = "EventMessages";
     await queryInterface.dropTable(options);
   },
 };

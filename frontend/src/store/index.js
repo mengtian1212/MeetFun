@@ -7,6 +7,7 @@ import eventsReducer from "./events";
 import membershipsReducer from "./memberships";
 import attendancesReducer from "./attendances";
 import directChatsReducer from "./directChats";
+import eventChatsReducer from "./eventChats";
 
 const rootReducer = combineReducers({
   // add reducer functions here
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   memberships: membershipsReducer,
   attendances: attendancesReducer,
   directChats: directChatsReducer,
+  eventChats: eventChatsReducer,
 });
 
 let enhancer;

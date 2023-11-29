@@ -81,7 +81,7 @@ function ProfileButton({ user }) {
           </div>
           <div className="user-icon-container1 cursor" onClick={handleMessage}>
             <i className="fa-regular fa-message"></i>
-            Messages
+            Chat
           </div>
           <div className="user-icon-container cursor">
             <button

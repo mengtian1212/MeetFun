@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class DirectMessage extends Model {
+  class EventMessage extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -9,24 +9,24 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      DirectMessage.belongsTo(models.User, {
+      EventMessage.belongsTo(models.User, {
         foreignKey: "senderId",
         onDelete: "cascade",
       });
-      DirectMessage.belongsTo(models.DirectChat, {
-        foreignKey: "directChatId",
+      EventMessage.belongsTo(models.EventChat, {
+        foreignKey: "eventChatId",
         onDelete: "cascade",
       });
     }
   }
-  DirectMessage.init(
+  EventMessage.init(
     {
       senderId: {
         allowNull: false,
         type: DataTypes.INTEGER,
         onDelete: "cascade",
       },
-      directChatId: {
+      eventChatId: {
         allowNull: false,
         type: DataTypes.INTEGER,
         onDelete: "cascade",
@@ -36,8 +36,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "DirectMessage",
+      modelName: "EventMessage",
     }
   );
-  return DirectMessage;
+  return EventMessage;
 };

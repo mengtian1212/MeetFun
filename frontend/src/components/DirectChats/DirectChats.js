@@ -11,7 +11,7 @@ import {
 import { fetchAllDirectChatsThunk } from "../../store/directChats";
 import DirectMessages from "./DirectMessages.js";
 import { getRandomColor } from "../../utils/helper-functions";
-import LoadingPage from "../LoadingPage/LoadingPage";
+import LoadingPage from "../LoadingPage";
 import DirectMessagesNew from "../DirectMessagesNew/DirectMessagesNew";
 import { useModal } from "../../context/Modal";
 import NewDMModal from "../NewDMModal/NewDMModal";
@@ -41,6 +41,11 @@ function DirectChats() {
     window.scroll(0, 0);
   };
 
+  const handleClickEventChat = () => {
+    history.push(`/event-chats`);
+    window.scroll(0, 0);
+  };
+
   if (!sessionUser) return <Redirect to="/" />;
   if (isLoading) return <LoadingPage />;
 
@@ -55,7 +60,12 @@ function DirectChats() {
           >
             Direct Messages
           </div>
-          <div className="messages-outer-side1-dm">Event Chats</div>
+          <div
+            className="messages-outer-side1-dm"
+            onClick={handleClickEventChat}
+          >
+            Event Chats
+          </div>
         </div>
 
         <div className="messages-outer1">

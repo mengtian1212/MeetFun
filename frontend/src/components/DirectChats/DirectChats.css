@@ -185,6 +185,15 @@
   text-overflow: ellipsis;
 }
 
+.messenger-name1 {
+  font-size: 16px;
+  line-height: 24px;
+  margin: 0 0 8px;
+  color: #212121;
+  width: 235px;
+  text-overflow: ellipsis;
+}
+
 .dm-send-outer {
   width: 100%;
   position: relative;
