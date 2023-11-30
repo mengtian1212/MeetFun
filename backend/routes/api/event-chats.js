@@ -49,18 +49,13 @@ router.get("/current", async (req, res, next) => {
   });
 
   const eventIds = myAttendances.map((record) => record.eventId);
+
+  console.log("eventIdssssssssssssssssssssssssss", eventIds);
   const eventsAttended = await Event.findAll({
     where: {
-      id: eventIds,
+      id: { [Op.in]: eventIds },
     },
     include: [
-      {
-        model: EventImage,
-        attributes: ["id", "url", "preview"],
-        where: {
-          preview: true,
-        },
-      },
       {
         model: EventChat,
         attributes: ["id"],
@@ -68,6 +63,14 @@ router.get("/current", async (req, res, next) => {
       {
         model: Venue,
         attributes: ["id", "address", "city", "state", "lat", "lng"],
+      },
+      {
+        model: EventImage,
+        attributes: ["id", "url", "preview"],
+        where: {
+          preview: true,
+        },
+        required: false, // Set required to false to make it a LEFT JOIN
       },
     ],
   });
@@ -86,7 +89,7 @@ router.get("/current", async (req, res, next) => {
     };
     result.push(dct);
   }
-  console.log("myAttendances", eventsAttended);
+  console.log("myAttendances", result);
 
   return res.json({ eventChats: result });
 });

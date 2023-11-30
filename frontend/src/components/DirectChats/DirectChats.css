@@ -52,9 +52,43 @@
   border-bottom: 2px solid rgb(217 217 217);
 }
 
+.dm-otheruser-outer1 {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgb(217 217 217);
+}
+
+.dm-otheruser-outer2 {
+  display: flex;
+  gap: 16px;
+  color: #c5c4c4;
+}
+
+.dm-otheruser-outer3 {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dm-otheruser-outer2 div {
+  font-size: 16px;
+}
+
+.dm-otheruser-outer2 i {
+  font-size: 16px;
+}
+
 .messages-outer-top {
   display: grid;
   grid-template-rows: 35px auto;
+  flex: 1;
+}
+
+.messages-outer-top1 {
+  display: grid;
+  grid-template-rows: 60px auto;
   flex: 1;
 }
 
@@ -63,6 +97,13 @@
   display: flex;
   flex-direction: column;
   height: calc(100vh - 260px);
+}
+
+.dm-messages-outer1 {
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 260px - 35px);
 }
 
 .messages-outer-side1-messages {
@@ -182,7 +223,11 @@
   margin: 0 0 8px;
   color: #212121;
   width: 235px;
+
   text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  -webkit-line-clamp: 1;
 }
 
 .messenger-name1 {
@@ -191,7 +236,11 @@
   margin: 0 0 8px;
   color: #212121;
   width: 235px;
+
   text-overflow: ellipsis;
+  overflow: hidden;
+  /* white-space: nowrap; */
+  -webkit-line-clamp: 2;
 }
 
 .dm-send-outer {

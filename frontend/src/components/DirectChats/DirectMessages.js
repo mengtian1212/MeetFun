@@ -102,6 +102,12 @@ function DirectMessages() {
         </section>
 
         <section className="dm-messages-outer" ref={messageContainerRef}>
+          {chatMessages && Object.values(chatMessages).length === 0 && (
+            <div className="DM-page1">
+              <i className="fa-regular fa-comment-dots comment-dot"></i>
+              <div className="DM-page-click">No messages</div>
+            </div>
+          )}
           {chatMessages.map((message) => {
             return <MessageCard key={message.id} message={message} />;
           })}

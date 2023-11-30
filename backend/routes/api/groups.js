@@ -443,7 +443,7 @@ router.post(
       status: "organizer",
     });
 
-    const eventChat = await EventChats.create({
+    const eventChat = await EventChat.create({
       eventId: event.id,
     });
 

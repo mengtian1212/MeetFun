@@ -67,16 +67,15 @@ function EventChats() {
                       key={eventChat?.eventChatId}
                       className="direct-messenger"
                     >
-                      {eventChat?.eventImage && (
-                        <img
-                          src={
-                            eventChat?.eventImage ||
-                            "https://secure.meetupstatic.com/next/images/find/emptyResultsIcon.svg"
-                          }
-                          alt=""
-                          className="member-thumb"
-                        />
-                      )}
+                      <img
+                        src={
+                          eventChat?.eventImage
+                            ? eventChat?.eventImage
+                            : "https://secure.meetupstatic.com/next/images/find/emptyResultsIcon.svg"
+                        }
+                        alt=""
+                        className="member-thumb"
+                      />
 
                       <div className="messenger-name1">
                         {eventChat?.eventName}
