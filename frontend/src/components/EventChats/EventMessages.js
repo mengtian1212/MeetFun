@@ -24,12 +24,11 @@ function EventMessages() {
   const { eventChatId } = useParams();
   const sessionUser = useSelector((state) => state.session.user);
   const messageContainerRef = useRef(null);
+  const targetEvent = useSelector((state) => state.events?.singleEvent);
 
   const messages = useSelector((state) =>
     Object.values(state.eventChats?.singleEventChat?.messages)
   );
-  const targetEvent = useSelector((state) => state.events?.singleEvent);
-
   const [chatMessages, setChatMessages] = useState(messages);
   const [currentMessage, setCurrentMessage] = useState("");
 
