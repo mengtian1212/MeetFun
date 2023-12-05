@@ -10,6 +10,7 @@ import EventListCard from "../../Events/EventsList/EventListCard";
 import {
   capitalizeFirstChar,
   getRandomColor,
+  isClickMemberMatchingOtherUserInDM,
 } from "../../../utils/helper-functions";
 import OpenModalButton from "../../OpenModalButton/OpenModalButton";
 import DeleteGroupModal from "../DeleteGroupModal";
@@ -21,6 +22,10 @@ import {
   fetchGroupMembershipsThunk,
   fetchMyMembershipsThunk,
 } from "../../../store/memberships";
+import {
+  createNewDMThunk,
+  fetchAllDirectChatsThunk,
+} from "../../../store/directChats";
 
 function SingleGroupDetails() {
   const { groupId } = useParams();
@@ -232,6 +237,28 @@ function SingleGroupDetails() {
     }
   }
 
+  const handleClickDM = async (attendee) => {
+    const directChats = await dispatch(fetchAllDirectChatsThunk());
+    console.log("directChats", directChats, attendee.id);
+    // if current user already has a dm with this member, then redirect to dm
+    const matchedDM = isClickMemberMatchingOtherUserInDM(
+      parseInt(attendee.id),
+      directChats
+    );
+    if (attendee.id === sessionUser.id) return;
+
+    if (matchedDM) {
+      window.scroll(0, 0);
+      history.push(`/messages/${matchedDM}`);
+    } else {
+      // otherwise redirect to a new dm page
+      console.log("attendee", attendee);
+      const directChatId = await dispatch(createNewDMThunk(attendee.id));
+      window.scroll(0, 0);
+      history.push(`/messages/${directChatId}`);
+    }
+  };
+
   return (
     <>
       <section className="group-detail-main">
@@ -383,18 +410,30 @@ function SingleGroupDetails() {
                 <div className="group-list-card show-as-white-card1">
                   {groupMembersSorted?.length > 0 &&
                     groupMembersSorted?.map((member) => (
-                      <div key={member.id} className="member-s">
-                        <div
-                          className="member-image"
-                          style={{
-                            backgroundColor: getRandomColor(),
-                          }}
-                        >
-                          <span>
-                            {member.firstName[0]}
-                            {member.lastName[0]}
-                          </span>
-                        </div>
+                      <div
+                        key={member.id}
+                        className="member-s"
+                        onClick={() => handleClickDM(member)}
+                      >
+                        {member.picture ? (
+                          <img
+                            src={member.picture}
+                            alt=""
+                            className="member-image"
+                          />
+                        ) : (
+                          <div
+                            className="member-image"
+                            style={{
+                              backgroundColor: getRandomColor(),
+                            }}
+                          >
+                            <span>
+                              {member.firstName[0]}
+                              {member.lastName[0]}
+                            </span>
+                          </div>
+                        )}
                         <div className="member-s1">
                           <div>
                             {member.firstName}&nbsp;
@@ -403,8 +442,16 @@ function SingleGroupDetails() {
                           <div className="member-s2">
                             {member.Membership[0].status[0].toUpperCase()}
                             {member.Membership[0].status.slice(1)}
+                            {sessionUser.id !== member.id && (
+                              <i className="fa-regular fa-envelope"></i>
+                            )}
                           </div>
                         </div>
+                        {sessionUser.id !== member.id && (
+                          <div className="chat-mask cursor">
+                            <div className="join-this-group-btn5">Chat</div>
+                          </div>
+                        )}
                       </div>
                     ))}
                 </div>

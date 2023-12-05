@@ -132,6 +132,7 @@ function CreateEvent() {
       .then(async (newEvent) => {
         await dispatch(addEventImagesThunk(imageData, newEvent.id));
         history.push(`/events/${newEvent.id}`);
+        window.scroll(0, 0);
       })
       .catch(async (err) => {
         const errors = await err.json();

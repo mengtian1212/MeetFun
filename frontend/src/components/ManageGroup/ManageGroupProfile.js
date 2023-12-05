@@ -1,5 +1,8 @@
 import { useParams, useHistory } from "react-router-dom";
-import { getRandomColor } from "../../utils/helper-functions";
+import {
+  getRandomColor,
+  isClickMemberMatchingOtherUserInDM,
+} from "../../utils/helper-functions";
 import EventListCard from "../Events/EventsList/EventListCard";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
@@ -11,6 +14,10 @@ import {
   fetchMyMembershipsThunk,
 } from "../../store/memberships";
 import LineBreakHelper from "../../utils/LineBreakHelper";
+import {
+  createNewDMThunk,
+  fetchAllDirectChatsThunk,
+} from "../../store/directChats";
 
 function ManageGroupProfile() {
   const { groupId } = useParams();
@@ -143,6 +150,28 @@ function ManageGroupProfile() {
 
   if (isLoading) return null;
 
+  const handleClickDM = async (attendee) => {
+    const directChats = await dispatch(fetchAllDirectChatsThunk());
+    console.log("directChats", directChats, attendee.id);
+    // if current user already has a dm with this member, then redirect to dm
+    const matchedDM = isClickMemberMatchingOtherUserInDM(
+      parseInt(attendee.id),
+      directChats
+    );
+    if (attendee.id === sessionUser.id) return;
+
+    if (matchedDM) {
+      window.scroll(0, 0);
+      history.push(`/messages/${matchedDM}`);
+    } else {
+      // otherwise redirect to a new dm page
+      console.log("attendee", attendee);
+      const directChatId = await dispatch(createNewDMThunk(attendee.id));
+      window.scroll(0, 0);
+      history.push(`/messages/${directChatId}`);
+    }
+  };
+
   return (
     <div className="bottom-inner2">
       <div className="bottom-inner-left">
@@ -218,18 +247,27 @@ function ManageGroupProfile() {
           <div className="group-list-card show-as-white-card1">
             {groupMembersSorted?.length > 0 &&
               groupMembersSorted?.map((member) => (
-                <div key={member.id} className="member-s">
-                  <div
-                    className="member-image"
-                    style={{
-                      backgroundColor: getRandomColor(),
-                    }}
-                  >
-                    <span>
-                      {member.firstName[0]}
-                      {member.lastName[0]}
-                    </span>
-                  </div>
+                <div
+                  key={member.id}
+                  className="member-s"
+                  onClick={() => handleClickDM(member)}
+                >
+                  {member.picture ? (
+                    <img src={member.picture} alt="" className="member-image" />
+                  ) : (
+                    <div
+                      className="member-image"
+                      style={{
+                        backgroundColor: getRandomColor(),
+                      }}
+                    >
+                      <span>
+                        {member.firstName[0]}
+                        {member.lastName[0]}
+                      </span>
+                    </div>
+                  )}
+
                   <div className="member-s1">
                     <div>
                       {member.firstName}&nbsp;
@@ -238,8 +276,16 @@ function ManageGroupProfile() {
                     <div className="member-s2">
                       {member.Membership[0].status[0].toUpperCase()}
                       {member.Membership[0].status.slice(1)}
+                      {sessionUser.id !== member.id && (
+                        <i className="fa-regular fa-envelope"></i>
+                      )}
                     </div>
                   </div>
+                  {sessionUser.id !== member.id && (
+                    <div className="chat-mask cursor">
+                      <div className="join-this-group-btn5">Chat</div>
+                    </div>
+                  )}
                 </div>
               ))}
           </div>

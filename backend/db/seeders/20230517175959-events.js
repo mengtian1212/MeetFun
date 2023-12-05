@@ -29,7 +29,7 @@ const events = [
     capacity: 58,
     price: 0,
     description:
-      "Come and join us at Story Music Bar for our monthly in-person meeting to play and listen to their wonderful collection of Steinway pianos.\nJoin us in June for an enchanting piano music gathering. Bring your musical talents or simply come to enjoy the melodious tunes as we create a harmonious atmosphere together. It's a wonderful opportunity to connect with fellow piano enthusiasts, share your love for music, and immerse yourself in the joy of piano melodies. Let's gather, play, and celebrate the power of music this June.",
+      "Come and join us at Story Music Bar for our monthly in-person meeting to play and listen to their wonderful collection of Steinway pianos.\nJoin us for an enchanting piano music gathering. Bring your musical talents or simply come to enjoy the melodious tunes as we create a harmonious atmosphere together. It's a wonderful opportunity to connect with fellow piano enthusiasts, share your love for music, and immerse yourself in the joy of piano melodies. Let's gather, play, and celebrate the power of music.",
     startDate: new Date("30 DEC 2024 15:00:00 EST"),
     endDate: new Date("30 DEC 2024 18:00:00 EST"),
     // startDate: "2024-12-30 09:00:00",

@@ -30,6 +30,7 @@ module.exports = {
           email: "user1@gmail.com",
           username: "FakeUser1",
           hashedPassword: bcrypt.hashSync("password1"),
+          picture: "https://randomuser.me/api/portraits/women/90.jpg",
         },
         {
           firstName: "Sarah",
@@ -37,6 +38,7 @@ module.exports = {
           email: "user2@gmail.com",
           username: "FakeUser2",
           hashedPassword: bcrypt.hashSync("password2"),
+          picture: "https://randomuser.me/api/portraits/women/56.jpg",
         },
         {
           firstName: "Michael",
@@ -44,6 +46,7 @@ module.exports = {
           email: "user3@gmail.com",
           username: "FakeUser3",
           hashedPassword: bcrypt.hashSync("password3"),
+          picture: "https://randomuser.me/api/portraits/men/51.jpg",
         },
         {
           firstName: "Emily",
@@ -51,6 +54,7 @@ module.exports = {
           email: "user4@gmail.com",
           username: "FakeUser4",
           hashedPassword: bcrypt.hashSync("password4"),
+          picture: "https://randomuser.me/api/portraits/women/54.jpg",
         },
         {
           firstName: "David",
@@ -58,6 +62,7 @@ module.exports = {
           email: "user5@gmail.com",
           username: "FakeUser5",
           hashedPassword: bcrypt.hashSync("password5"),
+          picture: "https://randomuser.me/api/portraits/men/54.jpg",
         },
         {
           firstName: "Cynthia",
@@ -65,6 +70,7 @@ module.exports = {
           email: "user6@gmail.com",
           username: "FakeUser6",
           hashedPassword: bcrypt.hashSync("password6"),
+          picture: "https://randomuser.me/api/portraits/women/2.jpg",
         },
         {
           firstName: "John",
@@ -72,6 +78,7 @@ module.exports = {
           email: "user7@gmail.com",
           username: "FakeUser7",
           hashedPassword: bcrypt.hashSync("password7"),
+          picture: "https://randomuser.me/api/portraits/men/7.jpg",
         },
         {
           firstName: "Daniel",
@@ -79,6 +86,7 @@ module.exports = {
           email: "user8@gmail.com",
           username: "FakeUser8",
           hashedPassword: bcrypt.hashSync("password8"),
+          picture: "https://randomuser.me/api/portraits/men/32.jpg",
         },
         {
           firstName: "Scott",
@@ -86,6 +94,7 @@ module.exports = {
           email: "user9@gmail.com",
           username: "FakeUser9",
           hashedPassword: bcrypt.hashSync("password9"),
+          picture: "https://randomuser.me/api/portraits/men/94.jpg",
         },
         {
           firstName: "Jeremy",
@@ -93,6 +102,7 @@ module.exports = {
           email: "user10@gmail.com",
           username: "FakeUser10",
           hashedPassword: bcrypt.hashSync("password10"),
+          picture: "https://randomuser.me/api/portraits/men/26.jpg",
         },
         {
           firstName: "Kumar",
@@ -100,6 +110,7 @@ module.exports = {
           email: "user11@gmail.com",
           username: "FakeUser11",
           hashedPassword: bcrypt.hashSync("password11"),
+          picture: "https://randomuser.me/api/portraits/men/39.jpg",
         },
         {
           firstName: "Austin",
@@ -107,6 +118,7 @@ module.exports = {
           email: "user12@gmail.com",
           username: "FakeUser12",
           hashedPassword: bcrypt.hashSync("password12"),
+          picture: "https://randomuser.me/api/portraits/men/85.jpg",
         },
       ],
       {}
@@ -121,15 +133,16 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
     options.tableName = "Users";
-    const Op = Sequelize.Op;
-    await queryInterface.bulkDelete(
-      options,
-      {
-        username: {
-          [Op.in]: ["Demo-lition", "FakeUser1", "FakeUser2", "FakeUser3"],
-        },
-      },
-      {}
-    );
+    // const Op = Sequelize.Op;
+    // await queryInterface.bulkDelete(
+    //   options,
+    //   {
+    //     username: {
+    //       [Op.in]: ["Demo-lition", "FakeUser1", "FakeUser2", "FakeUser3"],
+    //     },
+    //   },
+    //   {}
+    // );
+    await queryInterface.bulkDelete(options);
   },
 };

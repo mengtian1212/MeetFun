@@ -8,6 +8,8 @@ const groupImagesRouter = require("./group-images.js");
 const eventImagesRouter = require("./event-images.js");
 const attendancesRouter = require("./attendances.js");
 const membershipsRouter = require("./memberships.js");
+const directChatsRouter = require("./direct-chats.js");
+const eventChatsRouter = require("./event-chats.js");
 
 const { restoreUser } = require("../../utils/auth.js");
 
@@ -33,6 +35,10 @@ router.use("/event-images", eventImagesRouter);
 router.use("/attendances", attendancesRouter);
 
 router.use("/memberships", membershipsRouter);
+
+router.use("/direct-chats", directChatsRouter);
+
+router.use("/event-chats", eventChatsRouter);
 
 router.post("/test", (req, res) => {
   res.json({ requestBody: req.body });

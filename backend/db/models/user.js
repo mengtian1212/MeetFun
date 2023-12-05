@@ -65,6 +65,10 @@ module.exports = (sequelize, DataTypes) => {
           len: [60, 60],
         },
       },
+      picture: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
     },
     {
       sequelize,

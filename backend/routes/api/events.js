@@ -311,7 +311,7 @@ router.get("/:eventId/attendees", async (req, res, next) => {
   let attendees = [];
   if (isOrganizerCoHost) {
     attendees = await User.findAll({
-      attributes: ["id", "firstName", "lastName"],
+      attributes: ["id", "firstName", "lastName", "picture"],
       include: [
         {
           model: Attendance,
@@ -325,7 +325,7 @@ router.get("/:eventId/attendees", async (req, res, next) => {
     });
   } else {
     attendees = await User.findAll({
-      attributes: ["id", "firstName", "lastName"],
+      attributes: ["id", "firstName", "lastName", "picture"],
       include: {
         model: Attendance,
         where: {

@@ -1,0 +1,324 @@
+.messages-outer {
+  flex: 1;
+  display: flex;
+  padding-bottom: 1.25em;
+  padding-left: 3rem;
+  padding-right: 30px;
+  margin-top: -46px;
+  padding-top: 56px;
+  background-color: #f5f5f5;
+  width: 100%;
+  height: calc(100vh - 65px);
+}
+
+.messages-outer1 {
+  display: flex;
+  flex: 1;
+  gap: 28px;
+}
+
+.new-con {
+  width: 400px;
+  text-align: end;
+}
+
+.new-dm-btn {
+  background-color: transparent;
+  outline: none;
+  border: none;
+  padding-bottom: 12px;
+  color: rgba(0, 0, 0, 0.54);
+  cursor: pointer;
+}
+
+.new-dm-btn:hover {
+  color: var(--meetup-green);
+}
+
+.fa-user-plus {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.new-dm-btn:hover i {
+  color: var(--meetup-green);
+}
+
+.fa-user-plus:hover {
+  color: var(--meetup-green) !important;
+}
+
+.dm-otheruser-outer {
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgb(217 217 217);
+}
+
+.dm-otheruser-outer1 {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgb(217 217 217);
+}
+
+.dm-otheruser-outer2 {
+  display: flex;
+  gap: 16px;
+  color: #c5c4c4;
+}
+
+.dm-otheruser-outer3 {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dm-otheruser-outer2 div {
+  font-size: 16px;
+}
+
+.dm-otheruser-outer2 i {
+  font-size: 16px;
+}
+
+.messages-outer-top {
+  display: grid;
+  grid-template-rows: 35px auto;
+  flex: 1;
+}
+
+.messages-outer-top1 {
+  display: grid;
+  grid-template-rows: 60px auto;
+  flex: 1;
+}
+
+.dm-messages-outer {
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 260px);
+}
+
+.dm-messages-outer1 {
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 260px - 35px);
+}
+
+.messages-outer-side1-messages {
+  font-weight: bold;
+  line-height: 24px;
+  margin: 0 0 10px;
+  color: #212121;
+  width: 235px;
+  text-overflow: ellipsis;
+}
+
+.messages-outer-side1-dm {
+  line-height: 20px;
+  color: #212121;
+  cursor: pointer;
+  padding: 16px;
+}
+
+.bar-focus {
+  font-weight: bold;
+  background-color: rgba(0, 130, 148, 0.08);
+  border-left: 4px solid #008294;
+}
+
+.messages-outer-side2 {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+}
+
+.messengers-box {
+  width: 400px;
+  border-top: 2px solid rgb(217 217 217);
+  overflow-y: scroll;
+  flex: 1;
+}
+
+.direct-messenger {
+  display: flex;
+  height: 80px;
+  min-width: 300px;
+  border-left: 3px solid transparent;
+  align-items: center;
+  text-decoration: none;
+}
+
+.direct-messenger.active {
+  border-left: 4px solid #008294;
+  background-color: white;
+}
+
+.member-thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* margin-right: 30px;
+  margin-left: 30px; */
+  border: 1px solid transparent;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  position: relative;
+  margin-left: 12px;
+  margin-right: 12px;
+  object-fit: cover;
+}
+
+.member-thumb1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* margin-right: 30px;
+  margin-left: 30px; */
+  border: 1px solid transparent;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  text-align: center;
+  position: relative;
+  margin-left: 12px;
+  margin-right: 12px;
+  object-fit: cover;
+}
+
+.DM-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.DM-page1 {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.comment-dot {
+  color: rgb(217 217 217);
+  font-size: 72px;
+}
+
+.DM-page-click {
+  color: rgb(217 217 217);
+  font-size: 32px;
+}
+
+.messenger-name {
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 24px;
+  margin: 0 0 8px;
+  color: #212121;
+  width: 235px;
+
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  -webkit-line-clamp: 1;
+}
+
+.messenger-name1 {
+  font-size: 16px;
+  line-height: 24px;
+  margin: 0 0 8px;
+  color: #212121;
+  width: 235px;
+
+  text-overflow: ellipsis;
+  overflow: hidden;
+  /* white-space: nowrap; */
+  -webkit-line-clamp: 2;
+}
+
+.dm-send-outer {
+  width: 100%;
+  position: relative;
+}
+
+.dm-send-box {
+  width: 100%;
+  background-color: white;
+  height: 80px;
+  resize: none;
+}
+
+.dm-send-button-box {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+}
+
+.message-card-name {
+  color: #1f24cc;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.message-card-name1 {
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.message-card-outer {
+  display: flex;
+  padding: 12px 12px 12px 0;
+}
+
+.message-card-title {
+  display: flex;
+  gap: 5px;
+}
+
+.message-card-line {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.message-content {
+  font-size: 15px;
+}
+
+.dm-send-button {
+  background-color: #1f24cc;
+  box-shadow: rgba(0, 0, 0, 0.6) 0 1px 0 !important;
+  color: white;
+  padding: 0 16px;
+  min-height: 36px;
+  border-radius: 3px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  font-size: 24px;
+}
+
+.dm-send-button-box-c {
+  text-align: center;
+}
+
+.dm-send-button:disabled {
+  background-color: rgb(217 217 217);
+  box-shadow: none;
+  pointer-events: none;
+}
+
+.fa-envelope {
+  font-weight: 700;
+}
+
+.fa-envelope:hover {
+  color: var(--meetup-green);
+}

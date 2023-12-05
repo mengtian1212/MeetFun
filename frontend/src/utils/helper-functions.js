@@ -110,3 +110,15 @@ export const formatDateString = (dateString) => {
   );
   return formattedDate;
 };
+
+export const isClickMemberMatchingOtherUserInDM = (inputNumber, obj) => {
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      const otherUserValue = obj[key].otherUser;
+      if (otherUserValue === inputNumber) {
+        return key; // Match found
+      }
+    }
+  }
+  return false; // No match found
+};

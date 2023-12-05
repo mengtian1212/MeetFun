@@ -82,6 +82,21 @@
   gap: 7px;
 }
 
+.user-icon-container1 {
+  border: 0px;
+  background-color: transparent;
+  display: flex;
+  /* flex-direction: column; */
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-weight: 450;
+}
+
+.user-icon-container1:hover {
+  color: var(--meetup-green);
+}
+
 .fas.fa-user-circle {
   color: var(--meetup-red);
   fill: var(--meetup-red);
@@ -92,6 +107,16 @@
 
 .fas.fa-user-circle:hover {
   color: rgb(122 29 71);
+}
+
+.user-profile-image {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+}
+
+.user-profile-image:hover {
+  filter: brightness(88%);
 }
 
 .arrow {
@@ -149,6 +174,11 @@
 }
 
 .profile-dropdown li:nth-child(4) {
+  padding-top: 0.4rem;
+}
+
+.profile-dropdown li:nth-child(5) {
+  padding-top: 0.4rem;
   padding-bottom: 0.4rem;
 }
 

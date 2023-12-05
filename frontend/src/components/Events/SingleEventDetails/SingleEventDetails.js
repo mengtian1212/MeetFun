@@ -8,6 +8,7 @@ import {
   replaceThirdCommaDot,
   capitalizeFirstChar,
   getRandomColor,
+  isClickMemberMatchingOtherUserInDM,
 } from "../../../utils/helper-functions";
 
 import { fetchSingleEventThunk } from "../../../store/events";
@@ -22,6 +23,10 @@ import {
   fetchEventAttendeesThunk,
   fetchMyAttendancesThunk,
 } from "../../../store/attendances";
+import {
+  createNewDMThunk,
+  fetchAllDirectChatsThunk,
+} from "../../../store/directChats";
 
 function SingleEventDetails() {
   const { eventId } = useParams();
@@ -78,6 +83,28 @@ function SingleEventDetails() {
   const handleClickLeave = (e) => {
     console.log("my attendance 33333", myAttendance);
     return dispatch(deleteAttendanceThunk(myAttendance));
+  };
+
+  const handleClickDM = async (attendee) => {
+    const directChats = await dispatch(fetchAllDirectChatsThunk());
+    console.log("directChats", directChats, attendee.id);
+    // if current user already has a dm with this member, then redirect to dm
+    const matchedDM = isClickMemberMatchingOtherUserInDM(
+      parseInt(attendee.id),
+      directChats
+    );
+    if (attendee.id === sessionUser.id) return;
+
+    if (matchedDM) {
+      window.scroll(0, 0);
+      history.push(`/messages/${matchedDM}`);
+    } else {
+      // otherwise redirect to a new dm page
+      console.log("attendee", attendee);
+      const directChatId = await dispatch(createNewDMThunk(attendee.id));
+      window.scroll(0, 0);
+      history.push(`/messages/${directChatId}`);
+    }
   };
 
   useEffect(() => {
@@ -320,18 +347,27 @@ function SingleEventDetails() {
                       <div
                         key={attendee.id}
                         className="event-metadata-container member-s"
+                        onClick={() => handleClickDM(attendee)}
                       >
-                        <div
-                          className="member-image"
-                          style={{
-                            backgroundColor: getRandomColor(),
-                          }}
-                        >
-                          <span>
-                            {attendee.firstName[0]}
-                            {attendee.lastName[0]}
-                          </span>
-                        </div>
+                        {attendee.picture ? (
+                          <img
+                            src={attendee.picture}
+                            alt=""
+                            className="member-image"
+                          />
+                        ) : (
+                          <div
+                            className="member-image"
+                            style={{
+                              backgroundColor: getRandomColor(),
+                            }}
+                          >
+                            <span>
+                              {attendee.firstName[0]}
+                              {attendee.lastName[0]}
+                            </span>
+                          </div>
+                        )}
                         <div className="member-s1">
                           <div>
                             {attendee.firstName}&nbsp;
@@ -340,8 +376,16 @@ function SingleEventDetails() {
                           <div className="member-s2">
                             {attendee.Attendance[0].status[0].toUpperCase()}
                             {attendee.Attendance[0].status.slice(1)}
+                            {sessionUser.id !== attendee.id && (
+                              <i className="fa-regular fa-envelope"></i>
+                            )}
                           </div>
                         </div>
+                        {sessionUser.id !== attendee.id && (
+                          <div className="chat-mask cursor">
+                            <div className="join-this-group-btn5">Chat</div>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>

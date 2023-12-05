@@ -12,6 +12,7 @@ const {
   Venue,
   Attendance,
   sequelize,
+  EventChat,
 } = require("../../db/models");
 
 const { check } = require("express-validator");
@@ -442,11 +443,15 @@ router.post(
       status: "organizer",
     });
 
+    const eventChat = await EventChat.create({
+      eventId: event.id,
+    });
+
     return res.json({
       id: event.id,
       groupId: req.params.groupId,
       venueId: venueId ? venueId : null,
-      name,
+      eventChatId: eventChat.id,
       type,
       capacity,
       price,
@@ -481,7 +486,7 @@ router.get("/:groupId/members", async (req, res, next) => {
   let members = [];
   if (isOrganizerCoHost) {
     members = await User.findAll({
-      attributes: ["id", "firstName", "lastName"],
+      attributes: ["id", "firstName", "lastName", "picture"],
       include: {
         model: Membership,
         where: {
@@ -492,7 +497,7 @@ router.get("/:groupId/members", async (req, res, next) => {
     });
   } else {
     members = await User.findAll({
-      attributes: ["id", "firstName", "lastName"],
+      attributes: ["id", "firstName", "lastName", "picture"],
       include: {
         model: Membership,
         where: {

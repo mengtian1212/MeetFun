@@ -20,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
 
       Event.belongsTo(models.Group, { foreignKey: "groupId" });
       Event.belongsTo(models.Venue, { foreignKey: "venueId" });
+      Event.hasOne(models.EventChat, {
+        foreignKey: "eventId",
+        onDelete: "cascade",
+      });
     }
   }
   Event.init(
