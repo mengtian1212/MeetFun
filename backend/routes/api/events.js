@@ -11,6 +11,7 @@ const {
   Membership,
   Venue,
   Attendance,
+  EventChat,
   sequelize,
 } = require("../../db/models");
 
@@ -89,6 +90,10 @@ router.get("/", queryValidationCheck, async (req, res, next) => {
     },
     include: [
       {
+        model: EventChat,
+        attributes: ["id"],
+      },
+      {
         model: Group,
         attributes: ["id", "name", "city", "state"],
       },
@@ -162,6 +167,10 @@ router.get("/:eventId", async (req, res, next) => {
       "endDate",
     ],
     include: [
+      {
+        model: EventChat,
+        attributes: ["id"],
+      },
       {
         model: Group,
         attributes: ["id", "name", "private", "city", "state"],
