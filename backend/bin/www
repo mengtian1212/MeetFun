@@ -22,6 +22,7 @@ const {
   DirectChat,
   sequelize,
   DirectMessage,
+  EventMessage
 } = require("../db/models");
 
 // Check the database connection before starting the app
@@ -81,6 +82,41 @@ db.sequelize
 
           console.log("after emit");
         }
+      });
+
+      socket.on("event_message", async data => {
+        const room = data.room;
+        if (data.deleted) {
+          // handle deleted message logic
+        } else if (data.wasEdited) {
+          // handle edited message logic
+        } else {
+          // handle new message logic
+          const resEM = await EventMessage.create({
+            eventChatId: data.room,
+            content: data.content,
+            senderId: data.sessionUser.id,
+          });
+
+          const sender = await User.findByPk(resEM.senderId);
+          const dct = {
+            id: resEM.id,
+            senderId: resEM.senderId,
+            eventChatId: resEM.eventChatId,
+            content: resEM.content,
+            wasEdited: false,
+            createdAt: resEM.createdAt,
+            updatedAt: resEM.updatedAt,
+            senderFirstName: sender.firstName,
+            senderLastName: sender.lastName,
+            senderPicture: sender.picture,
+          }
+
+          console.log("resEM7777777777", dct, room);
+          io.to(`event-chat-${data.room}`).emit("event_message", dct);
+          console.log("after emit");
+        }
+
       });
 
       socket.on("disconnect", () => {

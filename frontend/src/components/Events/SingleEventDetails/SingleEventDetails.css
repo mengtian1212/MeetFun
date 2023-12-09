@@ -70,6 +70,7 @@
   display: flex;
   justify-content: flex-start;
 }
+
 .group-detail-img1 {
   max-width: 650px;
   width: 640px;
@@ -102,12 +103,14 @@
 .small-group-text-container {
   padding-left: 20px;
 }
+
 .small-group-title {
   font-weight: 500;
   font-size: 15px;
   line-height: 1.25;
   margin-bottom: 4px;
 }
+
 .small-group-type {
   font-weight: 500;
   font-size: 14px;
@@ -120,6 +123,52 @@
   padding: 1.3rem;
   border-radius: 1.5rem;
   background-color: white;
+}
+
+.event-metadata-container1 {
+  display: flex;
+  flex-direction: column;
+  padding: 1.3rem;
+  border-radius: 1.5rem;
+  background-color: white;
+  margin-top: 1rem;
+}
+
+.event-chat-btn {
+  cursor: pointer;
+  padding: 0.5rem 0;
+  background-color: #ffffff;
+  color: var(--meetup-green);
+  border: 2px solid var(--meetup-green);
+  font-weight: 500;
+  border-radius: 0.5rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+.event-chat-btn-grey {
+  padding: 0.5rem 0;
+  background-color: #A2A2A2;
+  color: #ffffff;
+  border: transparent;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+.event-chat-btn-text {
+  font-size: 14px;
+  margin-top: 0.5rem;
+  line-height: 1.25rem;
+  color: #212121;
+  text-align: center;
 }
 
 .detail-container {
@@ -135,9 +184,10 @@
   align-self: flex-start;
 }
 
-.icon-container > i {
+.icon-container>i {
   color: #707070;
 }
+
 /* details  */
 .bottom3-what-we-are-about {
   max-width: 984px;
@@ -147,7 +197,7 @@
   background-size: fill;
 }
 
-.bottom3-what-we-are-about > h2 {
+.bottom3-what-we-are-about>h2 {
   padding-bottom: 20px;
   font-size: 16pt;
 }

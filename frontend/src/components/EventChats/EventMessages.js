@@ -13,7 +13,8 @@ import {
   formatDateTime,
   replaceThirdCommaDot,
 } from "../../utils/helper-functions";
-import EventMessageCard from "./EventMessageCard";
+import EventMessageCard from "./EventMessageCard.js";
+import EventMessageCardSelf from "./EventMessageCardSelf.js";
 
 let socket;
 
@@ -60,16 +61,56 @@ function EventMessages() {
     })();
   }, [dispatch, eventChatId]);
 
-  const handleSubmit = () => {};
+  useEffect(() => {
+    socket = io();
+
+    socket.on("event_message", msg => {
+      console.log("received!!!!", msg);
+      setChatMessages((prev) => [...prev, msg]);
+    });
+
+    socket.emit("join", {
+      room: `event-chat-${eventChatId}`,
+    });
+
+    return () => socket.disconnect();
+
+  }, [dispatch, eventChatId]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const messageContent = currentMessage.trim();
+    if (!messageContent) {
+      return setCurrentMessage("");
+    }
+
+
+    socket.emit("event_message", {
+      sessionUser,
+      room: eventChatId,
+      content: messageContent,
+      wasEdited: false,
+      deleted: false,
+    });
+
+    setCurrentMessage("");
+  };
+
+  const handleClickEventTitle = () => {
+    history.push(`/events/${targetEvent.id}`);
+    window.scroll(0, 0);
+  }
 
   if (!sessionUser) return <Redirect to="/" />;
   if (isLoading) return null;
+
+  console.log("chatMessages", chatMessages);
 
   return (
     <>
       <div className="messages-outer-top1">
         <section className="dm-otheruser-outer1">
-          <section>{targetEvent?.name}</section>
+          <section className="dm-event" onClick={handleClickEventTitle}>{targetEvent?.name}</section>
 
           <section className="dm-otheruser-outer2">
             <div className="dm-otheruser-outer3">
@@ -111,8 +152,14 @@ function EventMessages() {
               <div className="DM-page-click">No messages</div>
             </div>
           )}
-          {chatMessages.map((message) => {
-            return <EventMessageCard key={message.id} message={message} />;
+          {chatMessages?.map((message) => {
+            return <>
+              {message.senderId === sessionUser.id ?
+                <EventMessageCardSelf key={message.id} message={message} />
+                :
+                <EventMessageCard key={message.id} message={message} />
+              }
+            </>
           })}
         </section>
       </div>

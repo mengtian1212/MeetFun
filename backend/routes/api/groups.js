@@ -363,6 +363,10 @@ router.get("/:groupId/events", async (req, res, next) => {
       ],
       include: [
         {
+          model: EventChat,
+          attributes: ["id"],
+        },
+        {
           model: Group,
           attributes: ["id", "name", "city", "state"],
         },

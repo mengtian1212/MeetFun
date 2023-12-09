@@ -107,6 +107,11 @@ function SingleEventDetails() {
     }
   };
 
+  const handleClickEventChat = (e) => {
+    e.stopPropagation();
+    history.push(`/event-chats/${targetEvent.EventChat.id}`);
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       const event = await dispatch(fetchSingleEventThunk(eventId));
@@ -235,7 +240,7 @@ function SingleEventDetails() {
                     src={
                       imgUrl === `No preview image for this event`
                         ? // ? "https://i0.wp.com/orstx.org/wp-content/uploads/2019/10/no-photo-available-icon-12.jpg?fit=300%2C245&ssl=1"
-                          "https://secure.meetupstatic.com/next/images/find/emptyResultsIcon.svg"
+                        "https://secure.meetupstatic.com/next/images/find/emptyResultsIcon.svg"
                         : imgUrl
                     }
                     alt="No event preview"
@@ -252,7 +257,7 @@ function SingleEventDetails() {
                         src={
                           imgUrlGroup === `No preview image for this group`
                             ? // ? "https://i0.wp.com/orstx.org/wp-content/uploads/2019/10/no-photo-available-icon-12.jpg?fit=300%2C245&ssl=1"
-                              "https://secure.meetupstatic.com/photos/event/1/4/3/e/600_516605182.webp"
+                            "https://secure.meetupstatic.com/photos/event/1/4/3/e/600_516605182.webp"
                             : imgUrlGroup
                         }
                         alt="No group preview"
@@ -327,6 +332,18 @@ function SingleEventDetails() {
                       </div>
                     )}
                   </div>
+
+                  {sessionUser && myAttendance?.status && myAttendance?.status !== "pending" &&
+                    <div className="event-metadata-container1">
+                      <button className="event-chat-btn" onClick={handleClickEventChat}><i className="fa-regular fa-message"></i>Event Chat</button>
+                    </div>
+                  }
+                  {sessionUser && (!myAttendance?.status || (myAttendance?.status && myAttendance?.status === "pending")) &&
+                    <div className="event-metadata-container1">
+                      <button className="event-chat-btn-grey"><i className="fa-regular fa-message"></i>Event Chat</button>
+                      <div className="event-chat-btn-text">Event chat is available for attendees</div>
+                    </div>
+                  }
                 </div>
               </div>
             </div>

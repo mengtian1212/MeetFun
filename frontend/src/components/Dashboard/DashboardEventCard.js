@@ -9,6 +9,11 @@ function DashboardEventCard({ eventId, attendeeType }) {
   const history = useHistory();
   const event = useSelector((state) => state.events?.allEvents[eventId]);
 
+  const handleClickEventChat = (e) => {
+    e.stopPropagation();
+    history.push(`/event-chats/${event.EventChat.id}`);
+  }
+
   return (
     <section
       onClick={
@@ -23,7 +28,7 @@ function DashboardEventCard({ eventId, attendeeType }) {
           src={
             event.previewImage === `No preview image for this event`
               ? // ? "https://i0.wp.com/orstx.org/wp-content/uploads/2019/10/no-photo-available-icon-12.jpg?fit=300%2C245&ssl=1"
-                "https://secure.meetupstatic.com/next/images/find/emptyResultsIcon.svg"
+              "https://secure.meetupstatic.com/next/images/find/emptyResultsIcon.svg"
               : event.previewImage
           }
           alt="No event preview"
@@ -41,8 +46,8 @@ function DashboardEventCard({ eventId, attendeeType }) {
         </div>
       </section>
 
-      {attendeeType !== "pending" && new Date(event.startDate) > new Date() && (
-        <section className="dash-group-nummembers1">
+      {attendeeType !== "pending" && (
+        <section className="dash-group-nummembers1" onClick={handleClickEventChat}>
           <i className="fa-solid fa-comment-dots"></i>Event Chat
         </section>
       )}

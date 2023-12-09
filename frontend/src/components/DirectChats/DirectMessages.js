@@ -9,6 +9,7 @@ import MessageCard from "./MessageCard";
 import "./DirectChats.css";
 
 import { io } from "socket.io-client";
+import MessageCardSelf from "./MessageCardSelf";
 
 let socket;
 
@@ -109,7 +110,13 @@ function DirectMessages() {
             </div>
           )}
           {chatMessages.map((message) => {
-            return <MessageCard key={message.id} message={message} />;
+            return <>
+              {message.senderId === sessionUser.id ?
+                <MessageCardSelf key={message.id} message={message} />
+                :
+                <MessageCard key={message.id} message={message} />
+              }
+            </>
           })}
         </section>
       </div>
