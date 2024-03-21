@@ -99,7 +99,7 @@ module.exports = {
         {
           eventId: 10,
           // url: "https://www.levantina.com/blog/wp-content/uploads/2019/10/c1.jpg",
-          url: "https://img.freepik.com/free-psd/poster-with-cooking-home-theme_23-2148546698.jpg",
+          url: "https://img.freepik.com/free-vector/food-design-banner-template_23-2149651551.jpg",
           preview: true,
         },
         {
