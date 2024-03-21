@@ -105,7 +105,7 @@ function SingleGroupDetails() {
   if (
     (sessionUser &&
       targetGroup &&
-      Number(sessionUser.id) === Number(targetGroup.organizerId)) ||
+      Number(sessionUser?.id) === Number(targetGroup.organizerId)) ||
     myMembership?.status === "co-host"
   ) {
     organizerBtns = (
@@ -119,8 +119,8 @@ function SingleGroupDetails() {
         <OpenModalButton
           modalComponent={<DeleteGroupModal groupId={groupId} />}
           buttonText="Delete group"
-          // className="organizerbtns"
-          // onItemClick={closeMenu}
+        // className="organizerbtns"
+        // onItemClick={closeMenu}
         />
       </div>
     );
@@ -245,7 +245,7 @@ function SingleGroupDetails() {
       parseInt(attendee.id),
       directChats
     );
-    if (attendee.id === sessionUser.id) return;
+    if (attendee.id === sessionUser?.id) return;
 
     if (matchedDM) {
       window.scroll(0, 0);
@@ -275,7 +275,7 @@ function SingleGroupDetails() {
                 src={
                   imgUrl === `No preview image for this group`
                     ? // ? "https://i0.wp.com/orstx.org/wp-content/uploads/2019/10/no-photo-available-icon-12.jpg?fit=300%2C245&ssl=1"
-                      "https://secure.meetupstatic.com/photos/event/1/4/3/e/600_516605182.webp"
+                    "https://secure.meetupstatic.com/photos/event/1/4/3/e/600_516605182.webp"
                     : imgUrl
                 }
                 alt="No preview for this group"
@@ -347,8 +347,8 @@ function SingleGroupDetails() {
               <div className="group-events-container">
                 {(!groupEvents?.length ||
                   (groupEvents?.length && !upcomingEventsArr?.length)) && (
-                  <h2>No Upcoming Events</h2>
-                )}
+                    <h2>No Upcoming Events</h2>
+                  )}
                 {upcomingEventsArr?.length > 0 && (
                   <h2>Upcoming events ({upcomingEventsArr?.length})</h2>
                 )}
@@ -442,12 +442,12 @@ function SingleGroupDetails() {
                           <div className="member-s2">
                             {member.Membership[0].status[0].toUpperCase()}
                             {member.Membership[0].status.slice(1)}
-                            {sessionUser.id !== member.id && (
+                            {sessionUser?.id !== member.id && (
                               <i className="fa-regular fa-envelope"></i>
                             )}
                           </div>
                         </div>
-                        {sessionUser.id !== member.id && (
+                        {sessionUser?.id !== member.id && (
                           <div className="chat-mask cursor">
                             <div className="join-this-group-btn5">Chat</div>
                           </div>
