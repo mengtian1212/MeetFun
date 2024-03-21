@@ -93,7 +93,7 @@ function SingleEventDetails() {
       parseInt(attendee.id),
       directChats
     );
-    if (attendee.id === sessionUser.id) return;
+    if (attendee.id === sessionUser?.id) return;
 
     if (matchedDM) {
       window.scroll(0, 0);
@@ -393,12 +393,12 @@ function SingleEventDetails() {
                           <div className="member-s2">
                             {attendee.Attendance[0].status[0].toUpperCase()}
                             {attendee.Attendance[0].status.slice(1)}
-                            {sessionUser.id !== attendee.id && (
+                            {sessionUser?.id !== attendee.id && (
                               <i className="fa-regular fa-envelope"></i>
                             )}
                           </div>
                         </div>
-                        {sessionUser.id !== attendee.id && (
+                        {sessionUser && sessionUser?.id !== attendee.id && (
                           <div className="chat-mask cursor">
                             <div className="join-this-group-btn5">Chat</div>
                           </div>
