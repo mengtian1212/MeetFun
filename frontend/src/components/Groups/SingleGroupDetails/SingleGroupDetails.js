@@ -447,7 +447,7 @@ function SingleGroupDetails() {
                             )}
                           </div>
                         </div>
-                        {sessionUser?.id !== member.id && (
+                        {sessionUser && sessionUser?.id !== member.id && (
                           <div className="chat-mask cursor">
                             <div className="join-this-group-btn5">Chat</div>
                           </div>
